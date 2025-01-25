@@ -44,11 +44,6 @@ public class TimeManager : MonoBehaviour
             currentTime += minuteConvertion;
         }
         
-        //if ((int)(Time.deltaTime % 60) - counter > 1)
-        //{
-        //    counter += 1;
-        //    currentTime += minuteConvertion;
-        //}
         Debug.Log(counter);
         Debug.Log(currentTime);
     }

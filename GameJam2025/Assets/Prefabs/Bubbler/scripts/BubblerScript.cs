@@ -59,14 +59,23 @@ public class BubblerScript : MonoBehaviour
         float horizontalMovement = Input.GetAxis("Horizontal");
         float verticalMovement = Input.GetAxis("Vertical");
 
-        if (horizontalMovement != 0 || verticalMovement != 0)
         {
-            _animator.SetFloat("HorMove", horizontalMovement);
-            _animator.SetFloat("VerMove", verticalMovement);
 
-            Vector3 movement = new Vector3(horizontalMovement, 0, verticalMovement) * speed * Time.deltaTime;
+        }
+
+        if(Math.Abs((double)horizontalMovement) > 0.1 || Math.Abs((double)verticalMovement) > 0.1)
+        {
+            _animator.SetBool("forwardMovement", true);
+            _animator.SetBool("backwardMovement", verticalMovement > 0);
+
+            float localSpeed = crouching ? speed / 2 : speed;
+            Vector3 movement = new Vector3(horizontalMovement, 0, verticalMovement) * localSpeed * Time.deltaTime;
            
             transform.Translate(movement, Space.Self);
+        } else
+        {
+            _animator.SetBool("forwardMovement", false);
+            _animator.SetBool("backwardMovement", false);
         }
         
         if (horizontalMovement < 0)
