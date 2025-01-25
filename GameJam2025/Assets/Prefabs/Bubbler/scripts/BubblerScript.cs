@@ -1,11 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BubblerScript : MonoBehaviour
 {
     [SerializeField] public float speed = 10f;
     private bool crouching = false;
+    private IInteractable currentInteractable;
 
 
     // Start is called before the first frame update
@@ -18,11 +21,27 @@ public class BubblerScript : MonoBehaviour
     {
         Walk();
         Crouch();
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            if (currentInteractable != null)
+            {
+                Debug.Log($"Interactuando con {currentInteractable.GetAction()}");
+                currentInteractable.Interact();
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            if (currentInteractable != null && currentInteractable.CanBePickedUp())
+            {
+                Debug.Log($"Has recogido el objeto: {currentInteractable}");
+                currentInteractable.PickUp();
+            }
+        }
     }
+
 
     void Inspect()
     {
-
     }
 
     void Walk()
@@ -41,4 +60,31 @@ public class BubblerScript : MonoBehaviour
     {
         crouching = Input.GetButton("Crouch");
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        IInteractable interactable = other.GetComponent<IInteractable>();
+        if (interactable != null)
+        {
+            currentInteractable = interactable;
+            Debug.Log($"Objeto interactuable detectado: {interactable.GetAction()}");
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        IInteractable interactable = other.GetComponent<IInteractable>();
+        if (interactable != null && interactable == currentInteractable)
+        {
+            currentInteractable = null; 
+            Debug.Log("Salimos de la zona interactuable");
+        }
+    }
+
+    void CreateBubble()
+    {
+        
+    }
+
+
 }

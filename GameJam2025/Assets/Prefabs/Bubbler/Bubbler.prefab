@@ -96,6 +96,7 @@ GameObject:
   - component: {fileID: 7941203932740748254}
   - component: {fileID: 8953211260481204131}
   - component: {fileID: 4799150308697283862}
+  - component: {fileID: 172358968407951845}
   m_Layer: 0
   m_Name: Bubbler
   m_TagString: Untagged
@@ -131,7 +132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7208a361b9ec3764296726524e41faaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensivity: 10
+  speed: 10
 --- !u!54 &8953211260481204131
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -174,11 +175,34 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
-  m_Height: 3.0453954
+  m_Height: 3
   m_Direction: 1
-  m_Center: {x: 0, y: -0.029989004, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!136 &172358968407951845
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4690435838374233979}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1.5
+  m_Height: 3
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
