@@ -30,6 +30,10 @@ public class BubblerScript : MonoBehaviour
             {
                 Debug.Log($"Interactuando con {currentInteractable.GetAction()}");
                 currentInteractable.Interact();
+                if (currentInteractable.GetAction() == "Sentarse")
+                {
+                    Sit();
+                }
             }
         }
         if (Input.GetKeyDown(KeyCode.F))
@@ -74,6 +78,11 @@ public class BubblerScript : MonoBehaviour
     void Crouch()
     {
         crouching = Input.GetButton("Crouch");
+    }
+
+    void Sit()
+    {
+        Debug.Log("Sentandose en la silla");
     }
 
     private void OnTriggerEnter(Collider other)
