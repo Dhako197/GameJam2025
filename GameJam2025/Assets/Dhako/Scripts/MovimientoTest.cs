@@ -18,10 +18,20 @@ public class MovimientoTest : MonoBehaviour
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
 
-        Vector3 movement = new Vector3(moveHorizontal, 0f, moveVertical);
-        movement.Normalize();
-        //transform.position += movement * speed * Time.deltaTime;
-        rb.AddForce(movement * speed);
+        if (moveHorizontal != 0 || moveVertical != 0)
+        {
+            Vector3 movement = new Vector3(moveHorizontal, 0f, moveVertical);
+            //movement.Normalize();
+            //transform.position += movement * speed * Time.deltaTime;
+            //rb.AddForce(movement * speed);
+            rb.velocity = (movement * speed);
+        }
+        else
+        {
+            rb.velocity = Vector3.zero;
+        }
+
+       
     }
     
 }
