@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8373870785823195340}
   - component: {fileID: 6345560801543231860}
   - component: {fileID: 2303058959689924089}
+  - component: {fileID: 3640969584806834617}
   m_Layer: 0
   m_Name: MesaIzq1
   m_TagString: Untagged
@@ -53,8 +54,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.7, y: 1.004743, z: 0.4}
-  m_Center: {x: -0.029999971, y: 0.00237149, z: 0.019999996}
+  m_Size: {x: 1.7, y: 1.4470928, z: 1.0204833}
+  m_Center: {x: -0.029999971, y: -0.2188034, z: 0.33024156}
 --- !u!54 &2303058959689924089
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -82,6 +83,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &3640969584806834617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4854175809819456716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5ea9847a9dc35d4ebc21aa6fe273bdc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5953228923473319476
 GameObject:
   m_ObjectHideFlags: 0
@@ -154,7 +167,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 5
   m_Sprite: {fileID: 21300000, guid: a836504587b8142439ed4547e74dce88, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
