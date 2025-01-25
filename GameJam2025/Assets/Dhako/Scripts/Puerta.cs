@@ -1,14 +1,18 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Puerta : MonoBehaviour , IInteractable
+public class Puerta : MonoBehaviour, IInteractable
 {
-    // Start is called before the first frame update
-    void Start()
-    {
+    [SerializeField] private Color _color;
+    [SerializeField] private SpriteRenderer _spriteRenderer;
+    private BoxCollider _boxCollider;
 
-    }
+void Start()
+{
+    _boxCollider = GetComponent<BoxCollider>();
+}
     // Update is called once per frame
     void Update()
     {
@@ -17,17 +21,19 @@ public class Puerta : MonoBehaviour , IInteractable
 
     public string GetAction()
     {
-        throw new System.NotImplementedException();
+        string action = "Abrir Puerta";
+        return action;
     }
 
     public void Interact()
     {
-        throw new System.NotImplementedException();
+        _spriteRenderer.color = _color;
+        _boxCollider.enabled = false;
     }
 
     public bool CanBePickedUp()
     {
-        throw new System.NotImplementedException();
+        return false;
     }
 
     public void PickUp()
