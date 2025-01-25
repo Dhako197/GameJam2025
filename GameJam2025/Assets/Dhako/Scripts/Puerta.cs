@@ -40,5 +40,10 @@ void Start()
     {
         throw new System.NotImplementedException();
     }
+
+    public GameObject GetObject()
+    {
+        return gameObject;
+    }
 }
     

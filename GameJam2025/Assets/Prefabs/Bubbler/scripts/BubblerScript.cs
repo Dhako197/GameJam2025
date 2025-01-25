@@ -33,7 +33,7 @@ public class BubblerScript : MonoBehaviour
 
     void ExecuteAction()
     {
-        if (Input.GetKeyDown("Interact"))
+        if (Input.GetButton("Interact"))
         {
             if (currentInteractable != null)
             {
@@ -76,7 +76,7 @@ public class BubblerScript : MonoBehaviour
         {
             _animator.SetBool("forwardMovement", false);
             _animator.SetBool("backwardMovement", false);
-            return
+            return;
         }
 
         isSitting = false;
