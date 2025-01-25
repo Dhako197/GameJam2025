@@ -62,8 +62,10 @@ public class BubblerScript : MonoBehaviour
         if (horizontalMovement != 0 || verticalMovement != 0)
         {
             _animator.SetFloat("HorMove", horizontalMovement);
+            _animator.SetFloat("VerMove", verticalMovement);
 
             Vector3 movement = new Vector3(horizontalMovement, 0, verticalMovement) * speed * Time.deltaTime;
+           
             transform.Translate(movement, Space.Self);
         }
         
@@ -105,6 +107,7 @@ public class BubblerScript : MonoBehaviour
         if (interactable != null && interactable == currentInteractable)
         {
             currentInteractable = null; 
+            _bubbleText.SetActive(false);
             Debug.Log("Salimos de la zona interactuable");
         }
     }
