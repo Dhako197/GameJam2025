@@ -60,6 +60,8 @@ public class BubblerScript : MonoBehaviour
                 {
                     GameObject item = currentInteractable.GetObject();
                     // Add to inventory
+                    PicableTest picableObj= item.GetComponent<PicableTest>();
+                    InventarioController.Instance.SetObjectUI(picableObj);
                     Destroy(item);
                 }
             }

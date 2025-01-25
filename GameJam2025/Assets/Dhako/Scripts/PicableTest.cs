@@ -8,9 +8,9 @@ using UnityEngine.UI;
 
 public class PicableTest : MonoBehaviour, IInteractable
 {
-    [SerializeField] private int _id;
-    [SerializeField] private Sprite _sprite;
-    [SerializeField] private string _nombre;
+    [SerializeField] public int _id;
+    [SerializeField] public Sprite _sprite;
+    [SerializeField] public string _nombre;
 
     private void Start()
     {
@@ -19,19 +19,18 @@ public class PicableTest : MonoBehaviour, IInteractable
 
     public string GetAction()
     {
-        string action = "Recogio " + _nombre;
+        string action = "Take";
         return action;
     }
 
     public GameObject GetObject()
     {
-        throw new NotImplementedException();
+        return gameObject;
     }
 
     public void Interact()
     {
-        InventarioController.Instance.SetObjectUI(_sprite,_id,_nombre);
-        Destroy(gameObject);
+       
     }
 
     public bool CanBePickedUp()

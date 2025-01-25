@@ -30,33 +30,19 @@ public class InventarioController : MonoBehaviour
         }
     }
 
-    public void SetObjectUI(Sprite sprite,int ID,string nombre)
+    public void SetObjectUI(PicableTest picableTest)
     {
-        for (int i = 0; i < _inventario.Length; i++)
-        {
-            if (ID == _inventario[i].ObjectID)
-            {
-                _inventario[i].Cantidad++;
-                break;
-            }
-            else
-            {
-                for (int j = 0; j < _inventario.Length; j++)
-                {
-                    if (_inventario[j].ObjectID == 0)
-                    {
-                        _inventario[j].gameObject.SetActive(true);
-                        _inventario[j].Image.sprite = sprite;
-                        _inventario[j].ObjectID = ID;
-                        _inventario[j].NombreObjeto = nombre;
-                        _inventario[j].Cantidad++;
-                
-                        break;
-                    }
-                } 
-                break;
-            }
-        }
+        
+       foreach (var obj in _inventario)
+       {
+           if (picableTest._id == obj.ObjectID)
+           {
+               obj.gameObject.SetActive(true);
+               obj.Cantidad++;
+               Destroy(picableTest.gameObject);
+               break;
+           }
+       }
     }
 
     public void UseItem(int ID)

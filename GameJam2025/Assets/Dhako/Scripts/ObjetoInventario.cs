@@ -12,6 +12,7 @@ public class ObjetoInventario : MonoBehaviour
     public int Cantidad;
     public TextMeshProUGUI CantidadUI;
     public int ObjectID= 0;
+    public int totalObjs;
     void Start()
     {
         
@@ -20,6 +21,6 @@ public class ObjetoInventario : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CantidadUI.text = "" +Cantidad;
+        CantidadUI.text = Cantidad + " / " + totalObjs;
     }
 }
