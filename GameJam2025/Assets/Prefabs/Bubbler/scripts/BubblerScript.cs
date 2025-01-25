@@ -10,6 +10,7 @@ public class BubblerScript : MonoBehaviour
     private bool crouching = false;
     private IInteractable currentInteractable;
     private Animator _animator;
+    public bool Stand = true;
     [SerializeField] private Transform _transform;
 
 
