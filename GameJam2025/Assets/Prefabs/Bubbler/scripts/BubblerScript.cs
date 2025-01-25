@@ -14,6 +14,8 @@ public class BubblerScript : MonoBehaviour
     public bool Stand = true;
     [SerializeField] private Transform _transform;
     [SerializeField] private GameObject _bubbleText;
+    [SerializeField] private GameObject _bubbleTextOpinion;
+    private bool canMove = true;
 
 
     // Start is called before the first frame update
@@ -25,7 +27,7 @@ public class BubblerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Walk();
+        if(canMove) Walk();
         Crouch();
         ExecuteAction();
     }
@@ -48,12 +50,15 @@ public class BubblerScript : MonoBehaviour
 
                 if (action == "Inspect") 
                 {
-                    GameObject inspectedObject = currentInteractable.GetObject();
-                    Transform inspectedTransform = inspectedObject.transform;
+                    //GameObject inspectedObject = currentInteractable.GetObject();
+                    //Transform inspectedTransform = inspectedObject.transform;
                     // focus camera
-                    GameObject innerElement = inspectedObject.GetComponent<NonCollectibleObject>().GetInnerElement();
-                    currentInteractable = innerElement.GetComponent<IInteractable>();
-                    _bubbleText.SetActive(true);
+                    //GameObject innerElement = inspectedObject.GetComponent<NonCollectibleObject>().GetInnerElement();
+                    //currentInteractable = innerElement.GetComponent<IInteractable>();
+                    _bubbleTextOpinion.SetActive(true);
+                    _animator.SetBool("Talk", true);
+                    canMove = false;
+                    Invoke("OpinionBubble", 1.5f);
                 }
 
                 if (action == "Take")
@@ -129,6 +134,13 @@ public class BubblerScript : MonoBehaviour
     public bool IsSitting()
     {
         return isSitting;
+    }
+
+    private void OpinionBubble()
+    {
+        _animator.SetBool("Talk", false);
+        _bubbleTextOpinion.SetActive(false);
+        canMove = true;
     }
 
     public void Reset()
