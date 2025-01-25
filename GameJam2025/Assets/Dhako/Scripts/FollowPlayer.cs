@@ -4,9 +4,14 @@ using UnityEngine;
 
 public class FollowPlayer : MonoBehaviour
 {
-    [SerializeField] private Transform player; 
+    private Transform player; 
     public Vector3 offset; 
     public float smoothSpeed = 5f;
+
+    void Start()
+    {
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+    }
 
     void LateUpdate()
     {
