@@ -9,11 +9,14 @@ public class BubblerScript : MonoBehaviour
     [SerializeField] public float speed = 10f;
     private bool crouching = false;
     private IInteractable currentInteractable;
+    private Animator _animator;
+    [SerializeField] private Transform _transform;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        _animator = GetComponentInChildren<Animator>();
     }
 
     // Update is called once per frame
@@ -54,6 +57,17 @@ public class BubblerScript : MonoBehaviour
             Vector3 movement = new Vector3(horizontalMovement, 0, verticalMovement) * speed * Time.deltaTime;
             transform.Translate(movement, Space.Self);
         }
+        
+        if (horizontalMovement < 0)
+        {
+            _transform.localRotation = new Quaternion(0,180,0,1);
+        }
+        else if(horizontalMovement > 0)
+        {
+            _transform.localRotation = new Quaternion(0,0,0,0);
+        }
+        
+        _animator.SetFloat("HorMove", horizontalMovement);
     }
 
     void Crouch()
