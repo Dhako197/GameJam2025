@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor.Animations;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ public class SleepingBlowfish : MonoBehaviour
     [SerializeField] private float sleepTimeBase = 10.0f;
     private BubblerScript playerController;
     private bool isSleeping = true;
+    private bool isChecking = false;
     private float counter = 0;
     private float sleepLimit = 0;
     private Animator animator;
@@ -16,36 +18,43 @@ public class SleepingBlowfish : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        animator = GetComponentInChildren<Animator>();
         playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<BubblerScript>();
         sleepLimit = sleepTimeBase + randomizeSleepTime();
-        animator = GetComponentInChildren<Animator>();
-        setIsSleeping(isSleeping);
+        animator.SetBool("isSleeping", isSleeping);
+        animator.SetBool("isChecking", isChecking);
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        CheckRoom();
         CheckSleep();
+        CheckRoom();
     }
 
     void CheckRoom()
     {
-        if (isSleeping)
+        if (!isChecking)
         {
             return;
         }
 
-        animator.SetBool("isChecking", true);
-
-        if (playerController.IsSitting())
+        if (playerController != null && playerController.IsSitting())
         {
             // increases one hour
             // animation returns player
             playerController.Reset();
+            return;
         }
+
+        SetIsChecking(false);
+    }
+
+    public void ResetSleep()
+    {
         sleepLimit = sleepTimeBase + randomizeSleepTime();
-        setIsSleeping(false);
+        SetIsSleeping(true);
         counter = 0;
     }
 
@@ -58,7 +67,7 @@ public class SleepingBlowfish : MonoBehaviour
 
         counter += Time.deltaTime;
         if (counter > sleepLimit) {
-            setIsSleeping(false);
+            SetIsSleeping(false);
         }
     }
 
@@ -69,15 +78,15 @@ public class SleepingBlowfish : MonoBehaviour
         return randomizer * upDownValue;
     }
 
-    void setIsChecking(bool isChecking)
-    {
-        animator.SetBool("isChecking", isChecking);
-    }
-
-    void setIsSleeping(bool sleep)
+    public void SetIsSleeping(bool sleep)
     {
         isSleeping = sleep;
         animator.SetBool("isSleeping", sleep);
-        animator.SetBool("isChecking", !sleep);
+    }
+
+    public void SetIsChecking(bool checking)
+    {
+        isChecking = checking;
+        animator.SetBool("isChecking", checking);
     }
 }
