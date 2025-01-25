@@ -590,9 +590,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7208a361b9ec3764296726524e41faaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
+  speed: 7
   Stand: 1
   _transform: {fileID: 1906699670321459027}
+  _bubbleText: {fileID: 5487829058950787354}
 --- !u!136 &6659320880877722096
 CapsuleCollider:
   m_ObjectHideFlags: 0

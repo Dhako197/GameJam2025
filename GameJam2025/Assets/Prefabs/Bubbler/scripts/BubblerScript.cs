@@ -105,6 +105,7 @@ public class BubblerScript : MonoBehaviour
         if (interactable != null && interactable == currentInteractable)
         {
             currentInteractable = null; 
+            _bubbleText.SetActive(false);
             Debug.Log("Salimos de la zona interactuable");
         }
     }
