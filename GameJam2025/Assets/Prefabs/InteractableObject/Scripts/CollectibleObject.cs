@@ -2,27 +2,13 @@ using UnityEngine;
 
 public class CollectibleObject : MonoBehaviour, IInteractable
 {
-    public string objectName = "Objeto"; 
-
     public string GetAction()
     {
-        return CanBePickedUp() ? "Coger" : "Interactuar"; 
+        return "Take"; 
     }
 
-    public bool CanBePickedUp()
+    public GameObject GetObject()
     {
-        return true; 
-    }
-
-    public void Interact()
-    {
-        Debug.Log($"Interactuando con {objectName}");
-    }
-
-    public void PickUp()
-    {
-        Debug.Log($"Has recogido {objectName}");
-        
-        Destroy(gameObject); 
+        return gameObject;
     }
 }

@@ -2,25 +2,20 @@ using UnityEngine;
 
 public class NonCollectibleObject : MonoBehaviour, IInteractable
 {
-    public string objectName = "Objeto";
+    [SerializeField] private GameObject innerElement;
 
     public string GetAction()
     {
-        return "Interactuar"; 
+        return "Inspect"; 
     }
 
-    public bool CanBePickedUp()
+    public GameObject GetObject()
     {
-        return false; 
+        return gameObject;
     }
 
-    public void Interact()
+    public GameObject GetInnerElement()
     {
-        Debug.Log($"Interactuando con {objectName}");
-    }
-
-    public void PickUp()
-    {
-        Debug.Log($"{objectName} no puede ser recogido.");
+        return innerElement;
     }
 }

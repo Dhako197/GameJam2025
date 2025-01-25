@@ -5,7 +5,5 @@ using UnityEngine;
 public interface IInteractable
 {
     string GetAction();
-    void Interact();
-    bool CanBePickedUp();
-    void PickUp();
+    GameObject GetObject();
 } 

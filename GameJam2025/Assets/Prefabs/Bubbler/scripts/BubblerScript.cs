@@ -6,8 +6,9 @@ using UnityEngine;
 
 public class BubblerScript : MonoBehaviour
 {
-    [SerializeField] public float speed = 10f;
+    [SerializeField] public float speed = 8f;
     private bool crouching = false;
+    private bool isSitting = false;
     private IInteractable currentInteractable;
     private Animator _animator;
     public bool Stand = true;
@@ -26,32 +27,43 @@ public class BubblerScript : MonoBehaviour
     {
         Walk();
         Crouch();
-        if (Input.GetKeyDown(KeyCode.E))
+        ExecuteAction();
+    }
+
+
+    void ExecuteAction()
+    {
+        if (Input.GetKeyDown("Interact"))
         {
             if (currentInteractable != null)
             {
                 _bubbleText.SetActive(false);
-                Debug.Log($"Interactuando con {currentInteractable.GetAction()}");
-                currentInteractable.Interact();
-                if (currentInteractable.GetAction() == "Sentarse")
+                string action = currentInteractable.GetAction();
+
+                //currentInteractable.Interact(gameObject);
+                if (action == "Sit")
                 {
                     Sit();
                 }
+
+                if (action == "Inspect") 
+                {
+                    GameObject inspectedObject = currentInteractable.GetObject();
+                    Transform inspectedTransform = inspectedObject.transform;
+                    // focus camera
+                    GameObject innerElement = inspectedObject.GetComponent<NonCollectibleObject>().GetInnerElement();
+                    currentInteractable = innerElement.GetComponent<IInteractable>();
+                    _bubbleText.SetActive(true);
+                }
+
+                if (action == "Take")
+                {
+                    GameObject item = currentInteractable.GetObject();
+                    // Add to inventory
+                    Destroy(item);
+                }
             }
         }
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            if (currentInteractable != null && currentInteractable.CanBePickedUp())
-            {
-                Debug.Log($"Has recogido el objeto: {currentInteractable}");
-                currentInteractable.PickUp();
-            }
-        }
-    }
-
-
-    void Inspect()
-    {
     }
 
     void Walk()
@@ -59,34 +71,25 @@ public class BubblerScript : MonoBehaviour
         float horizontalMovement = Input.GetAxis("Horizontal");
         float verticalMovement = Input.GetAxis("Vertical");
 
-        {
 
-        }
-
-        if(Math.Abs((double)horizontalMovement) > 0.1 || Math.Abs((double)verticalMovement) > 0.1)
-        {
-            _animator.SetBool("forwardMovement", true);
-            _animator.SetBool("backwardMovement", verticalMovement > 0);
-
-            float localSpeed = crouching ? speed / 2 : speed;
-            Vector3 movement = new Vector3(horizontalMovement, 0, verticalMovement) * localSpeed * Time.deltaTime;
-           
-            transform.Translate(movement, Space.Self);
-        } else
+        if(Math.Abs((double)horizontalMovement) < 0.1 && Math.Abs((double)verticalMovement) < 0.1)
         {
             _animator.SetBool("forwardMovement", false);
             _animator.SetBool("backwardMovement", false);
+            return
         }
-        
-        if (horizontalMovement < 0)
-        {
-            _transform.localRotation = new Quaternion(0,180,0,1);
-        }
-        else if(horizontalMovement > 0)
-        {
-            _transform.localRotation = new Quaternion(0,0,0,0);
-        }
-        
+
+        isSitting = false;
+        _animator.SetBool("isSitting", false);
+        _animator.SetBool("forwardMovement", true);
+        _animator.SetBool("backwardMovement", verticalMovement > 0);
+
+        float localSpeed = crouching ? speed / 2 : speed;
+        Vector3 movement = new Vector3(horizontalMovement, 0, verticalMovement).normalized * localSpeed * Time.deltaTime;
+           
+        transform.Translate(movement, Space.Self);
+
+        _transform.localRotation = horizontalMovement < 0 ? new Quaternion(0, 180, 0, 1) : new Quaternion(0, 0, 0, 0);
     }
 
     void Crouch()
@@ -94,8 +97,10 @@ public class BubblerScript : MonoBehaviour
         crouching = Input.GetButton("Crouch");
     }
 
-    void Sit()
+    public void Sit()
     {
+        isSitting = true;
+        _animator.SetBool("isSitting", true);
         Debug.Log("Sentandose en la silla");
     }
 
@@ -106,7 +111,6 @@ public class BubblerScript : MonoBehaviour
         {
             currentInteractable = interactable;
             _bubbleText.SetActive(true);
-            Debug.Log($"Objeto interactuable detectado: {interactable.GetAction()}");
         }
     }
 
@@ -117,14 +121,17 @@ public class BubblerScript : MonoBehaviour
         {
             currentInteractable = null; 
             _bubbleText.SetActive(false);
-            Debug.Log("Salimos de la zona interactuable");
         }
     }
 
-    void CreateBubble()
+    public bool IsSitting()
     {
-        
+        return isSitting;
     }
 
+    public void Reset()
+    {
+
+    }
 
 }

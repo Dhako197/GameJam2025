@@ -9,18 +9,8 @@ public class ChairObject : MonoBehaviour, IInteractable
       return "Sentarse";
    }
    
-   public bool CanBePickedUp()
-   {
-      return false;
-   }
-   
-   public void Interact()
-   {
-      Debug.Log("Sentandose en la silla");
-   }
-   
-   public void PickUp()
-   {
-      Debug.Log("No se puede recoger la silla");
-   }
+    public GameObject GetObject()
+    {
+        return gameObject;
+    }
 }

@@ -7,6 +7,7 @@ using UnityEngine;
 public class SleepingBlowfish : MonoBehaviour
 {
     [SerializeField] private float sleepTimeBase = 10.0f;
+    private BubblerScript playerController;
     private bool isSleeping = true;
     private float counter = 0;
     private float sleepLimit = 0;
@@ -15,6 +16,7 @@ public class SleepingBlowfish : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<BubblerScript>();
         sleepLimit = sleepTimeBase + randomizeSleepTime();
         animator = GetComponentInChildren<Animator>();
         setIsSleeping(isSleeping);
@@ -34,7 +36,14 @@ public class SleepingBlowfish : MonoBehaviour
             return;
         }
 
-        // check room
+        animator.SetBool("isChecking", true);
+
+        if (playerController.IsSitting())
+        {
+            // increases one hour
+            // animation returns player
+            playerController.Reset();
+        }
         sleepLimit = sleepTimeBase + randomizeSleepTime();
         setIsSleeping(false);
         counter = 0;
