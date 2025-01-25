@@ -25,6 +25,11 @@ void Start()
         return action;
     }
 
+    public GameObject GetObject()
+    {
+        throw new NotImplementedException();
+    }
+
     public void Interact()
     {
         _spriteRenderer.color = _color;

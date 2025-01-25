@@ -76,7 +76,7 @@ public class BubblerScript : MonoBehaviour
         {
             _animator.SetBool("forwardMovement", false);
             _animator.SetBool("backwardMovement", false);
-            return
+            return;
         }
 
         isSitting = false;

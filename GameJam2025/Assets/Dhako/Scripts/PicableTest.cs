@@ -23,6 +23,11 @@ public class PicableTest : MonoBehaviour, IInteractable
         return action;
     }
 
+    public GameObject GetObject()
+    {
+        throw new NotImplementedException();
+    }
+
     public void Interact()
     {
         InventarioController.Instance.SetObjectUI(_sprite,_id,_nombre);
