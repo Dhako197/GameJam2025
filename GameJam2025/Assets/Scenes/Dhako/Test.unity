@@ -1106,6 +1106,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8da93acd177155643845713b15aa5bbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _color: {r: 0.15549028, g: 1, b: 0, a: 1}
+  _spriteRenderer: {fileID: 2043645620}
 --- !u!1 &1000591836
 GameObject:
   m_ObjectHideFlags: 0
@@ -1847,11 +1849,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!4 &1672381455 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8034607762230154977, guid: 43cbaaa3915944970ba39265e193fcde, type: 3}
-  m_PrefabInstance: {fileID: 42547376}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1692135114
 GameObject:
   m_ObjectHideFlags: 0
@@ -2729,7 +2726,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3b01774292a13649ad990d882d891e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 1672381455}
   offset: {x: 0, y: 3, z: -6}
   smoothSpeed: 5
 --- !u!1660057539 &9223372036854775807
