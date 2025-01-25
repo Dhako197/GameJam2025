@@ -33,7 +33,7 @@ public class BubblerScript : MonoBehaviour
 
     void ExecuteAction()
     {
-        if (Input.GetKeyDown("Interact"))
+        if (Input.GetButton("Interact"))
         {
             if (currentInteractable != null)
             {

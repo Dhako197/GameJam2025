@@ -228,11 +228,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 135140702}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!4 &1124351557 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8034607762230154977, guid: 43cbaaa3915944970ba39265e193fcde, type: 3}
-  m_PrefabInstance: {fileID: 1246967639}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1246967639
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -241,6 +236,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1906699670321459027, guid: 43cbaaa3915944970ba39265e193fcde, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9659258
+      objectReference: {fileID: 0}
+    - target: {fileID: 1906699670321459027, guid: 43cbaaa3915944970ba39265e193fcde, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.2588191
+      objectReference: {fileID: 0}
+    - target: {fileID: 1906699670321459027, guid: 43cbaaa3915944970ba39265e193fcde, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 5487829058950787354, guid: 43cbaaa3915944970ba39265e193fcde, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6418058930987333323, guid: 43cbaaa3915944970ba39265e193fcde, type: 3}
       propertyPath: m_Name
       value: Bubler
@@ -1006,13 +1017,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7942074639158374567}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.44261682, y: -0, z: -0, w: 0.8967109}
-  m_LocalPosition: {x: 0, y: 7.928455, z: -20.73}
+  m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
+  m_LocalPosition: {x: 0, y: 4.72, z: -20.73}
   m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 52.542, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 30, y: 0, z: 0}
 --- !u!81 &4879521664805234686
 AudioListener:
   m_ObjectHideFlags: 0
@@ -1087,8 +1098,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3b01774292a13649ad990d882d891e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 1124351557}
-  offset: {x: 0, y: 7.928455, z: -6}
+  offset: {x: 0, y: 3, z: -6}
   smoothSpeed: 5
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
