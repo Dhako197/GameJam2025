@@ -12,6 +12,7 @@ public class BubblerScript : MonoBehaviour
     private Animator _animator;
     public bool Stand = true;
     [SerializeField] private Transform _transform;
+    [SerializeField] private GameObject _bubbleText;
 
 
     // Start is called before the first frame update
@@ -29,6 +30,7 @@ public class BubblerScript : MonoBehaviour
         {
             if (currentInteractable != null)
             {
+                _bubbleText.SetActive(false);
                 Debug.Log($"Interactuando con {currentInteractable.GetAction()}");
                 currentInteractable.Interact();
                 if (currentInteractable.GetAction() == "Sentarse")
@@ -92,6 +94,7 @@ public class BubblerScript : MonoBehaviour
         if (interactable != null)
         {
             currentInteractable = interactable;
+            _bubbleText.SetActive(true);
             Debug.Log($"Objeto interactuable detectado: {interactable.GetAction()}");
         }
     }
