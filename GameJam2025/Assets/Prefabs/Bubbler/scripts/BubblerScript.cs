@@ -54,6 +54,8 @@ public class BubblerScript : MonoBehaviour
 
         if (horizontalMovement != 0 || verticalMovement != 0)
         {
+            _animator.SetFloat("HorMove", horizontalMovement);
+
             Vector3 movement = new Vector3(horizontalMovement, 0, verticalMovement) * speed * Time.deltaTime;
             transform.Translate(movement, Space.Self);
         }
@@ -67,7 +69,6 @@ public class BubblerScript : MonoBehaviour
             _transform.localRotation = new Quaternion(0,0,0,0);
         }
         
-        _animator.SetFloat("HorMove", horizontalMovement);
     }
 
     void Crouch()
