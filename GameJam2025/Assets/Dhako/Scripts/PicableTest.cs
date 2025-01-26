@@ -12,15 +12,28 @@ public class PicableTest : MonoBehaviour, IInteractable
     [SerializeField] public Sprite _sprite;
     [SerializeField] public string _nombre;
 
+    private int _actionId;
+
     private void Start()
     {
         _sprite = GetComponentInChildren<SpriteRenderer>().sprite;
+        _actionId = System.Guid.NewGuid().GetHashCode();
     }
 
     public string GetAction()
     {
-        string action = "Tomar";
-        return action;
+        string actionType;
+        if (InventarioController.Instance._inventario[1].Cantidad > 0)
+        {
+            actionType = "Tomar";
+            return actionType;
+        }
+        else
+        {
+            actionType = "Aun necesitas algo para intercambiar";
+            return actionType;
+        }
+        
     }
 
     public GameObject GetObject()
@@ -28,18 +41,9 @@ public class PicableTest : MonoBehaviour, IInteractable
         return gameObject;
     }
 
-    public void Interact()
+    public int GetId()
     {
-       
+        return _actionId;
     }
-
-    public bool CanBePickedUp()
-    {
-        return false;
-    }
-
-    public void PickUp()
-    {
-        throw new System.NotImplementedException();
-    }
+    
 }

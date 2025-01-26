@@ -139,7 +139,7 @@ public class InventarioController : MonoBehaviour
 
     private IEnumerator Cooldown()
     {
-        yield return new WaitForSecondsRealtime(1f);
+        yield return new WaitForSecondsRealtime(0.5f);
         Time.timeScale = 1;
         isUiOpen = true;
     }
