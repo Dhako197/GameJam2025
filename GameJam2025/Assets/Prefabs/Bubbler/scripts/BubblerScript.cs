@@ -17,7 +17,14 @@ public class BubblerScript : MonoBehaviour
     [SerializeField] private Transform _transform;
     [SerializeField] private GameObject _bubbleText;
     [SerializeField] private GameObject _bubbleTextOpinion;
-    private bool canMove = true;
+
+    [Header("Introduccion")]
+    private bool isIntroOn = true;
+    [SerializeField] private string[] introTextos;
+    [SerializeField] private GameObject _bubbleTextDinamico;
+    [SerializeField] private TextMeshProUGUI introTMPro;
+    private int contador=0;
+    private bool canMove = false;
 
     [SerializeField] private TextMeshProUGUI textBox;
 
@@ -25,14 +32,55 @@ public class BubblerScript : MonoBehaviour
     void Start()
     {
         _animator = GetComponentInChildren<Animator>();
+        _bubbleTextDinamico.SetActive(true);
+        canMove = false;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (isIntroOn)
+        {
+            UpdateText();
+            if (Input.GetButton("Interact"))
+            {
+                contador++;
+            }
+        }
+        
+        
         if(canMove) Walk();
         Crouch();
         ExecuteAction();
+    }
+
+    private void SetCamera()
+    {
+        //(0, 1.25,-2.49)
+        //(0,3,-6)
+        GameObject followPlayerGo= GameObject.FindGameObjectWithTag("MainCamera");
+        FollowPlayer followPlayerScriop = followPlayerGo.GetComponent<FollowPlayer>();
+        if (followPlayerScriop != null)
+        {
+            followPlayerScriop.offset = new Vector3(0, 3, -6);
+        }
+
+    }
+
+    private void UpdateText()
+    {
+        if (contador >= introTextos.Length -1)
+        {
+            introTMPro.text = introTextos[contador];
+        }
+        else
+        {
+            SetCamera();
+            _bubbleTextDinamico.SetActive(false);
+            isIntroOn = false;
+            canMove = true;
+        }
+       
     }
 
 
