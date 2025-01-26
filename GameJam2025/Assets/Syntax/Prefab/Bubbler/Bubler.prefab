@@ -950,7 +950,14 @@ MonoBehaviour:
   _transform: {fileID: 7585285000150863804}
   _bubbleText: {fileID: 9040576716640976695}
   _bubbleTextOpinion: {fileID: 3742546684030297101}
+  introTextos: []
+  _bubbleTextDinamico: {fileID: 0}
+  introTMPro: {fileID: 0}
+  contador: 0
   textBox: {fileID: 3289499932494520110}
+  controladorDisparo: {fileID: 0}
+  prefabBala: {fileID: 0}
+  cantidadBalas: 0
 --- !u!136 &7941493290280043074
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -988,3 +995,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controladorDisparo: {fileID: 39665910732382395}
   prefabBala: {fileID: 8583300196187981037, guid: d091de00eae254fa79306cbb67401e90, type: 3}
+  cantidadBalas: 0
