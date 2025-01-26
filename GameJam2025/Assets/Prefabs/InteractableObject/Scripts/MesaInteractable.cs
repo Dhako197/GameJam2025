@@ -18,7 +18,7 @@ public class MesaInteractable : MonoBehaviour, IInteractable
 
     public string GetAction()
     {
-        string action = "Inspect";
+        string action = "Inspeccionar";
         return action;
     }
 
