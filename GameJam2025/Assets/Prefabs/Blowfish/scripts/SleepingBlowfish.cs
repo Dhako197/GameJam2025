@@ -116,6 +116,20 @@ public class SleepingBlowfish : MonoBehaviour
 
     void reachBubbler()
     {
+        animator.SetBool("isWalking", true);
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        Vector3 ogPosition = transform.position;
+        transform.position = player.transform.position;
+        player.SetActive(false);
 
+        animator.SetBool("isWithKid", true);
+        Vector3 initialPosition = new Vector3(0.0f, 1, -10);
+        transform.position = initialPosition;
+        player.SetActive(true);
+
+        transform.position = ogPosition;
+        animator.SetBool("isWalking", false);
+        animator.SetBool("isWithKid", false);
+        animator.SetBool("isChecking", false);
     }
 }
