@@ -34,7 +34,6 @@ public class EnemyController : MonoBehaviour
             setTimeLimit();
         }
 
-        Debug.Log(counter + " " + timeLimit);
         if (counter > timeLimit)
         {
             animator.SetBool("startGum", true);
