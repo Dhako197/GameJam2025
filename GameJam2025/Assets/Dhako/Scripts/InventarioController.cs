@@ -68,7 +68,15 @@ public class InventarioController : MonoBehaviour
            if (picableTest._id == obj.ObjectID)
            {
                obj.gameObject.SetActive(true);
-               obj.Cantidad++;
+               if (picableTest._id == 3)
+               {
+                   obj.Cantidad = 1;
+               }
+               else
+               {
+                   obj.Cantidad++;
+               }
+               
                Destroy(picableTest.gameObject);
                CheckInfo(obj.Cantidad,picableTest._id);
                break;

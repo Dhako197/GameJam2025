@@ -23,7 +23,7 @@ public class MenuPerdiste : MonoBehaviour
         Time.timeScale = 1f;
         
     }
-<<<<<<< HEAD
+
 
     void Pause()
     {
@@ -31,9 +31,7 @@ public class MenuPerdiste : MonoBehaviour
         Time.timeScale = 0f;
     }
 
-=======
-    
->>>>>>> feature/audio
+
     public void Renaudar()
     {
         Time.timeScale = 1f;
