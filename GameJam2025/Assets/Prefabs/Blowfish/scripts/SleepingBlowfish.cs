@@ -88,7 +88,8 @@ public class SleepingBlowfish : MonoBehaviour
         counter += Time.deltaTime;
         if (counter > sleepLimit) {
             SetIsSleeping(false);
-            bubbleAnimator.SetBool("isChargin", true);
+            bubbleAnimator.GetComponent<SpriteRenderer>().enabled = true;
+
         }
     }
 
