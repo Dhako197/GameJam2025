@@ -15,6 +15,7 @@ public class BubblerScript : MonoBehaviour
     private bool isSitting = false;
     private IInteractable currentInteractable;
     private Animator _animator;
+    private Vector3 initialPosition = Vector3.zero;
     public bool Stand = true;
     [SerializeField] private Transform _transform;
     [SerializeField] private GameObject _bubbleText;
@@ -25,12 +26,11 @@ public class BubblerScript : MonoBehaviour
     [SerializeField] private string[] introTextos;
     [SerializeField] private GameObject _bubbleTextDinamico;
     [SerializeField] private TextMeshProUGUI introTMPro;
-    public int contador=0;
+    public int contador = 0;
     private bool canMove = false;
 
     [Header("Cambio")]
     private bool changeOportunity = false;
-
     private bool GetKey = false;
     
     [Header("NextLEvel")]
@@ -47,6 +47,7 @@ public class BubblerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        initialPosition = transform.position;
         _animator = GetComponentInChildren<Animator>();
         _bubbleTextDinamico.SetActive(true);
         canMove = false;
@@ -297,4 +298,18 @@ public class BubblerScript : MonoBehaviour
         return actionName + ", presiona e";
     }
 
+    public Vector3 GetInitialPosition()
+    {
+        return initialPosition;
+    }
+
+    public bool GetIsIntroOn()
+    {
+        return isIntroOn;
+    }
+
+    public void ClearInteractable()
+    {
+        currentInteractable = null;
+    }
 }
