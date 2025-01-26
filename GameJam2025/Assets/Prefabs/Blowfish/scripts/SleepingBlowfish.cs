@@ -13,14 +13,30 @@ public class SleepingBlowfish : MonoBehaviour
     private bool isChecking = false;
     private float counter = 0;
     private float sleepLimit = 0;
+    private Animator[] animators;
     private Animator animator;
+    private Animator bubbleAnimator;
 
     // Start is called before the first frame update
     void Start()
     {
-        animator = GetComponentInChildren<Animator>();
+        animators = GetComponentsInChildren<Animator>();
         playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<BubblerScript>();
         sleepLimit = sleepTimeBase + randomizeSleepTime();
+        for (int i = 0; i < animators.Length; i++)
+        {
+            Debug.Log(animators[i].name);
+
+            if (animators[i].name == "sprite")
+            {
+                animator = animators[i];
+            }
+
+            if (animators[i].name == "bubble")
+            {
+                bubbleAnimator = animators[i];
+            }
+        }
         animator.SetBool("isSleeping", isSleeping);
         animator.SetBool("isChecking", isChecking);
 
@@ -40,16 +56,19 @@ public class SleepingBlowfish : MonoBehaviour
             return;
         }
 
+        bubbleAnimator.SetBool("isChargin", false);
         if (playerController != null && playerController.IsSitting())
         {
             // increases one hour
             // animation returns player
+            //animator.SetBool("isWalking", true);
+            //Transform player = GameObject.FindGameObjectWithTag("Player");
+            //transform.position = new Vector3(pla)
+
             reachBubbler();
             playerController.Reset();
             return;
         }
-
-        SetIsChecking(false);
     }
 
     public void ResetSleep()
@@ -69,6 +88,7 @@ public class SleepingBlowfish : MonoBehaviour
         counter += Time.deltaTime;
         if (counter > sleepLimit) {
             SetIsSleeping(false);
+            bubbleAnimator.SetBool("isChargin", true);
         }
     }
 
