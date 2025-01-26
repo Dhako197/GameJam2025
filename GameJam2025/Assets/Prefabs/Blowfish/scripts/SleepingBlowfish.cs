@@ -13,6 +13,7 @@ public class SleepingBlowfish : MonoBehaviour
     private bool isChecking = false;
     private float counter = 0;
     private float sleepLimit = 0;
+    private bool isCatching = false;
     private Animator[] animators;
     private Animator animator;
     private Animator bubbleAnimator;
@@ -56,15 +57,10 @@ public class SleepingBlowfish : MonoBehaviour
             return;
         }
 
-        //bubbleAnimator.GetComponent<SpriteRenderer>().enabled = false;
-        if (playerController != null && playerController.IsSitting())
+        Debug.Log(playerController.IsSitting());
+        if (playerController != null && !playerController.IsSitting() && !isCatching)
         {
-            // increases one hour
-            // animation returns player
-            //animator.SetBool("isWalking", true);
-            //Transform player = GameObject.FindGameObjectWithTag("Player");
-            //transform.position = new Vector3(pla)
-
+            isCatching = true;
             reachBubbler();
             playerController.Reset();
             return;
@@ -90,8 +86,6 @@ public class SleepingBlowfish : MonoBehaviour
         if (counter > sleepLimit) {
             SetIsSleeping(false);
             bubbleAnimator.SetBool("isCharging", true);
-            //bubbleAnimator.GetComponent<SpriteRenderer>().enabled = true;
-
         }
     }
 
@@ -117,6 +111,7 @@ public class SleepingBlowfish : MonoBehaviour
     void reachBubbler()
     {
         animator.SetBool("isWalking", true);
+        Debug.Log("Reaching buibbler");
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         Vector3 ogPosition = transform.position;
         transform.position = player.transform.position;

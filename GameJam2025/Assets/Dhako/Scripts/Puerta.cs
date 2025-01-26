@@ -13,7 +13,7 @@ public class Puerta : MonoBehaviour, IInteractable
     void Start()
     {
         _boxCollider = GetComponent<BoxCollider>();
-        animator = GetComponent<Animator>();
+        animator = GetComponentInChildren<Animator>();
     }
     // Update is called once per frame
     void Update()
@@ -27,7 +27,7 @@ public class Puerta : MonoBehaviour, IInteractable
         return action;
     }
 
-    public void Interact()
+    public void Open()
     {
         _spriteRenderer.color = _color;
         _boxCollider.enabled = false;
