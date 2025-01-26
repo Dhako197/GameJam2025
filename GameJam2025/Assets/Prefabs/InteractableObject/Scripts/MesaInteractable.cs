@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class MesaInteractable : MonoBehaviour, IInteractable
 {
-    // Start is called before the first frame update
-    void Start()
+      private int id;
+
+    public void Start()
     {
-        
+        id = System.Guid.NewGuid().GetHashCode();
     }
 
     // Update is called once per frame
@@ -25,5 +26,10 @@ public class MesaInteractable : MonoBehaviour, IInteractable
     public GameObject GetObject()
     {
         return gameObject;
+    }
+
+    public int GetId()
+    {
+        return id;
     }
 }

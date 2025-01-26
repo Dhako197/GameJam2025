@@ -9,11 +9,14 @@ public class Puerta : MonoBehaviour, IInteractable
     [SerializeField] private SpriteRenderer _spriteRenderer;
     private BoxCollider _boxCollider;
     private Animator animator;
+    private int id;
+
 
     void Start()
     {
         _boxCollider = GetComponent<BoxCollider>();
         animator = GetComponentInChildren<Animator>();
+        id = System.Guid.NewGuid().GetHashCode();
     }
     // Update is called once per frame
     void Update()
@@ -37,6 +40,11 @@ public class Puerta : MonoBehaviour, IInteractable
     public GameObject GetObject()
     {
         return gameObject;
+    }
+
+    public int GetId()
+    {
+        return id;
     }
 }
     
