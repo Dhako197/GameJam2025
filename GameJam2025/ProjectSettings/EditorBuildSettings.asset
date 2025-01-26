@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Syntax/Scenes/Disparo.unity
+    guid: cbe4295b6fa3f4c3384ca94bcbd1fdca
   m_configObjects: {}
