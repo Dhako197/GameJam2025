@@ -24,13 +24,11 @@ public class MenuPerdiste : MonoBehaviour
         
     }
 
-
     void Pause()
     {
         perdisteMenuUI.SetActive(true);
         Time.timeScale = 0f;
     }
-
 
     public void Renaudar()
     {
