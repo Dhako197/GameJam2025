@@ -4,7 +4,14 @@ using UnityEngine;
 
 public class ChairObject : MonoBehaviour, IInteractable
 {
-   public string GetAction()
+    private int id;
+
+    public void Start()
+    {
+        id = System.Guid.NewGuid().GetHashCode();
+    }
+
+    public string GetAction()
    {
       return "Sentarse";
    }
@@ -12,5 +19,10 @@ public class ChairObject : MonoBehaviour, IInteractable
     public GameObject GetObject()
     {
         return gameObject;
+    }
+
+    public int GetId()
+    {
+        return id;
     }
 }

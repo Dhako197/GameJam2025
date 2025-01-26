@@ -8,12 +8,13 @@ public class MesaCollectible : MonoBehaviour, IInteractable
     private int count = 1;
     private float cooldown= 5;
     private bool startCooldown = false;
+    private int id;
 
     [SerializeField] private GameObject PicableObjPrefab;
     // Start is called before the first frame update
     void Start()
     {
-        
+        id = System.Guid.NewGuid().GetHashCode();
     }
 
     // Update is called once per frame
@@ -48,6 +49,10 @@ public class MesaCollectible : MonoBehaviour, IInteractable
             return PicableObjPrefab;
         }
         else return null;
+    }
 
+    public int GetId()
+    {
+        return id;
     }
 }

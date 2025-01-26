@@ -1,12 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static System.Collections.Specialized.BitVector32;
+using static UnityEngine.Rendering.DebugUI.Table;
 
 public class BubblerScript : MonoBehaviour
 {
@@ -14,6 +16,8 @@ public class BubblerScript : MonoBehaviour
     private bool crouching = false;
     private bool isSitting = false;
     private IInteractable currentInteractable;
+    private List<int> interactableIds = new List<int>();
+    private List<IInteractable> interactables = new List<IInteractable>();
     private Animator _animator;
     private Vector3 initialPosition = Vector3.zero;
     public bool Stand = true;
@@ -138,16 +142,16 @@ public class BubblerScript : MonoBehaviour
     }
     void ExecuteAction()
     {
-        if (Input.GetButtonDown("Interact"))
+        if (interactables.Count != 0)
         {
-            if (currentInteractable != null)
+            currentInteractable = interactables.Last();
+
+            if (Input.GetButtonDown("Interact"))
             {
-                _bubbleText.SetActive(false);
                 string action = currentInteractable.GetAction();
 
                 if (action == "Sentarse")
                 {
-                    _bubbleText.SetActive(false);
                     Sit();
                 }
 
@@ -177,7 +181,18 @@ public class BubblerScript : MonoBehaviour
                         InteractuableInfo interactuableInfo = info.GetComponent<InteractuableInfo>();
                         InventarioController.Instance.NoCollectionableInfo(interactuableInfo.InfoId);
                     }
+                }
 
+                interactableIds.RemoveAt(interactableIds.Count - 1);
+                interactables.RemoveAt(interactables.Count - 1);
+                currentInteractable = interactables.Last();
+                if (currentInteractable == null)
+                {
+                    _bubbleText.SetActive(false);
+                } else
+                {
+                    textBox = gameObject.GetComponentInChildren<TextMeshProUGUI>();
+                    textBox.text = BuildActionMessage(currentInteractable.GetAction());
                 }
             }
         }
@@ -226,14 +241,19 @@ public class BubblerScript : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         IInteractable interactable = other.GetComponent<IInteractable>();
-        if (interactable != null)
-        {
-            currentInteractable = interactable;
-            Debug.Log(currentInteractable.GetAction());
-            _bubbleText.SetActive(true);
-            textBox = gameObject.GetComponentInChildren<TextMeshProUGUI>();
-            textBox.text = BuildActionMessage(currentInteractable.GetAction());
+        int id = interactable.GetId();
+       
+        Debug.Log(interactable.GetId());
+        if (interactableIds.Contains(id)) {
+            return;
         }
+
+        interactableIds.Add(id);
+        interactables.Add(interactable);
+        Debug.Log(interactable.GetAction());
+        _bubbleText.SetActive(true);
+        textBox = gameObject.GetComponentInChildren<TextMeshProUGUI>();
+        textBox.text = BuildActionMessage(interactable.GetAction());
 
         if (other.CompareTag("Teacher") && InventarioController.Instance._inventario[1].Cantidad > 0)
         {
@@ -254,11 +274,22 @@ public class BubblerScript : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         IInteractable interactable = other.GetComponent<IInteractable>();
-        if (interactable != null && interactable == currentInteractable)
+        int id = interactable.GetId();
+
+        
+        int deleteIndex = interactableIds.IndexOf(id);
+        interactableIds.Remove(id);
+        interactables.RemoveAt(deleteIndex);
+
+        if (interactables.Count == 0)
         {
             currentInteractable = null; 
             _bubbleText.SetActive(false);
+        } else
+        {
+            currentInteractable = interactables.Last();
         }
+
         if (other.CompareTag("Teacher"))
         {
             _bubbleTextDinamico.SetActive(false);
@@ -310,6 +341,8 @@ public class BubblerScript : MonoBehaviour
 
     public void ClearInteractable()
     {
+        interactableIds.Clear();
+        interactables.Clear();
         currentInteractable = null;
     }
 }
