@@ -112,9 +112,33 @@ public class InventarioController : MonoBehaviour
         }
     }
 
+    public void NoCollectionableInfo(int id)
+    {
+        if (isUiOpen == false)
+        {
+            switch (id)
+            {
+                case 4:
+                    infocard[3].SetActive(true);
+                    break;
+                case 5:
+                    infocard[4].SetActive(true);
+                    break;
+                case 6:
+                    infocard[5].SetActive(true);
+                    break;
+            }
+            Debug.Log("Entro a la info");
+            Time.timeScale = 0;
+            StartCoroutine("Cooldown");
+        }
+       
+       
+    }
+
     private IEnumerator Cooldown()
     {
-        yield return new WaitForSecondsRealtime(0.2f);
+        yield return new WaitForSecondsRealtime(1f);
         isUiOpen = true;
     }
 
