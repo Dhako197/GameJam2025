@@ -37,7 +37,7 @@ public class InventarioController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetButtonDown("Interact"))
+        if (Input.GetButtonDown("Interact") || Input.GetAxis("Horizontal") > 0.1 || Input.GetAxis("Vertical") > 0.1)
         {
             if (isUiOpen)
             {
