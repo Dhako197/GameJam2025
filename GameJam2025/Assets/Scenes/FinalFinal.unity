@@ -4813,11 +4813,11 @@ Transform:
   m_GameObject: {fileID: 633292838}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 6.947903, y: 4.15, z: -21.876118}
+  m_LocalPosition: {x: -1.1520972, y: 0.15, z: -11.5761175}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 1780870101}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &633292840
 MonoBehaviour:
@@ -15131,7 +15131,6 @@ Transform:
   - {fileID: 1138994086}
   - {fileID: 1373422145}
   - {fileID: 1655826006}
-  - {fileID: 633292839}
   - {fileID: 1610708154}
   - {fileID: 901693884}
   - {fileID: 560236686}
@@ -18153,6 +18152,7 @@ GameObject:
   - component: {fileID: 776193326915160324}
   - component: {fileID: 1646528514278782206}
   - component: {fileID: 1482433903739816996}
+  - component: {fileID: 8507393447607736838}
   m_Layer: 0
   m_Name: Llaves
   m_TagString: Teacher
@@ -18177,7 +18177,7 @@ Transform:
   m_GameObject: {fileID: 46778132819713526}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0.71}
   m_LocalScale: {x: 0.99999994, y: 0.99999994, z: 0.99999994}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -18192,13 +18192,28 @@ Transform:
   m_GameObject: {fileID: 2927569651972934562}
   serializedVersion: 2
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: -1.965, y: 1.289, z: 7.47}
+  m_LocalPosition: {x: -2.028, y: 1.376, z: 7.319}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 8389977831950103693}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 30, y: 0, z: 0}
+--- !u!114 &8507393447607736838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2927569651972934562}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf215480c9443e848a5d33f7c7d3fe10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: 3
+  _sprite: {fileID: 0}
+  _nombre: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -18216,6 +18231,7 @@ SceneRoots:
   - {fileID: 971009483}
   - {fileID: 646277420}
   - {fileID: 2117904261}
+  - {fileID: 633292839}
   - {fileID: 844696998}
   - {fileID: 204916121}
   - {fileID: 2084016732}
