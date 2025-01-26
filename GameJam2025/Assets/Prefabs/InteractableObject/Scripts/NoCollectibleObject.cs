@@ -6,7 +6,7 @@ public class NonCollectibleObject : MonoBehaviour, IInteractable
 
     public string GetAction()
     {
-        return "Inspect"; 
+        return "Inspeccionar"; 
     }
 
     public GameObject GetObject()

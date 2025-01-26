@@ -814,6 +814,7 @@ MonoBehaviour:
   _transform: {fileID: 1906699670321459027}
   _bubbleText: {fileID: 5487829058950787354}
   _bubbleTextOpinion: {fileID: 6765438903032438298}
+  textBox: {fileID: 7471384998866349683}
 --- !u!136 &6659320880877722096
 CapsuleCollider:
   m_ObjectHideFlags: 0
