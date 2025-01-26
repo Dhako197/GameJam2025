@@ -6,16 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-<<<<<<< HEAD
-<<<<<<< HEAD
     path: Assets/Scenes/FinalFinal.unity
     guid: 09eeb9627a29e204abdcb63d7c162e7e
-=======
+  - enabled: 1
     path: Assets/Syntax/Scenes/Disparo.unity
     guid: cbe4295b6fa3f4c3384ca94bcbd1fdca
->>>>>>> 555c196 (pantalla se acabo el tiempo)
-=======
-    path: Assets/Syntax/Scenes/Disparo.unity
-    guid: cbe4295b6fa3f4c3384ca94bcbd1fdca
->>>>>>> feature/audio
+  - enabled: 0
+    path: Assets/Syntax/Scenes/MenuInicial.unity
+    guid: 078216b8b3c154b718db008ed8375243
   m_configObjects: {}
