@@ -4,7 +4,7 @@ public class CollectibleObject : MonoBehaviour, IInteractable
 {
     public string GetAction()
     {
-        return "Take"; 
+        return "Tomar"; 
     }
 
     public GameObject GetObject()

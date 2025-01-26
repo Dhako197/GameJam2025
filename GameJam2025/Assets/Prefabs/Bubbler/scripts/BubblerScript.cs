@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using static System.Collections.Specialized.BitVector32;
 
 public class BubblerScript : MonoBehaviour
 {
@@ -14,7 +16,7 @@ public class BubblerScript : MonoBehaviour
     public bool Stand = true;
     [SerializeField] private Transform _transform;
     [SerializeField] private GameObject _bubbleText;
-
+    [SerializeField] private TextMeshProUGUI textBox;
 
     // Start is called before the first frame update
     void Start()
@@ -41,12 +43,13 @@ public class BubblerScript : MonoBehaviour
                 string action = currentInteractable.GetAction();
 
                 //currentInteractable.Interact(gameObject);
-                if (action == "Sit")
+                if (action == "Sentarse")
                 {
+                    _bubbleText.SetActive(false);
                     Sit();
                 }
 
-                if (action == "Inspect") 
+                if (action == "Inspeccionar") 
                 {
                     GameObject inspectedObject = currentInteractable.GetObject();
                     Transform inspectedTransform = inspectedObject.transform;
@@ -54,6 +57,7 @@ public class BubblerScript : MonoBehaviour
                     GameObject innerElement = inspectedObject.GetComponent<NonCollectibleObject>().GetInnerElement();
                     currentInteractable = innerElement.GetComponent<IInteractable>();
                     _bubbleText.SetActive(true);
+                    textBox.SetText(BuildActionMessage(action));
                 }
 
                 if (action == "Take")
@@ -83,6 +87,7 @@ public class BubblerScript : MonoBehaviour
 
         isSitting = false;
         _animator.SetBool("isSitting", false);
+        _animator.SetBool("isSitting", false);
         _animator.SetBool("forwardMovement", true);
         _animator.SetBool("backwardMovement", verticalMovement > 0);
 
@@ -102,8 +107,9 @@ public class BubblerScript : MonoBehaviour
     public void Sit()
     {
         isSitting = true;
+        Vector3 seatPosition = currentInteractable.GetObject().transform.position;
+        transform.position = new Vector3(seatPosition.x, transform.position.y, seatPosition.z + 0.5f);
         _animator.SetBool("isSitting", true);
-        Debug.Log("Sentandose en la silla");
     }
 
     private void OnTriggerEnter(Collider other)
@@ -112,7 +118,10 @@ public class BubblerScript : MonoBehaviour
         if (interactable != null)
         {
             currentInteractable = interactable;
+            Debug.Log(currentInteractable.GetAction());
             _bubbleText.SetActive(true);
+            textBox = gameObject.GetComponentInChildren<TextMeshProUGUI>();
+            textBox.text = BuildActionMessage(currentInteractable.GetAction());
         }
     }
 
@@ -134,6 +143,11 @@ public class BubblerScript : MonoBehaviour
     public void Reset()
     {
 
+    }
+
+    string BuildActionMessage(string actionName)
+    {
+        return actionName + ", presiona e";
     }
 
 }

@@ -44,6 +44,7 @@ public class SleepingBlowfish : MonoBehaviour
         {
             // increases one hour
             // animation returns player
+            reachBubbler();
             playerController.Reset();
             return;
         }
@@ -88,5 +89,10 @@ public class SleepingBlowfish : MonoBehaviour
     {
         isChecking = checking;
         animator.SetBool("isChecking", checking);
+    }
+
+    void reachBubbler()
+    {
+
     }
 }
