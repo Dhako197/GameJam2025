@@ -14,6 +14,7 @@ public class InventarioController : MonoBehaviour
     [SerializeField] private GameObject[] infocard;
 
     private bool isUiOpen = false;
+    private List<int> entered = new List<int>();
 
     private void Awake()
     {
@@ -37,7 +38,7 @@ public class InventarioController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetButtonDown("Interact") || Input.GetAxis("Horizontal") > 0.1 || Input.GetAxis("Vertical") > 0.1)
+        if (Input.GetButtonDown("Interact") || Math.Abs(Input.GetAxis("Horizontal")) > 0.1 || Math.Abs(Input.GetAxis("Vertical")) > 0.1)
         {
             if (isUiOpen)
             {
@@ -91,7 +92,7 @@ public class InventarioController : MonoBehaviour
 
     private void CheckInfo(int catidad, int id)
     {
-        if (catidad == 1)
+        if (catidad == 1 && !hasEntered(id))
         { 
             switch (id)
             {
@@ -106,9 +107,9 @@ public class InventarioController : MonoBehaviour
                     break;
             }
 
+            markEntered(id);
             Time.timeScale = 0;
             StartCoroutine("Cooldown");
-
         }
     }
 
@@ -116,6 +117,8 @@ public class InventarioController : MonoBehaviour
     {
         if (isUiOpen == false)
         {
+            Debug.Log(isUiOpen);
+            Debug.Log(id);
             switch (id)
             {
                 case 4:
@@ -132,13 +135,12 @@ public class InventarioController : MonoBehaviour
             Time.timeScale = 0;
             StartCoroutine("Cooldown");
         }
-       
-       
     }
 
     private IEnumerator Cooldown()
     {
         yield return new WaitForSecondsRealtime(1f);
+        Time.timeScale = 1;
         isUiOpen = true;
     }
 
@@ -159,4 +161,13 @@ public class InventarioController : MonoBehaviour
         }
     }
     
+    void markEntered(int id)
+    {
+        entered.Add(id);
+    }
+
+    bool hasEntered(int id)
+    {
+        return entered.Contains(id);
+    }
 }

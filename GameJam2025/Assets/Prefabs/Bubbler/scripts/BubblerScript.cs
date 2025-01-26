@@ -57,6 +57,14 @@ public class BubblerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        specialInteractions();
+        Walk();
+        Crouch();
+        ExecuteAction();
+    }
+
+    private void specialInteractions()
+    {
         if (Input.GetButtonDown("Interact"))
         {
             if (isIntroOn)
@@ -65,7 +73,7 @@ public class BubblerScript : MonoBehaviour
                 UpdateText();
             }
 
-            if (changeOportunity == true && GetKey== false)
+            if (changeOportunity == true && GetKey == false)
             {
                 InventarioController.Instance._inventario[1].Cantidad--;
                 InventarioController.Instance.SetObByID(3);
@@ -76,10 +84,11 @@ public class BubblerScript : MonoBehaviour
 
             if (NextLevel == true)
             {
+                currentInteractable.GetObject().GetComponentInChildren<Puerta>().Open();
                 InventarioController.Instance._inventario[2].Cantidad--;
                 SceneManager.LoadScene("Scenes/Dhako/Test");
             }
-            
+
             if (SceneManager.GetActiveScene().name.Contains("Disparo"))
             {
                 Debug.Log("Disparando...");
@@ -94,9 +103,6 @@ public class BubblerScript : MonoBehaviour
                 }
             }
         }
-        if(canMove) Walk();
-        Crouch();
-        ExecuteAction();
     }
 
     private void SetCamera()
@@ -138,7 +144,6 @@ public class BubblerScript : MonoBehaviour
                 _bubbleText.SetActive(false);
                 string action = currentInteractable.GetAction();
 
-                //currentInteractable.Interact(gameObject);
                 if (action == "Sentarse")
                 {
                     _bubbleText.SetActive(false);
@@ -158,10 +163,8 @@ public class BubblerScript : MonoBehaviour
                     GameObject item = currentInteractable.GetObject();
                     if (item != null)
                     {
-                        // Add to inventory
                         PicableTest picableObj= item.GetComponent<PicableTest>();
                         InventarioController.Instance.SetObjectUI(picableObj);
-                        //Destroy(item);
                     }
                 }
 
@@ -181,6 +184,7 @@ public class BubblerScript : MonoBehaviour
 
     void Walk()
     {
+        if (!canMove) { return; }
         float horizontalMovement = Input.GetAxis("Horizontal");
         float verticalMovement = Input.GetAxis("Vertical");
 
