@@ -23,17 +23,8 @@ public class PicableTest : MonoBehaviour, IInteractable
     public string GetAction()
     {
         string actionType;
-        if (InventarioController.Instance._inventario[1].Cantidad > 0)
-        {
-            actionType = "Tomar";
-            return actionType;
-        }
-        else
-        {
-            actionType = "Aun necesitas algo para intercambiar";
-            return actionType;
-        }
-        
+        actionType = "Tomar";
+        return actionType;
     }
 
     public GameObject GetObject()

@@ -36,6 +36,8 @@ public class BubblerScript : MonoBehaviour
     [Header("Cambio")]
     private bool changeOportunity = false;
     private bool GetKey = false;
+    [SerializeField] private GameObject LlavesObj;
+    [SerializeField] private GameObject LlavesJuegueteObj;
     
     [Header("NextLEvel")]
     private bool NextLevel = false;
@@ -80,8 +82,10 @@ public class BubblerScript : MonoBehaviour
 
             if (changeOportunity == true && GetKey == false)
             {
-                InventarioController.Instance._inventario[1].Cantidad--;
+                InventarioController.Instance.UseItem(2);
                 InventarioController.Instance.SetObByID(3);
+                LlavesObj.SetActive(false);
+                LlavesJuegueteObj.SetActive(true);
                 _bubbleTextDinamico.SetActive(false);
                 GetKey = true;
 

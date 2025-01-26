@@ -105,6 +105,10 @@ public class InventarioController : MonoBehaviour
                 case 3:
                     infocard[2].SetActive(true);
                     break;
+                case 6:
+                    infocard[5].SetActive(true);
+                    Debug.Log("abre info pitillo");
+                    break;
             }
 
             markEntered(id);
@@ -126,9 +130,6 @@ public class InventarioController : MonoBehaviour
                     break;
                 case 5:
                     infocard[4].SetActive(true);
-                    break;
-                case 6:
-                    infocard[5].SetActive(true);
                     break;
             }
             Debug.Log("Entro a la info");
