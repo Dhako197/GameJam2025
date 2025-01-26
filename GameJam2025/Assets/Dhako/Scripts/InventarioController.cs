@@ -8,7 +8,12 @@ public class InventarioController : MonoBehaviour
 {
     // Start is called before the first frame update
     public static InventarioController Instance { get; private set; }
-    [SerializeField] private ObjetoInventario[] _inventario;
+    [SerializeField] public ObjetoInventario[] _inventario;
+
+    [Header("InfoCards")] 
+    [SerializeField] private GameObject[] infocard;
+
+    private bool isUiOpen = false;
 
     private void Awake()
     {
@@ -30,6 +35,30 @@ public class InventarioController : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (Input.GetButtonDown("Interact"))
+        {
+            if (isUiOpen)
+            {
+               Resume();
+            }
+            
+        }
+    }
+
+    private void Resume()
+    {
+        Debug.Log("se cierra");
+        foreach (var go in infocard)
+        {
+            go.SetActive(false);
+        }
+
+        isUiOpen = false;
+        Time.timeScale = 1;
+    }
+
     public void SetObjectUI(PicableTest picableTest)
     {
         
@@ -40,9 +69,53 @@ public class InventarioController : MonoBehaviour
                obj.gameObject.SetActive(true);
                obj.Cantidad++;
                Destroy(picableTest.gameObject);
+               CheckInfo(obj.Cantidad,picableTest._id);
                break;
            }
        }
+    }
+
+    public void SetObByID(int Id)
+    {
+        foreach (var obj in _inventario)
+        {
+            if (Id == obj.ObjectID)
+            {
+                obj.gameObject.SetActive(true);
+                obj.Cantidad++;
+                CheckInfo(obj.Cantidad, Id);
+                break;
+            }
+        }
+    }
+
+    private void CheckInfo(int catidad, int id)
+    {
+        if (catidad == 1)
+        { 
+            switch (id)
+            {
+                case 1:
+                    infocard[0].SetActive(true);
+                    break;
+                case 2:
+                    infocard[1].SetActive(true);
+                    break;
+                case 3:
+                    infocard[2].SetActive(true);
+                    break;
+            }
+
+            Time.timeScale = 0;
+            StartCoroutine("Cooldown");
+
+        }
+    }
+
+    private IEnumerator Cooldown()
+    {
+        yield return new WaitForSecondsRealtime(0.2f);
+        isUiOpen = true;
     }
 
     public void UseItem(int ID)

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using static System.Collections.Specialized.BitVector32;
 
 public class BubblerScript : MonoBehaviour
@@ -23,8 +24,15 @@ public class BubblerScript : MonoBehaviour
     [SerializeField] private string[] introTextos;
     [SerializeField] private GameObject _bubbleTextDinamico;
     [SerializeField] private TextMeshProUGUI introTMPro;
-    private int contador=0;
+    public int contador=0;
     private bool canMove = false;
+
+    [Header("Cambio")]
+    private bool changeOportunity = false;
+    
+    [Header("NextLEvel")]
+    private bool NextLevel = false;
+    
 
     [SerializeField] private TextMeshProUGUI textBox;
 
@@ -34,21 +42,33 @@ public class BubblerScript : MonoBehaviour
         _animator = GetComponentInChildren<Animator>();
         _bubbleTextDinamico.SetActive(true);
         canMove = false;
+        UpdateText();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (isIntroOn)
+        if (Input.GetButtonDown("Interact"))
         {
-            UpdateText();
-            if (Input.GetButton("Interact"))
+            if (isIntroOn)
             {
                 contador++;
+                UpdateText();
+            }
+
+            if (changeOportunity == true)
+            {
+                InventarioController.Instance._inventario[1].Cantidad--;
+                InventarioController.Instance.SetObByID(3);
+                _bubbleTextDinamico.SetActive(false);
+            }
+
+            if (NextLevel == true)
+            {
+                InventarioController.Instance._inventario[2].Cantidad--;
+                SceneManager.LoadScene("Scenes/Dhako/Test");
             }
         }
-        
-        
         if(canMove) Walk();
         Crouch();
         ExecuteAction();
@@ -69,12 +89,13 @@ public class BubblerScript : MonoBehaviour
 
     private void UpdateText()
     {
-        if (contador >= introTextos.Length -1)
+        if (contador < introTextos.Length )
         {
             introTMPro.text = introTextos[contador];
         }
         else
         {
+            Debug.Log("termino intro");
             SetCamera();
             _bubbleTextDinamico.SetActive(false);
             isIntroOn = false;
@@ -82,11 +103,9 @@ public class BubblerScript : MonoBehaviour
         }
        
     }
-
-
     void ExecuteAction()
     {
-        if (Input.GetButton("Interact"))
+        if (Input.GetButtonDown("Interact"))
         {
             if (currentInteractable != null)
             {
@@ -102,11 +121,6 @@ public class BubblerScript : MonoBehaviour
 
                 if (action == "Inspeccionar") 
                 {
-                    //GameObject inspectedObject = currentInteractable.GetObject();
-                    //Transform inspectedTransform = inspectedObject.transform;
-                    // focus camera
-                    //GameObject innerElement = inspectedObject.GetComponent<NonCollectibleObject>().GetInnerElement();
-                    //currentInteractable = innerElement.GetComponent<IInteractable>();
                     _bubbleTextOpinion.SetActive(true);
                     _animator.SetBool("Talk", true);
                     canMove = false;
@@ -121,7 +135,7 @@ public class BubblerScript : MonoBehaviour
                         // Add to inventory
                         PicableTest picableObj= item.GetComponent<PicableTest>();
                         InventarioController.Instance.SetObjectUI(picableObj);
-                        Destroy(item);
+                        //Destroy(item);
                     }
                    
                 }
@@ -179,6 +193,21 @@ public class BubblerScript : MonoBehaviour
             textBox = gameObject.GetComponentInChildren<TextMeshProUGUI>();
             textBox.text = BuildActionMessage(currentInteractable.GetAction());
         }
+
+        if (other.CompareTag("Teacher") && InventarioController.Instance._inventario[1].Cantidad > 0)
+        {
+            _bubbleTextDinamico.SetActive(true);
+            introTMPro.text = new string("Presiona E parta el cambio ninja");
+            changeOportunity = true;
+        }
+
+        if (other.CompareTag("Puerta") && InventarioController.Instance._inventario[2].Cantidad > 0)
+        {
+            _bubbleTextDinamico.SetActive(true);
+            introTMPro.text = new string("Presiona E para empezar tu venganza");
+            NextLevel = true;
+
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -188,6 +217,16 @@ public class BubblerScript : MonoBehaviour
         {
             currentInteractable = null; 
             _bubbleText.SetActive(false);
+        }
+        if (other.CompareTag("Teacher"))
+        {
+            _bubbleTextDinamico.SetActive(false);
+            changeOportunity = false;
+        }
+        if (other.CompareTag("Puerta"))
+        {
+            _bubbleTextDinamico.SetActive(false);
+            NextLevel = false;
         }
     }
 
