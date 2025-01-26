@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7215784427756213068}
-  - component: {fileID: 3724903062175389354}
+  - component: {fileID: 7259166074906702896}
   m_Layer: 0
   m_Name: TimeManager
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3724903062175389354
+--- !u!114 &7259166074906702896
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,6 +41,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8933826901518227910}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6fe301ce37f8ad64091394ebf95a14e2, type: 3}
+  m_Script: {fileID: 11500000, guid: a8725d3854ba34376a1e54cd1c8b03f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hourHand: {fileID: 0}
+  minuteHand: {fileID: 0}
+  referenceHand: {fileID: 0}
+  gameTimeDuration: 1200

@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class TimeManager : MonoBehaviour
 {
-    private int gameTimeExpectationMinutes = 20;
+    private int gameTimeExpectationMinutes = 5;
     private int maxHours = 6;
     private int initialTime = 0;
     private int finalTime;
@@ -16,25 +16,30 @@ public class TimeManager : MonoBehaviour
     private float hourConversion;
     private float minuteConvertion;
 
+    [SerializeField] private Transform hourHand;
+    [SerializeField] private Transform minuteHand;
+    
+    private int lastGameHour;
 
-    // Start is called before the first frame update
+
+// Start is called before the first frame update
     void Start()
     {
         int hour = System.DateTime.Now.Hour;
         initialTime = hour < 12 ? hour : hour - 12;
         finalTime = (initialTime + maxHours) < 12 ? initialTime + maxHours : initialTime - maxHours;
         currentTime = initialTime;
-
+        lastGameHour = Mathf.FloorToInt(currentTime);
         hourConversion = gameTimeExpectationMinutes / maxHours;
-        minuteConvertion = hourConversion / 60;
-        Debug.Log(initialTime);
-        Debug.Log(finalTime);
-        Debug.Log(currentTime);
-        Debug.Log(hourConversion);
-        Debug.Log(minuteConvertion);
+        minuteConvertion = hourConversion / 3600;
+        /*Debug.Log($"Initial time {initialTime}");
+        Debug.Log($"finalTime {finalTime}");
+        Debug.Log($"currentTime {currentTime}");
+        Debug.Log($"hourConversion {hourConversion}");
+        Debug.Log($"minuteConvertion {minuteConvertion}");*/
     }
 
-    // Update is called once per frame
+// Update is called once per frame
     void Update()
     {
         timer += Time.deltaTime;
@@ -43,9 +48,34 @@ public class TimeManager : MonoBehaviour
             counter++;
             currentTime += minuteConvertion;
         }
-        
-        Debug.Log(counter);
-        Debug.Log(currentTime);
+
+        UpdateClockHands();
+        CheckForNewGameHour();
+
+        /*Debug.Log($"Counter {counter}");
+        Debug.Log($"Current time {currentTime}");*/
+    }
+
+    void UpdateClockHands()
+    {
+        float hours = currentTime % 12;
+        float minutes = (currentTime * 60) % 60;
+        hourHand.localRotation = Quaternion.Euler(0, 0, -hours * 30);
+        minuteHand.localRotation = Quaternion.Euler(0, 0, -minutes * 6);
+    }
+    
+    void CheckForNewGameHour()
+    {
+        int currentGameHour = Mathf.FloorToInt(currentTime); // Obtener la hora de juego actual completa
+
+        // Verificar si ha pasado una nueva hora de juego
+        if (currentGameHour > lastGameHour)
+        {
+            lastGameHour = currentGameHour; // Actualizar la última hora de juego registrada
+            Debug.Log($"Ha pasado una hora de juego. Hora actual: {currentGameHour}");
+
+            // Aquí puedes agregar lógica adicional, como mostrar un mensaje en la UI
+        }
     }
 
     public void IncrementHour()
