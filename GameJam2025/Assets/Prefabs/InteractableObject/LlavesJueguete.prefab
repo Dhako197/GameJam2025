@@ -247,4 +247,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _id: 2
   _sprite: {fileID: 0}
-  _nombre: Piedra
+  _nombre: Llavejueguete
