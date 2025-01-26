@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static System.Collections.Specialized.BitVector32;
@@ -29,6 +30,8 @@ public class BubblerScript : MonoBehaviour
 
     [Header("Cambio")]
     private bool changeOportunity = false;
+
+    private bool GetKey = false;
     
     [Header("NextLEvel")]
     private bool NextLevel = false;
@@ -42,6 +45,7 @@ public class BubblerScript : MonoBehaviour
         _animator = GetComponentInChildren<Animator>();
         _bubbleTextDinamico.SetActive(true);
         canMove = false;
+        _animator.SetBool("Talk", true);
         UpdateText();
     }
 
@@ -56,11 +60,13 @@ public class BubblerScript : MonoBehaviour
                 UpdateText();
             }
 
-            if (changeOportunity == true)
+            if (changeOportunity == true && GetKey== false)
             {
                 InventarioController.Instance._inventario[1].Cantidad--;
                 InventarioController.Instance.SetObByID(3);
                 _bubbleTextDinamico.SetActive(false);
+                GetKey = true;
+
             }
 
             if (NextLevel == true)
@@ -100,6 +106,7 @@ public class BubblerScript : MonoBehaviour
             _bubbleTextDinamico.SetActive(false);
             isIntroOn = false;
             canMove = true;
+            _animator.SetBool("Talk", false);
         }
        
     }
@@ -137,7 +144,17 @@ public class BubblerScript : MonoBehaviour
                         InventarioController.Instance.SetObjectUI(picableObj);
                         //Destroy(item);
                     }
-                   
+                }
+
+                if (action == "Info")
+                {
+                    GameObject info = currentInteractable.GetObject();
+                    if (info != null)
+                    {
+                        InteractuableInfo interactuableInfo = info.GetComponent<InteractuableInfo>();
+                        InventarioController.Instance.NoCollectionableInfo(interactuableInfo.InfoId);
+                    }
+
                 }
             }
         }
