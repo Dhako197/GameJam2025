@@ -295,8 +295,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2127638753}
     - target: {fileID: 7259166074906702896, guid: f7283e58cda47e443a9b98358cefc391, type: 3}
+      propertyPath: menuPerdisteUI
+      value: 
+      objectReference: {fileID: 2019786425}
+    - target: {fileID: 7259166074906702896, guid: f7283e58cda47e443a9b98358cefc391, type: 3}
       propertyPath: gameTimeDuration
-      value: 300
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8933826901518227910, guid: f7283e58cda47e443a9b98358cefc391, type: 3}
       propertyPath: m_Name
@@ -1721,6 +1725,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2019786426}
+  - component: {fileID: 2019786427}
   m_Layer: 0
   m_Name: PantallaPerdisteController
   m_TagString: Untagged
@@ -1743,6 +1748,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2019786427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2019786425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f76919d852976406683a8409588c9284, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  perdisteMenuUI: {fileID: 1201871555}
 --- !u!1 &2051895330
 GameObject:
   m_ObjectHideFlags: 0
