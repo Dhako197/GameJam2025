@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DisparoBubbler : MonoBehaviour
 {
@@ -18,17 +19,19 @@ public class DisparoBubbler : MonoBehaviour
     {
         if (Input.GetButtonDown("Interact"))
         {
-            Debug.Log("Disparando...");
-            if (cantidadBalas > 0)
+            if (SceneManager.GetActiveScene().name.Contains("Disparo"))
             {
-                Disparar();
-                cantidadBalas--;
+                Debug.Log("Disparando...");
+                if (cantidadBalas > 0)
+                {
+                    Disparar();
+                    cantidadBalas--;
+                }
+                else
+                {
+                    Debug.Log("No tienes balas...");
+                }
             }
-            else
-            {
-                Debug.Log("No tienes balas...");
-            }
-           
         }
     }
     

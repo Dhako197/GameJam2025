@@ -38,6 +38,11 @@ public class BubblerScript : MonoBehaviour
     
 
     [SerializeField] private TextMeshProUGUI textBox;
+    
+    [Header("Disparo")]
+    [SerializeField] private Transform controladorDisparo;
+    [SerializeField] private GameObject prefabBala;
+    [SerializeField] private int cantidadBalas;
 
     // Start is called before the first frame update
     void Start()
@@ -73,6 +78,20 @@ public class BubblerScript : MonoBehaviour
             {
                 InventarioController.Instance._inventario[2].Cantidad--;
                 SceneManager.LoadScene("Scenes/Dhako/Test");
+            }
+            
+            if (SceneManager.GetActiveScene().name.Contains("Disparo"))
+            {
+                Debug.Log("Disparando...");
+                if (cantidadBalas > 0)
+                {
+                    Disparar();
+                    cantidadBalas--;
+                }
+                else
+                {
+                    Debug.Log("No tienes balas...");
+                }
             }
         }
         if(canMove) Walk();
@@ -257,6 +276,11 @@ public class BubblerScript : MonoBehaviour
         _animator.SetBool("Talk", false);
         _bubbleTextOpinion.SetActive(false);
         canMove = true;
+    }
+    
+    public void Disparar()
+    {
+        Instantiate(prefabBala, controladorDisparo.position, controladorDisparo.rotation);
     }
 
     public void Reset()
