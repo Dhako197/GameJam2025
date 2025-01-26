@@ -23,5 +23,15 @@ public class FollowPlayer : MonoBehaviour
             transform.position = smoothedPosition;
         }
     }
-    
+
+    public void ChangeTransform(Transform transform)
+    {
+        player = transform;
+    }
+
+    public void ResetTransform()
+    {
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+    }
+
 }
