@@ -39,7 +39,7 @@ public class SleepingBlowfish : MonoBehaviour
         }
         animator.SetBool("isSleeping", isSleeping);
         animator.SetBool("isChecking", isChecking);
-
+        bubbleAnimator.GetComponent<SpriteRenderer>().enabled = false;
     }
 
     // Update is called once per frame
@@ -56,7 +56,7 @@ public class SleepingBlowfish : MonoBehaviour
             return;
         }
 
-        bubbleAnimator.SetBool("isChargin", false);
+        bubbleAnimator.GetComponent<SpriteRenderer>().enabled = false;
         if (playerController != null && playerController.IsSitting())
         {
             // increases one hour

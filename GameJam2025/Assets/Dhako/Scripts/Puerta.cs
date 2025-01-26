@@ -8,11 +8,13 @@ public class Puerta : MonoBehaviour, IInteractable
     [SerializeField] private Color _color;
     [SerializeField] private SpriteRenderer _spriteRenderer;
     private BoxCollider _boxCollider;
+    private Animator animator;
 
-void Start()
-{
-    _boxCollider = GetComponent<BoxCollider>();
-}
+    void Start()
+    {
+        _boxCollider = GetComponent<BoxCollider>();
+        animator = GetComponent<Animator>();
+    }
     // Update is called once per frame
     void Update()
     {
@@ -29,16 +31,7 @@ void Start()
     {
         _spriteRenderer.color = _color;
         _boxCollider.enabled = false;
-    }
-
-    public bool CanBePickedUp()
-    {
-        return false;
-    }
-
-    public void PickUp()
-    {
-        throw new System.NotImplementedException();
+        animator.SetBool("isOpen", true);
     }
 
     public GameObject GetObject()
