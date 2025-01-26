@@ -65,13 +65,17 @@ public class BubblerScript : MonoBehaviour
                     Invoke("OpinionBubble", 1.5f);
                 }
 
-                if (action == "Take")
+                if (action == "Tomar")
                 {
                     GameObject item = currentInteractable.GetObject();
-                    // Add to inventory
-                    PicableTest picableObj= item.GetComponent<PicableTest>();
-                    InventarioController.Instance.SetObjectUI(picableObj);
-                    Destroy(item);
+                    if (item != null)
+                    {
+                        // Add to inventory
+                        PicableTest picableObj= item.GetComponent<PicableTest>();
+                        InventarioController.Instance.SetObjectUI(picableObj);
+                        Destroy(item);
+                    }
+                   
                 }
             }
         }

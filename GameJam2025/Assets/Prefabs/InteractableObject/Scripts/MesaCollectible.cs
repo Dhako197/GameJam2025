@@ -27,12 +27,12 @@ public class MesaCollectible : MonoBehaviour, IInteractable
     {
         if (count >= 1)
         {
-            string action = "Take";
+            string action = "Tomar";
             return action;
         }
         if (cooldown <= 0)
         {
-            string action2 = "Inspect";
+            string action2 = "Inspeccionar";
             return action2;
         }
         return null;

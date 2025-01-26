@@ -19,7 +19,7 @@ public class PicableTest : MonoBehaviour, IInteractable
 
     public string GetAction()
     {
-        string action = "Take";
+        string action = "Tomar";
         return action;
     }
 
