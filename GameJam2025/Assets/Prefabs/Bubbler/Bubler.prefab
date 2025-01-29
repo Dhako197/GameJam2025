@@ -471,7 +471,7 @@ GameObject:
   - component: {fileID: 7363140865496311188}
   - component: {fileID: 4397751561834199232}
   m_Layer: 5
-  m_Name: Canvasinpect
+  m_Name: CanvaInteractions
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -656,7 +656,7 @@ GameObject:
   - component: {fileID: 7577168760852473201}
   - component: {fileID: 5060315170709239840}
   m_Layer: 0
-  m_Name: Sombra7
+  m_Name: Sombra
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -840,7 +840,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 8, y: 9, z: 1}
+  m_Size: {x: 8, y: 9.5, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &1209377588888255663
 Rigidbody:
@@ -882,26 +882,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 7
-  Stand: 1
+  requiresIntro: 1
   _transform: {fileID: 1906699670321459027}
-  _bubbleText: {fileID: 5487829058950787354}
-  _bubbleTextOpinion: {fileID: 6765438903032438298}
+  introCommentCounter: 0
+  bubbleInteractions: {fileID: 5487829058950787354}
+  bubbleComments: {fileID: 6765438903032438298}
+  bubbleTextDinamico: {fileID: 7940409514760102849}
   introTextos:
   - Otra vez en castigo por mis malas notas...
-  - "Estoy cansado de que la pandilla chicletilla siempre me trate mal y nunca los
-    castiguen... hoy me vengar\xE9"
-  - "Ellos est\xE1n en el patio... tengo que salir de aqu\xED pero el profesor no
-    me puede ver... tengo que salir de aqu\xED"
+  - Estoy cansado de que la pandilla chicletilla siempre me trate mal y nunca los
+    castiguen...
+  - "Hoy me vengar\xE9"
   - "All\xED est\xE1n las llaves, podr\xEDa intercambiarlas por algo para que no
-    se de cuenta... investigar\xE9, quiz\xE1 encuentre algo mas para acabar con la
-    pandilla"
-  - U I I A U U I I I A U
-  _bubbleTextDinamico: {fileID: 7940409514760102849}
-  introTMPro: {fileID: 6665099360854551099}
-  contador: 0
+    se de cuenta..."
+  - "Investigar\xE9, quiz\xE1 encuentre algo mas para acabar con la pandilla"
   LlavesObj: {fileID: 0}
   LlavesJuegueteObj: {fileID: 0}
-  textBox: {fileID: 0}
   controladorDisparo: {fileID: 0}
   prefabBala: {fileID: 0}
   cantidadBalas: 0
@@ -941,7 +937,7 @@ GameObject:
   - component: {fileID: 4013131870142190738}
   - component: {fileID: 6499929479716431894}
   m_Layer: 5
-  m_Name: CanvaOpinio
+  m_Name: CanvaComments
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1065,7 +1061,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 30, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.0297, y: 0.06}
+  m_AnchoredPosition: {x: -0.122, y: 0.211}
   m_SizeDelta: {x: 1.81, y: 1.35}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8831167849156133559

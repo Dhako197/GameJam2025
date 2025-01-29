@@ -22,9 +22,7 @@ public class PicableTest : MonoBehaviour, IInteractable
 
     public string GetAction()
     {
-        string actionType;
-        actionType = "Tomar";
-        return actionType;
+        return "Tomar";
     }
 
     public GameObject GetObject()

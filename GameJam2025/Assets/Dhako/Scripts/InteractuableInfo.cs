@@ -14,8 +14,7 @@ public class InteractuableInfo : MonoBehaviour,IInteractable
 
     public string GetAction()
     {
-        string actionType = "Info";
-        return  actionType;
+        return "Info";
     }
 
     public GameObject GetObject()

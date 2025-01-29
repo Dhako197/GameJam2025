@@ -50,7 +50,6 @@ public class InventarioController : MonoBehaviour
 
     private void Resume()
     {
-        Debug.Log("se cierra");
         foreach (var go in infocard)
         {
             go.SetActive(false);

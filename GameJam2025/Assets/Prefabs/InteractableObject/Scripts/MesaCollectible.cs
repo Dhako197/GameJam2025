@@ -17,7 +17,6 @@ public class MesaCollectible : MonoBehaviour, IInteractable
         id = System.Guid.NewGuid().GetHashCode();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (startCooldown) cooldown -= 1 * Time.deltaTime;

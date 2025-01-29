@@ -6,34 +6,38 @@ using UnityEngine;
 
 public class SleepingBlowfish : MonoBehaviour
 {
-    [SerializeField] private float sleepTimeBase = 10.0f;
+    [SerializeField] private float sleepTimeBase = 9.0f;
     private BubblerScript playerController;
     private GameObject player;
     private bool isSleeping = true;
     private bool isChecking = false;
+    private bool isCatching = false;
     private float counter = 0;
     private float sleepLimit = 0;
-    private Vector3 ogPosition = Vector3.zero;
+    private Vector3 ogPosition = new Vector3(-3.65f, 1.45f, 9);
     private Vector3 destination = Vector3.zero;
     private string destinationName = string.Empty;
-    private bool isCatching = false;
     private Animator[] animators;
     private Animator animator;
     private Animator bubbleAnimator;
+    private FollowPlayer sceneCamera;
 
+    private readonly string isSleepingAnimation = "isSleeping";
+    private readonly string isCheckingAnimation = "isChecking";
+    private readonly string isWithKidAnimation = "isWithKid";
+    private readonly string isChargingAnimation = "isCharging";
+    private readonly string isWalkingAnimation = "isWalking";
 
-    // Start is called before the first frame update
     void Start()
     {
-        ogPosition = transform.position;
+        sceneCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<FollowPlayer>();
+
         animators = GetComponentsInChildren<Animator>();
         player = GameObject.FindGameObjectWithTag("Player");
         playerController = player.GetComponent<BubblerScript>();
         sleepLimit = sleepTimeBase + randomizeSleepTime();
         for (int i = 0; i < animators.Length; i++)
         {
-            Debug.Log(animators[i].name);
-
             if (animators[i].name == "sprite")
             {
                 animator = animators[i];
@@ -44,11 +48,10 @@ public class SleepingBlowfish : MonoBehaviour
                 bubbleAnimator = animators[i];
             }
         }
-        animator.SetBool("isSleeping", isSleeping);
-        animator.SetBool("isChecking", isChecking);
+        animator.SetBool(isSleepingAnimation, isSleeping);
+        animator.SetBool(isCheckingAnimation, isChecking);
     }
 
-    // Update is called once per frame
     void Update()
     {
         moveToDestination();
@@ -74,27 +77,24 @@ public class SleepingBlowfish : MonoBehaviour
     {
         if (destination != Vector3.zero)
         {
-            if (destinationName == "Kid")
+            if (destinationName == "kid")
             {
                 destination = GameObject.FindGameObjectWithTag("Player").transform.position;
             }
 
-            transform.position = Vector3.MoveTowards(transform.position, new Vector3(destination.x, transform.position.y, destination.z), Time.deltaTime * 5);
+            transform.position = Vector3.MoveTowards(transform.position, new Vector3(destination.x, transform.position.y, destination.z), Time.deltaTime * 10f);
             Vector3 diff = destination - transform.position;
 
 
-            if (Math.Abs(diff.x) < 1 && Math.Abs(diff.z) < 1)
+            if (Math.Abs(diff.x) < 1.5 && Math.Abs(diff.z) < 1.5)
             {
-                Debug.Log(destinationName);
                 if (destinationName == "kid") {
-                    animator.SetBool("isWithKid", true);
                     destinationName = "initialChair";
-                    player.SetActive(false);
-                    FollowPlayer camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<FollowPlayer>();
-                    camera.ChangeTransform(transform);
+                    animator.SetBool(isWithKidAnimation, true);
+                    sceneCamera.ChangeTransform(transform);
+                    playerController.ClearInteractable();
                     destination = playerController.GetInitialPosition();
-                    Debug.Log(destination);
-                    Debug.Log(destinationName);
+                    player.SetActive(false);
                     return;
                 }
 
@@ -102,11 +102,10 @@ public class SleepingBlowfish : MonoBehaviour
                 {
                     player.SetActive(true);
                     player.transform.position = transform.position;
-                    FollowPlayer camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<FollowPlayer>();
-                    camera.ResetTransform();
+                    sceneCamera.ResetTransform();
                     destination = ogPosition;
                     destinationName = String.Empty;
-                    animator.SetBool("isWithKid", false);
+                    animator.SetBool(isWithKidAnimation, false);
                     return;
                 }
 
@@ -126,7 +125,7 @@ public class SleepingBlowfish : MonoBehaviour
     {
         sleepLimit = sleepTimeBase + randomizeSleepTime();
         SetIsSleeping(true);
-        bubbleAnimator.SetBool("isCharging", false);
+        bubbleAnimator.SetBool(isChargingAnimation, false);
         counter = 0;
     }
 
@@ -140,13 +139,12 @@ public class SleepingBlowfish : MonoBehaviour
         counter += Time.deltaTime;
         if (counter > sleepLimit) {
             SetIsSleeping(false);
-            bubbleAnimator.SetBool("isCharging", true);
+            bubbleAnimator.SetBool(isChargingAnimation, true);
         }
     }
 
     void reachBubbler()
     {
-        Debug.Log("Reaching buibbler");
         SetIsChecking(false);
         SetIsWalking(true);
 
@@ -164,18 +162,18 @@ public class SleepingBlowfish : MonoBehaviour
     public void SetIsSleeping(bool sleep)
     {
         isSleeping = sleep;
-        animator.SetBool("isSleeping", sleep);
+        animator.SetBool(isSleepingAnimation, sleep);
     }
 
     public void SetIsChecking(bool checking)
     {
         isChecking = checking;
-        animator.SetBool("isChecking", checking);
+        animator.SetBool(isCheckingAnimation, checking);
     }
 
     public void SetIsWalking(bool checking)
     {
         isCatching = checking;
-        animator.SetBool("isWalking", checking);
+        animator.SetBool(isWalkingAnimation, checking);
     }
 }

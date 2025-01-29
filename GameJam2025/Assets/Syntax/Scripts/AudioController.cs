@@ -2,32 +2,29 @@ using UnityEngine;
 
 public class AudioController : MonoBehaviour
 {
-    public AudioClip firstClip; // Primer audio que se reproduce una vez
-    public AudioClip secondClip; // Segundo audio que se loopea
+    [SerializeField] public AudioClip FirstClip; // Primer audio que se reproduce una vez
+    [SerializeField] public AudioClip SecondClip; // Segundo audio que se loopea
 
     private AudioSource audioSource;
 
-    void Start()
+    private void Awake()
     {
-        // Obtén el componente AudioSource
         audioSource = GetComponent<AudioSource>();
+        audioSource.clip = FirstClip;
+        audioSource.loop = false; // El primer clip no debe repetirse
+        audioSource.volume = 0.75f;
+        audioSource.Play();
+    }
 
-        if (audioSource == null)
+    void Update()
+    {
+        if (audioSource.isPlaying)
         {
-            Debug.LogError("No se encontró un AudioSource en el GameObject.");
             return;
         }
 
-        // Configura y reproduce el primer clip
-        audioSource.clip = firstClip;
-        audioSource.loop = false; // El primer clip no debe repetirse
-        audioSource.Play();
-
-        // Programa el segundo clip para que inicie exactamente cuando termine el primero
-        double startTime = AudioSettings.dspTime + firstClip.length;
-        audioSource.SetScheduledEndTime(startTime); // Opcional para precisión
-        audioSource.clip = secondClip;
+        audioSource.clip = SecondClip;
         audioSource.loop = true; // Este clip se debe repetir
-        audioSource.PlayScheduled(startTime);
+        audioSource.Play();
     }
 }
