@@ -7,6 +7,8 @@ using UnityEngine;
 public class SleepingBlowfish : MonoBehaviour
 {
     [SerializeField] private float sleepTimeBase = 9.0f;
+    [SerializeField] private float speed = 8.0f;
+
     private BubblerScript playerController;
     private GameObject player;
     private bool isSleeping = true;
@@ -35,7 +37,7 @@ public class SleepingBlowfish : MonoBehaviour
         animators = GetComponentsInChildren<Animator>();
         player = GameObject.FindGameObjectWithTag("Player");
         playerController = player.GetComponent<BubblerScript>();
-        sleepLimit = sleepTimeBase + randomizeSleepTime();
+        sleepLimit = sleepTimeBase + RandomizeSleepTime();
         for (int i = 0; i < animators.Length; i++)
         {
             if (animators[i].name == "sprite")
@@ -54,35 +56,35 @@ public class SleepingBlowfish : MonoBehaviour
 
     void Update()
     {
-        moveToDestination();
+        MoveToDestination();
         CheckSleep();
         CheckRoom();
     }
 
     void CheckRoom()
     {
-        if (!isChecking || isCatching || isSleeping || playerController.GetIsIntroOn())
+        if (!isChecking || isCatching || isSleeping || playerController.GetIsInstructionsTalking())
         {
             return;
         }
 
         if (playerController != null && !playerController.IsSitting())
         {
-            reachBubbler();
+            ReachBubbler();
             return;
         }
     }
 
-    void moveToDestination()
+    void MoveToDestination()
     {
         if (destination != Vector3.zero)
         {
             if (destinationName == "kid")
             {
-                destination = GameObject.FindGameObjectWithTag("Player").transform.position;
+                CatchingKidChanges();
             }
 
-            transform.position = Vector3.MoveTowards(transform.position, new Vector3(destination.x, transform.position.y, destination.z), Time.deltaTime * 10f);
+            transform.position = Vector3.MoveTowards(transform.position, new Vector3(destination.x, transform.position.y, destination.z), Time.deltaTime * speed);
             Vector3 diff = destination - transform.position;
 
 
@@ -101,18 +103,19 @@ public class SleepingBlowfish : MonoBehaviour
                 if (destinationName == "initialChair")
                 {
                     player.SetActive(true);
-                    player.transform.position = transform.position;
                     sceneCamera.ResetTransform();
+                    animator.SetBool(isWithKidAnimation, false);
+                    playerController.CatchTutorial();
+                    player.transform.position = transform.position;
                     destination = ogPosition;
                     destinationName = String.Empty;
-                    animator.SetBool(isWithKidAnimation, false);
                     return;
                 }
 
                 if (destinationName == String.Empty)
                 {
-                    SetIsChecking(false);
                     SetIsSleeping(true);
+                    SetIsChecking(false);
                     SetIsWalking(false);
                     destination = Vector3.zero;
                     return;
@@ -121,9 +124,21 @@ public class SleepingBlowfish : MonoBehaviour
         }
     }
 
+    void CatchingKidChanges()
+    {
+        if (!playerController.IsSitting())
+        {
+            destination = player.transform.position;
+            return;
+        }
+
+        destination = ogPosition;
+        destinationName = String.Empty;
+    }
+
     public void ResetSleep()
     {
-        sleepLimit = sleepTimeBase + randomizeSleepTime();
+        sleepLimit = sleepTimeBase + RandomizeSleepTime();
         SetIsSleeping(true);
         bubbleAnimator.SetBool(isChargingAnimation, false);
         counter = 0;
@@ -143,7 +158,7 @@ public class SleepingBlowfish : MonoBehaviour
         }
     }
 
-    void reachBubbler()
+    void ReachBubbler()
     {
         SetIsChecking(false);
         SetIsWalking(true);
@@ -152,7 +167,7 @@ public class SleepingBlowfish : MonoBehaviour
         destinationName = "kid";
     }
 
-    float randomizeSleepTime()
+    float RandomizeSleepTime()
     {
         float upDownValue = UnityEngine.Random.Range(0, 1) > 0.5 ? 1 : -1;
         float randomizer = (float)Math.Ceiling(UnityEngine.Random.Range(0.0f, sleepTimeBase * 0.2F));

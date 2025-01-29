@@ -9,8 +9,9 @@ using UnityEngine.UI;
 public class PicableTest : MonoBehaviour, IInteractable
 {
     [SerializeField] public int _id;
-    [SerializeField] public Sprite _sprite;
-    [SerializeField] public string _nombre;
+    [SerializeField] private Sprite _sprite;
+    [SerializeField] private string _nombre;
+    [SerializeField] private string action = "Tomar";
 
     private int _actionId;
 
@@ -22,7 +23,7 @@ public class PicableTest : MonoBehaviour, IInteractable
 
     public string GetAction()
     {
-        return "Tomar";
+        return action;
     }
 
     public GameObject GetObject()

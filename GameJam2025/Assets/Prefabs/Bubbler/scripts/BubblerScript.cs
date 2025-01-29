@@ -13,6 +13,7 @@ using static UnityEngine.InputManagerEntry;
 public class BubblerScript : MonoBehaviour
 {
     [SerializeField] private float speed = 8f;
+    [SerializeField] private float sensitivity = 0.25f;
     [SerializeField] private bool requiresIntro;
     [SerializeField] private Transform _transform;
 
@@ -25,15 +26,19 @@ public class BubblerScript : MonoBehaviour
     private TextMeshProUGUI textBoxInteractions;
     private TextMeshProUGUI textBoxComments;
     private TextMeshProUGUI textBoxIntro;
+    private FollowPlayer followPlayerScript;
+    private float opinionCooldownTimer = 0;
+    private float opinionCooldownCounter = 0;
     private bool crouching = false;
     private bool isSitting = false;
-    private bool canMove = false;
+    private bool isFirstCatch = true;
+    private bool isInstructionsTalking = false;
+    private bool canMove = true;
     private bool canShoot = false;
-    public int introCommentCounter = 0;
     private IInteractable currentInteractable;
     private Vector3 initialPosition = Vector3.zero;
-    private List<int> interactableIds = new List<int>();
-    private List<IInteractable> interactables = new List<IInteractable>();
+    private readonly List<string> dialogs = new List<string>();
+    private readonly List<IInteractable> interactables = new List<IInteractable>();
 
     [Header("Burbujas de dialogo")]
     [SerializeField] private GameObject bubbleInteractions;
@@ -44,18 +49,10 @@ public class BubblerScript : MonoBehaviour
     [Header("Introduccion")]
     [SerializeField] private string[] introTextos;
     
-    private bool isIntroOn = true;
-
     [Header("Cambio")]
-    private bool changeOportunity = false;
-    private bool GetKey = false;
     [SerializeField] private GameObject LlavesObj;
-    [SerializeField] private GameObject LlavesJuegueteObj;
-    
-    [Header("NextLEvel")]
-    private bool NextLevel = false;
-    
-    
+    [SerializeField] private Sprite replacementKeys;
+
     [Header("Disparo")]
     [SerializeField] private Transform controladorDisparo;
     [SerializeField] private GameObject prefabBala;
@@ -70,14 +67,16 @@ public class BubblerScript : MonoBehaviour
 
         animator = GetComponentInChildren<Animator>();
         canShoot = SceneManager.GetActiveScene().name.Contains("Disparo");
+        followPlayerScript = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<FollowPlayer>();
+
         initialPosition = transform.position;
 
         if (requiresIntro)
         {
-            bubbleTextDinamico.SetActive(true);
-            animator.SetBool(isTalkingAnimation, true);
-            canMove = false;
-            UpdateText();
+            for (int i = 0; i < introTextos.Length; i++)
+            {
+                dialogs.Add(introTextos[i]);
+            }
         }
     }
 
@@ -86,53 +85,40 @@ public class BubblerScript : MonoBehaviour
         Walk();
         Crouch();
         Shoot();
-        ExecuteAction();
+        Interact();
+        StartDialog();
+        ClearOpinion();
     }
 
     void OnTriggerEnter(Collider other)
     {
         IInteractable interactable = other.GetComponent<IInteractable>();
         if (interactable == null) { return; }
-        int id = interactable.GetId();
+        string action = interactable.GetAction();
 
-        if (interactableIds.Contains(id))
+        if (action == "Reemplazar")
         {
-            return;
+            bool hasDoorKeys = InventarioController.Instance.HasDoorKeys();
+            if (hasDoorKeys) { return; }
         }
 
-        interactableIds.Add(id);
+        if (action == "Abrir")
+        {
+            action = InventarioController.Instance.HasDoorKeys() ? "Empezar venganza" : action;
+        }
+
         interactables.Add(interactable);
         bubbleInteractions.SetActive(true);
-        textBoxInteractions.text = BuildActionMessage(interactable.GetAction());
+        textBoxInteractions.text = BuildActionMessage(action);
 
-        //if (other.CompareTag("Teacher") && InventarioController.Instance._inventario[1].Cantidad > 0)
-        if (other.CompareTag("Teacher"))
-        {
-            bubbleInteractions.SetActive(true);
-            textBoxInteractions.text = new string("Presiona E parta el cambio ninja");
-            changeOportunity = true;
-        }
-
-        //if (other.CompareTag("Puerta") && InventarioController.Instance._inventario[2].Cantidad > 0)
-        if (other.CompareTag("Puerta"))
-        {
-            bubbleInteractions.SetActive(true);
-            textBoxInteractions.text = new string("Presiona E para empezar tu venganza");
-            NextLevel = true;
-
-        }
     }
 
     void OnTriggerExit(Collider other)
     {
         IInteractable interactable = other.GetComponent<IInteractable>();
         if (interactable == null) { return; }
-        int id = interactable.GetId();
 
-
-        int deleteIndex = interactableIds.IndexOf(id);
-        interactableIds.Remove(id);
-        interactables.RemoveAt(deleteIndex);
+        interactables.Remove(interactable);
 
         if (interactables.Count == 0)
         {
@@ -143,17 +129,6 @@ public class BubblerScript : MonoBehaviour
         {
             currentInteractable = interactables.Last();
         }
-
-        if (other.CompareTag("Teacher"))
-        {
-            bubbleTextDinamico.SetActive(false);
-            changeOportunity = false;
-        }
-        if (other.CompareTag("Puerta"))
-        {
-            bubbleTextDinamico.SetActive(false);
-            NextLevel = false;
-        }
     }
 
     void Shoot()
@@ -163,7 +138,8 @@ public class BubblerScript : MonoBehaviour
             Debug.Log("Disparando...");
             if (cantidadBalas > 0)
             {
-                Disparar();
+                cantidadBalas--;
+                Instantiate(prefabBala, controladorDisparo.position, controladorDisparo.rotation); ;
             }
             else
             {
@@ -172,14 +148,14 @@ public class BubblerScript : MonoBehaviour
         }
 
     }
-    
-    void ExecuteAction()
+
+    void Interact()
     {
         if (Input.GetButtonDown("Interact"))
         {
-            if (isIntroOn)
+            if (isInstructionsTalking)
             {
-                UpdateText();
+                NextDialog();
                 return;
             }
 
@@ -195,7 +171,7 @@ public class BubblerScript : MonoBehaviour
         }
     }
 
-    private void InteractionExecution(string action, GameObject item)
+    void InteractionExecution(string action, GameObject item)
     {
         if (action == "Sentarse")
         {
@@ -205,10 +181,8 @@ public class BubblerScript : MonoBehaviour
 
         if (action == "Inspeccionar")
         {
-            bubbleInteractions.SetActive(true);
-            animator.SetBool(isTalkingAnimation, true);
-            canMove = false;
-            Invoke(nameof(OpinionBubble), 1.5f);
+            followPlayerScript.Shake();
+            OpinionBubbleShow(true, "Parece que no hay nada");
             return;
         }
 
@@ -216,8 +190,7 @@ public class BubblerScript : MonoBehaviour
         {
             if (item != null)
             {
-                PicableTest picableObj = item.GetComponent<PicableTest>();
-                InventarioController.Instance.SetObjectUI(picableObj);
+                InventarioController.Instance.SetObjectUI(item.GetComponent<PicableTest>());
             }
             return;
         }
@@ -226,82 +199,81 @@ public class BubblerScript : MonoBehaviour
         {
             if (item != null)
             {
-                InteractuableInfo interactuableInfo = item.GetComponent<InteractuableInfo>();
-                InventarioController.Instance.NoCollectionableInfo(interactuableInfo.InfoId);
+                InventarioController.Instance.NoCollectionableInfo(item.GetComponent<InteractuableInfo>());
             }
             return;
         }
 
-        if (action == "Abrir") // meant to replace the NextLevel == true logic
+        if (action == "Abrir")
         {
-            /*
-             if (NextLevel == true)
+            bool canOpen = InventarioController.Instance.HasDoorKeys();
+            if (canOpen)
             {
                 currentInteractable.GetObject().GetComponentInChildren<Puerta>().Open();
-                InventarioController.Instance._inventario[2].Cantidad--;
-                SceneManager.LoadScene("Scenes/Dhako/Test");
+                Invoke(nameof(LoadNextScene), 1); // late load next scene
             }
-             */
+
+            OpinionBubbleShow(!canOpen, "Aun no tengo la llave");
             return;
         }
 
-        if (action == "Reemplazar") // meant to replace the changeOportunity == true && GetKey == false logic
+        if (action == "Reemplazar")
         {
-            /*
-             if (changeOportunity == true && GetKey == false)
+            bool canReplace = InventarioController.Instance.HasReplacementKeys();
+            if (canReplace)
             {
-                InventarioController.Instance.UseItem(2);
-                InventarioController.Instance.SetObByID(3);
-                LlavesObj.SetActive(false);
-                LlavesJuegueteObj.SetActive(true);
-                bubbleTextDinamico.SetActive(false);
-                GetKey = true;
-
+                InventarioController.Instance.ReplaceKeys();
+                LlavesObj.GetComponentInChildren<SpriteRenderer>().sprite = replacementKeys;
             }
-            */
+
+            OpinionBubbleShow(!canReplace, "Necesito algo para reemplazar las llavez");
             return;
         }
     }
 
-    private void SetCamera()
+    void SetCinematicCamera(bool cinematic)
     {
-        //(0, 1.25,-2.49)
-        //(0,3,-6)
-        GameObject followPlayerGo = GameObject.FindGameObjectWithTag("MainCamera");
-        FollowPlayer followPlayerScript = followPlayerGo.GetComponent<FollowPlayer>();
-        if (followPlayerScript != null)
-        {
-            followPlayerScript.offset = new Vector3(0, 3, -6);
-        }
+        // cinematic (0, 1.25, -2.49)
+        // gameplay  (0, 3, -6)
+        Vector3 offset = cinematic ? new Vector3(0, 1.25f, -2.49f) : new Vector3(0, 3, -6);
+        followPlayerScript.offset = offset;
     }
 
-    private void UpdateText()
+    void StartDialog()
     {
-        if (introCommentCounter < introTextos.Length )
+        if (dialogs.Count == 0)
         {
-            textBoxIntro.text = introTextos[introCommentCounter];
-            introCommentCounter++;
+            return;
         }
-        else
+
+        SetCinematicCamera(true);
+        animator.SetBool(isTalkingAnimation, true);
+        bubbleTextDinamico.SetActive(true);
+        textBoxIntro.text = dialogs.First();
+        isInstructionsTalking = true;
+    }
+
+    void NextDialog()
+    {
+        dialogs.RemoveAt(0);
+        if (dialogs.Count == 0)
         {
-            SetCamera();
+            SetCinematicCamera(false);
             bubbleTextDinamico.SetActive(false);
-            isIntroOn = false;
-            canMove = true;
             animator.SetBool(isTalkingAnimation, false);
+            isInstructionsTalking = false;
         }
-       
     }
 
     void Walk()
     {
-        if (!canMove) { return; }
+        if (!canMove || isInstructionsTalking) { return; }
 
         float horizontalMovement = Input.GetAxis("Horizontal");
         float verticalMovement = Input.GetAxis("Vertical");
 
 
-        if (Math.Abs(horizontalMovement) < 0.1 && Math.Abs(verticalMovement) < 0.1)
+        if (Math.Abs(horizontalMovement) < sensitivity && Math.Abs(verticalMovement) < sensitivity)
         {
             animator.SetBool(forwardMovementAnimation, false);
             animator.SetBool(backwardMovementAnimation, false);
@@ -334,22 +306,58 @@ public class BubblerScript : MonoBehaviour
         animator.SetBool(isSittingAnimation, true);
     }
 
-    public bool IsSitting()
+    void OpinionBubbleShow(bool enable)
     {
-        return isSitting;
+        animator.SetBool(isTalkingAnimation, enable);
+        bubbleComments.SetActive(enable);
+        SetOpinionCoolDown(enable);
     }
 
-    private void OpinionBubble()
+    void OpinionBubbleShow(bool enable, string text)
+    {
+        animator.SetBool(isTalkingAnimation, enable);
+        bubbleComments.SetActive(enable);
+        textBoxComments.text = text;
+        SetOpinionCoolDown(enable);
+    }
+
+    void SetOpinionCoolDown(bool coolDown)
+    {
+        if (coolDown)
+        {
+            opinionCooldownTimer = 1.5f;
+            opinionCooldownCounter = 0;
+        }
+    } 
+
+    void ClearOpinion()
+    {
+        if (opinionCooldownTimer == 0) { return; }
+        if (opinionCooldownCounter < opinionCooldownTimer)
+        {
+            opinionCooldownCounter += Time.deltaTime;
+            return;
+        }
+
+        opinionCooldownTimer = 0;
+        OpinionBubbleShow(false);
+    }
+
+    void OpinionBubble()
     {
         animator.SetBool(isTalkingAnimation, false);
         bubbleComments.SetActive(false);
         canMove = true;
     }
-    
-    public void Disparar()
+
+    void LoadNextScene()
     {
-        cantidadBalas--;
-        Instantiate(prefabBala, controladorDisparo.position, controladorDisparo.rotation);
+        SceneManager.LoadScene("Scenes/Dhako/Test");
+    }
+
+    public bool IsSitting()
+    {
+        return isSitting;
     }
 
     string BuildActionMessage(string actionName)
@@ -362,24 +370,22 @@ public class BubblerScript : MonoBehaviour
         return initialPosition;
     }
 
-    public bool GetIsIntroOn()
+    public bool GetIsInstructionsTalking()
     {
-        return isIntroOn;
+        return isInstructionsTalking;
     }
 
     public void ClearLastInteractable()
     {
-        interactableIds.RemoveAt(interactableIds.Count - 1);
         interactables.RemoveAt(interactables.Count - 1);
-        currentInteractable = interactables.Last();
 
-        if (currentInteractable == null)
+        if (interactables.Count == 0)
         {
             bubbleInteractions.SetActive(false);
             return;
         }
-        
-        textBoxInteractions = gameObject.GetComponentInChildren<TextMeshProUGUI>();
+
+        currentInteractable = interactables.Last();
         textBoxInteractions.text = BuildActionMessage(currentInteractable.GetAction());
     }
 
@@ -387,13 +393,20 @@ public class BubblerScript : MonoBehaviour
     {
         bubbleComments.SetActive(false);
         bubbleInteractions.SetActive(false);
-        interactableIds.Clear();
         interactables.Clear();
         currentInteractable = null;
+        canMove = true;
     }
 
-    public void SetIntroOn(bool intro)
+    public void CatchTutorial()
     {
+        if (!isFirstCatch)
+        {
+            return;
+        }
 
+        isFirstCatch = false;
+        dialogs.Add("Mr.Pluff no me dejará salir");
+        dialogs.Add("debo estar sentado cuando despierte");
     }
 }

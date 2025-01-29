@@ -325,6 +325,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sleepTimeBase: 10
+  speed: 8
 --- !u!1 &6977417696367753440
 GameObject:
   m_ObjectHideFlags: 0

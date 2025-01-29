@@ -8,7 +8,7 @@ public class InventarioController : MonoBehaviour
 {
     // Start is called before the first frame update
     public static InventarioController Instance { get; private set; }
-    [SerializeField] public ObjetoInventario[] _inventario;
+    [SerializeField] private ObjetoInventario[] _inventario;
 
     [Header("InfoCards")] 
     [SerializeField] private GameObject[] infocard;
@@ -124,8 +124,9 @@ public class InventarioController : MonoBehaviour
         }
     }
 
-    public void NoCollectionableInfo(int id)
+    public void NoCollectionableInfo(InteractuableInfo interactableInfo)
     {
+        int id = interactableInfo.InfoId;
         if (isUiOpen == false)
         {
             Debug.Log(isUiOpen);
@@ -177,5 +178,21 @@ public class InventarioController : MonoBehaviour
     bool hasEntered(int id)
     {
         return entered.Contains(id);
+    }
+
+    public bool HasDoorKeys()
+    {
+        return _inventario[2].Cantidad > 0;
+    }
+
+    public bool HasReplacementKeys()
+    {
+        return _inventario[1].Cantidad > 0;
+    }
+
+    public void ReplaceKeys()
+    {
+        UseItem(2);
+        SetObByID(3);
     }
 }
