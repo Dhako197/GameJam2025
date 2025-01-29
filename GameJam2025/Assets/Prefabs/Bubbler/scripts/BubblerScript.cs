@@ -343,13 +343,6 @@ public class BubblerScript : MonoBehaviour
         OpinionBubbleShow(false);
     }
 
-    void OpinionBubble()
-    {
-        animator.SetBool(isTalkingAnimation, false);
-        bubbleComments.SetActive(false);
-        canMove = true;
-    }
-
     void LoadNextScene()
     {
         SceneManager.LoadScene("Scenes/Dhako/Test");
