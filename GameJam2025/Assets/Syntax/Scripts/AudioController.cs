@@ -11,7 +11,6 @@ public class AudioController : MonoBehaviour
         audioSource.clip = FirstClip;
         audioSource.loop = true;
         //audioSource.volume = 0.75f;
-        audioSource.volume = 0f;
         audioSource.Play();
     }
 }
