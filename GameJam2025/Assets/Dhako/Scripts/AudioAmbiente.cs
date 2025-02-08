@@ -6,9 +6,11 @@ public class AudioAmbiente : MonoBehaviour
 {
     private AudioSource _audioSource;
     public float _contador = 0;
+    private Animator _animator;
     void Start()
     {
         _audioSource = GetComponent<AudioSource>();
+        _animator = GetComponentInChildren<Animator>();
         NextTimeToCount();
     }
 
@@ -18,6 +20,7 @@ public class AudioAmbiente : MonoBehaviour
 
         if (_contador <= 0)
         {
+            _animator.SetTrigger("Start");
             _audioSource.Play();
             NextTimeToCount();
         }
