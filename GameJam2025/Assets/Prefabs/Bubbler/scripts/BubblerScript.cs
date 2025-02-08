@@ -19,6 +19,7 @@ public class BubblerScript : MonoBehaviour
     private readonly string backwardMovementAnimation = "backwardMovement";
 
     private Animator animator;
+    private BubblerSoundController bubblerSoundcontroller;
     private TextMeshProUGUI textBoxInteractions;
     private TextMeshProUGUI textBoxComments;
     private TextMeshProUGUI textBoxIntro;
@@ -60,9 +61,11 @@ public class BubblerScript : MonoBehaviour
 
     void Start()
     {
+        bubblerSoundcontroller = GetComponentInChildren<BubblerSoundController>();
         textBoxInteractions = bubbleInteractions.GetComponentInChildren<TextMeshProUGUI>();
         textBoxComments = bubbleComments.GetComponentInChildren<TextMeshProUGUI>();
         textBoxIntro = bubbleTextDinamico.GetComponentInChildren<TextMeshProUGUI>();
+        audioSource = GetComponent<AudioSource>();
         audioSource = GetComponent<AudioSource>();
 
         animator = GetComponentInChildren<Animator>();
@@ -77,6 +80,7 @@ public class BubblerScript : MonoBehaviour
             {
                 dialogs.Add(introTextos[i]);
             }
+            animator.SetBool(isTalkingAnimation, true);
         }
     }
 
@@ -249,7 +253,6 @@ public class BubblerScript : MonoBehaviour
         }
 
         SetCinematicCamera(true);
-        animator.SetBool(isTalkingAnimation, true);
         bubbleTextDinamico.SetActive(true);
         textBoxIntro.text = dialogs.First();
         isInstructionsTalking = true;
@@ -257,14 +260,21 @@ public class BubblerScript : MonoBehaviour
 
     void NextDialog()
     {
-        dialogs.RemoveAt(0);
-        if (dialogs.Count == 0)
+        if (dialogs.Count != 0)
         {
-            SetCinematicCamera(false);
-            bubbleTextDinamico.SetActive(false);
-            animator.SetBool(isTalkingAnimation, false);
-            isInstructionsTalking = false;
+            dialogs.RemoveAt(0);
         }
+
+        if (dialogs.Count != 0)
+        {
+            animator.SetBool(isTalkingAnimation, true);
+            return;
+        }
+
+        SetCinematicCamera(false);
+        bubbleTextDinamico.SetActive(false);
+        animator.SetBool(isTalkingAnimation, false);
+        isInstructionsTalking = false;
     }
 
     void Walk()
@@ -281,13 +291,14 @@ public class BubblerScript : MonoBehaviour
             return;
         }
 
-        float currentMovement = horizontalMovement > 0 ? 1 : -1;
         isSitting = false;
+        bubblerSoundcontroller.PlayWalking();
         animator.SetBool(isTalkingAnimation, false);
         animator.SetBool(isSittingAnimation, false);
         animator.SetBool(forwardMovementAnimation, true);
         animator.SetBool(backwardMovementAnimation, verticalMovement > 0);
 
+        float currentMovement = horizontalMovement > 0 ? 1 : -1;
         float localSpeed = crouching ? speed / 2 : speed;
         Vector3 movement = new Vector3(horizontalMovement, 0, verticalMovement).normalized * localSpeed * Time.deltaTime;
 
@@ -408,10 +419,5 @@ public class BubblerScript : MonoBehaviour
         isFirstCatch = false;
         dialogs.Add("Mr.Pluff no me dejará salir");
         dialogs.Add("debo estar sentado cuando despierte");
-    }
-
-    public void PlaySound(string soundName) 
-    {
-        // sound map
     }
 }
