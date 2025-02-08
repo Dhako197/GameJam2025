@@ -597,6 +597,7 @@ MonoBehaviour:
   _id: 2
   _sprite: {fileID: 0}
   _nombre: Piedra
+  action: Tomar
 --- !u!54 &162731788
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2303,6 +2304,63 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 230247f20f7bbc04f9c4f4a8d3565ff2, type: 3}
+--- !u!1001 &803810375
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 804410107097669359, guid: ac42b5e7a8291b346a41dde4726215d1, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 6.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 804410107097669359, guid: ac42b5e7a8291b346a41dde4726215d1, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 804410107097669359, guid: ac42b5e7a8291b346a41dde4726215d1, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -9.21
+      objectReference: {fileID: 0}
+    - target: {fileID: 804410107097669359, guid: ac42b5e7a8291b346a41dde4726215d1, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 804410107097669359, guid: ac42b5e7a8291b346a41dde4726215d1, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 804410107097669359, guid: ac42b5e7a8291b346a41dde4726215d1, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 804410107097669359, guid: ac42b5e7a8291b346a41dde4726215d1, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 804410107097669359, guid: ac42b5e7a8291b346a41dde4726215d1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 804410107097669359, guid: ac42b5e7a8291b346a41dde4726215d1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 804410107097669359, guid: ac42b5e7a8291b346a41dde4726215d1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7523606498712024685, guid: ac42b5e7a8291b346a41dde4726215d1, type: 3}
+      propertyPath: m_Name
+      value: Burbujas ambiente
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ac42b5e7a8291b346a41dde4726215d1, type: 3}
 --- !u!1001 &852308172
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2962,7 +3020,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8da93acd177155643845713b15aa5bbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _color: {r: 0.15549028, g: 1, b: 0, a: 1}
   _spriteRenderer: {fileID: 2043645620}
 --- !u!4 &949953640 stripped
 Transform:
@@ -3588,6 +3645,7 @@ MonoBehaviour:
   _id: 3
   _sprite: {fileID: 0}
   _nombre: Piedra
+  action: Tomar
 --- !u!54 &1189950299
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5281,6 +5339,7 @@ MonoBehaviour:
   - {fileID: 348187803}
   - {fileID: 772213220}
   - {fileID: 1692479210}
+  infocard: []
 --- !u!1001 &1842869151
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7267,8 +7326,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Image: {fileID: 3024234813239792335}
   NombreObjeto: 
-  Cantidad: 0
   CantidadUI: {fileID: 5402280270226105176}
+  Cantidad: 0
   ObjectID: 1
   totalObjs: 10
 --- !u!114 &1214022853193749671
@@ -8082,3 +8141,4 @@ SceneRoots:
   - {fileID: 859947896}
   - {fileID: 8965035069705445151}
   - {fileID: 2015493465}
+  - {fileID: 803810375}
