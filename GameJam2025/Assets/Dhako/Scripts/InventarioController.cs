@@ -6,9 +6,12 @@ using UnityEngine.UI;
 
 public class InventarioController : MonoBehaviour
 {
-    // Start is called before the first frame update
     public static InventarioController Instance { get; private set; }
     [SerializeField] private ObjetoInventario[] _inventario;
+    private float shake = 0;
+    private ObjetoInventario itemToShake = null;
+    private readonly float shakeAmount = 0.025f;
+    private readonly float decreaseFactor = 1.5f;
 
     [Header("InfoCards")] 
     [SerializeField] private GameObject[] infocard;
@@ -46,6 +49,8 @@ public class InventarioController : MonoBehaviour
             }
             
         }
+
+        CheckShake();
     }
 
     private void Resume()
@@ -72,8 +77,11 @@ public class InventarioController : MonoBehaviour
                    obj.Cantidad = 1;
                }
                else
-               {
-                   obj.Cantidad++;
+               {    
+                    obj.Cantidad++;
+                    // shake
+                    itemToShake = obj;
+                    Shake();
                }
                
                Destroy(picableTest.gameObject);
@@ -193,6 +201,28 @@ public class InventarioController : MonoBehaviour
     public void ReplaceKeys()
     {
         UseItem(2);
+
+        // add loader
+
         SetObByID(3);
+    }
+
+    void CheckShake()
+    {
+        if (shake > 0)
+        {
+            Vector3 randomize = UnityEngine.Random.insideUnitSphere * shakeAmount;
+            itemToShake.transform.Translate(new Vector3(randomize.x, randomize.y, 0), Space.Self);
+            shake -= Time.deltaTime * decreaseFactor;
+            return;
+        }
+
+        shake = 0.0f;
+    }
+
+    public void Shake()
+    {
+
+        shake = 0.1f;
     }
 }
