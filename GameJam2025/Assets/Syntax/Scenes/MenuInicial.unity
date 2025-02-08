@@ -767,7 +767,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1020781674}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 192103009}
+        m_TargetAssemblyTypeName: ShowImageWithSmoothTransition, Assembly-CSharp
+        m_MethodName: StartGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1020781674
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1045,8 +1057,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3fda4727b30044ca8a9ebf826349f89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firstClip: {fileID: 8300000, guid: 5915af44f235b47b8b0853a96f9061e2, type: 3}
-  secondClip: {fileID: 8300000, guid: e876a092dad5f48ff8a96a023cd3cd84, type: 3}
+  FirstClip: {fileID: 0}
 --- !u!4 &1630853157
 Transform:
   m_ObjectHideFlags: 0
@@ -1328,7 +1339,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2002113235}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 192103009}
+        m_TargetAssemblyTypeName: ShowImageWithSmoothTransition, Assembly-CSharp
+        m_MethodName: ExitGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2002113235
 MonoBehaviour:
   m_ObjectHideFlags: 0
