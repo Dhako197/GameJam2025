@@ -36,7 +36,7 @@ public class FollowPlayer : MonoBehaviour
         }
     }
 
-     void CheckShake()
+    void CheckShake()
     {
         if (shake > 0)
         {

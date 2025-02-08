@@ -10,6 +10,7 @@ public class SleepingBlowfish : MonoBehaviour
     [SerializeField] private float speed = 8.0f;
 
     private BubblerScript playerController;
+    private TeacherAudioController teacherAudioController;
     private GameObject player;
     private bool isSleeping = true;
     private bool isChecking = false;
@@ -34,6 +35,7 @@ public class SleepingBlowfish : MonoBehaviour
     {
         sceneCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<FollowPlayer>();
 
+        teacherAudioController = GetComponentInChildren<TeacherAudioController>();
         animators = GetComponentsInChildren<Animator>();
         player = GameObject.FindGameObjectWithTag("Player");
         playerController = player.GetComponent<BubblerScript>();
@@ -52,6 +54,7 @@ public class SleepingBlowfish : MonoBehaviour
         }
         animator.SetBool(isSleepingAnimation, isSleeping);
         animator.SetBool(isCheckingAnimation, isChecking);
+        teacherAudioController.PlaySleeping();
     }
 
     void Update()
@@ -71,6 +74,7 @@ public class SleepingBlowfish : MonoBehaviour
         if (playerController != null && !playerController.IsSitting())
         {
             ReachBubbler();
+            teacherAudioController.PlayTalking();
             return;
         }
     }
@@ -87,8 +91,10 @@ public class SleepingBlowfish : MonoBehaviour
             transform.position = Vector3.MoveTowards(transform.position, new Vector3(destination.x, transform.position.y, destination.z), Time.deltaTime * speed);
             Vector3 diff = destination - transform.position;
 
+            // proximity when returning behind desk is smaller than catching player
+            float proximity = destinationName == String.Empty ? 0.5f : 1.5f;
 
-            if (Math.Abs(diff.x) < 1.5 && Math.Abs(diff.z) < 1.5)
+            if (Math.Abs(diff.x) < proximity && Math.Abs(diff.z) < proximity)
             {
                 if (destinationName == "kid") {
                     destinationName = "initialChair";
@@ -140,6 +146,7 @@ public class SleepingBlowfish : MonoBehaviour
     {
         sleepLimit = sleepTimeBase + RandomizeSleepTime();
         SetIsSleeping(true);
+        teacherAudioController.PlaySleeping();
         bubbleAnimator.SetBool(isChargingAnimation, false);
         counter = 0;
     }
@@ -154,6 +161,7 @@ public class SleepingBlowfish : MonoBehaviour
         counter += Time.deltaTime;
         if (counter > sleepLimit) {
             SetIsSleeping(false);
+            teacherAudioController.PlayBlop();
             bubbleAnimator.SetBool(isChargingAnimation, true);
         }
     }
