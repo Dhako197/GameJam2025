@@ -1,14 +1,10 @@
+using DG.Tweening;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.ConstrainedExecution;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using static UnityEditor.PlayerSettings;
-using static UnityEngine.InputManagerEntry;
 
 public class BubblerScript : MonoBehaviour
 {
@@ -27,6 +23,8 @@ public class BubblerScript : MonoBehaviour
     private TextMeshProUGUI textBoxComments;
     private TextMeshProUGUI textBoxIntro;
     private FollowPlayer followPlayerScript;
+    private AudioSource audioSource;
+
     private float opinionCooldownTimer = 0;
     private float opinionCooldownCounter = 0;
     private bool crouching = false;
@@ -35,6 +33,7 @@ public class BubblerScript : MonoBehaviour
     private bool isInstructionsTalking = false;
     private bool canMove = true;
     private bool canShoot = false;
+    private float prevMovement = 1;
     private IInteractable currentInteractable;
     private Vector3 initialPosition = Vector3.zero;
     private readonly List<string> dialogs = new List<string>();
@@ -64,6 +63,7 @@ public class BubblerScript : MonoBehaviour
         textBoxInteractions = bubbleInteractions.GetComponentInChildren<TextMeshProUGUI>();
         textBoxComments = bubbleComments.GetComponentInChildren<TextMeshProUGUI>();
         textBoxIntro = bubbleTextDinamico.GetComponentInChildren<TextMeshProUGUI>();
+        audioSource = GetComponent<AudioSource>();
 
         animator = GetComponentInChildren<Animator>();
         canShoot = SceneManager.GetActiveScene().name.Contains("Disparo");
@@ -210,6 +210,8 @@ public class BubblerScript : MonoBehaviour
             if (canOpen)
             {
                 currentInteractable.GetObject().GetComponentInChildren<Puerta>().Open();
+                // TODO: this needs change, we no longer use more scenes
+                // lazy load assets
                 Invoke(nameof(LoadNextScene), 1); // late load next scene
             }
 
@@ -272,7 +274,6 @@ public class BubblerScript : MonoBehaviour
         float horizontalMovement = Input.GetAxis("Horizontal");
         float verticalMovement = Input.GetAxis("Vertical");
 
-
         if (Math.Abs(horizontalMovement) < sensitivity && Math.Abs(verticalMovement) < sensitivity)
         {
             animator.SetBool(forwardMovementAnimation, false);
@@ -280,17 +281,23 @@ public class BubblerScript : MonoBehaviour
             return;
         }
 
+        float currentMovement = horizontalMovement > 0 ? 1 : -1;
         isSitting = false;
+        animator.SetBool(isTalkingAnimation, false);
         animator.SetBool(isSittingAnimation, false);
         animator.SetBool(forwardMovementAnimation, true);
         animator.SetBool(backwardMovementAnimation, verticalMovement > 0);
 
         float localSpeed = crouching ? speed / 2 : speed;
         Vector3 movement = new Vector3(horizontalMovement, 0, verticalMovement).normalized * localSpeed * Time.deltaTime;
-           
+
         transform.Translate(movement, Space.Self);
 
-        _transform.localRotation = horizontalMovement < 0 ? new Quaternion(0, 180, 0, 1) : new Quaternion(0, 0, 0, 0);
+        if (prevMovement != currentMovement)
+        {
+            _transform.Rotate(new Vector3(0, 180, 0), Space.Self);
+            prevMovement = currentMovement;
+        }
     }
 
     void Crouch()
@@ -401,5 +408,10 @@ public class BubblerScript : MonoBehaviour
         isFirstCatch = false;
         dialogs.Add("Mr.Pluff no me dejará salir");
         dialogs.Add("debo estar sentado cuando despierte");
+    }
+
+    public void PlaySound(string soundName) 
+    {
+        // sound map
     }
 }

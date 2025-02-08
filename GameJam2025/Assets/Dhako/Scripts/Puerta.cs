@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class Puerta : MonoBehaviour, IInteractable
 {
-    [SerializeField] private Color _color;
     [SerializeField] private SpriteRenderer _spriteRenderer;
     private BoxCollider boxCollider;
     private Animator animator;
@@ -26,7 +25,6 @@ public class Puerta : MonoBehaviour, IInteractable
 
     public void Open()
     {
-        _spriteRenderer.color = _color;
         boxCollider.enabled = false;
         animator.SetBool("isOpen", true);
     }
