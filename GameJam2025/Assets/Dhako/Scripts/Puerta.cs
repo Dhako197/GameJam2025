@@ -25,7 +25,7 @@ public class Puerta : MonoBehaviour, IInteractable
 
     public void Open()
     {
-        boxCollider.enabled = false;
+        boxCollider.isTrigger = true;
         animator.SetBool("isOpen", true);
     }
 
