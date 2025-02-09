@@ -231,6 +231,16 @@ public class InventarioController : MonoBehaviour
         return _inventario[0].Cantidad;
     }
 
+    public int GetStrawAmount()
+    {
+        if (_inventario[3] != null)
+        {
+            return _inventario[3].Cantidad;
+        }
+        else return 0;
+
+    }
+
     public void UseBullet()
     {
         _inventario[0].Cantidad -= 1;

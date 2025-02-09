@@ -140,8 +140,8 @@ public class BubblerScript : MonoBehaviour
 
             if (phase == "final" && !canShoot)
             {
-                //bool hasEnoughGums = InventarioController.Instance.GetGumAmount() > requiredGums;
-                bool hasEnoughGums = true;
+                bool hasEnoughGums = InventarioController.Instance.GetGumAmount() >= requiredGums;
+                //bool hasEnoughGums = true;
                 if (hasEnoughGums)
                 {
                     SetHasBuiltStraw();
@@ -263,8 +263,9 @@ public class BubblerScript : MonoBehaviour
 
             if (phase == "final")
             {
-                //bool canOpen = InventarioController.Instance.GetGumAmount() > requiredGums;
-                bool canOpen = true;
+                bool canOpen = InventarioController.Instance.GetGumAmount() >= requiredGums 
+                               && InventarioController.Instance.GetStrawAmount()>=1;
+                //bool canOpen = true;
                 if (canOpen)
                 {
                     p.Open();
