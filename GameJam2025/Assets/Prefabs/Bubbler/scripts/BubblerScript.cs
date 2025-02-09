@@ -489,7 +489,7 @@ public class BubblerScript : MonoBehaviour
 
     string BuildActionMessage(string actionName)
     {
-        return actionName + " [ E ]";
+        return actionName + "\n[ E ]";
     }
 
     public Vector3 GetInitialPosition()
