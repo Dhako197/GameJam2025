@@ -81,7 +81,7 @@ public class BubblerScript : MonoBehaviour
             animator.SetBool(isTalkingAnimation, true);
         }
 
-        SetHasBuiltStraw();
+        //SetHasBuiltStraw();
     }
 
     void Update()
@@ -431,7 +431,7 @@ public class BubblerScript : MonoBehaviour
         }
 
         isFirstCatch = false;
-        dialogs.Add("Mr.Pluff no me dejará salir");
+        dialogs.Add("Mr.Pluff no me dejarï¿½ salir");
         dialogs.Add("debo estar sentado cuando despierte");
     }
 }
