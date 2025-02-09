@@ -229,7 +229,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4178c07278d5ee44b9e28fad4ab63cff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  snoreClip: {fileID: 8300000, guid: 32e0ac8882767024ebacdad838432af6, type: 3}
+  snoreClip: {fileID: 8300000, guid: 941f38dcc44646745952036bb6a9fe3c, type: 3}
   blopClip: {fileID: 8300000, guid: 3281e767588bfc14a96a24418a05ec09, type: 3}
   talkingClip: {fileID: 8300000, guid: dd7745824a47ac84b8fe0c92ef82789b, type: 3}
 --- !u!1 &2654695903676357880
