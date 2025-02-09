@@ -34,6 +34,7 @@ public class BubblerScript : MonoBehaviour
     private bool isInstructionsTalking = false;
     private bool canMove = true;
     private bool canShoot = false;
+    private bool isSecondFase = false;
     private float prevMovement = 1;
     private bool hasBuiltStraw = false;
     private IInteractable currentInteractable;
@@ -115,6 +116,12 @@ public class BubblerScript : MonoBehaviour
         interactables.Add(interactable);
         bubbleInteractions.SetActive(true);
         textBoxInteractions.text = BuildActionMessage(action);
+
+        if (other.CompareTag("Puerta"))
+        {
+            isSecondFase = true;
+            Debug.Log("Inicia la segunda fase");
+        }
 
     }
 
@@ -383,6 +390,11 @@ public class BubblerScript : MonoBehaviour
     public bool IsSitting()
     {
         return isSitting;
+    }
+
+    public bool IsInSecondFase()
+    {
+        return isSecondFase;
     }
 
     string BuildActionMessage(string actionName)

@@ -71,7 +71,7 @@ public class SleepingBlowfish : MonoBehaviour
             return;
         }
 
-        if (playerController != null && !playerController.IsSitting())
+        if (playerController != null && !playerController.IsSitting() && !playerController.IsInSecondFase())
         {
             ReachBubbler();
             teacherAudioController.PlayTalking();
