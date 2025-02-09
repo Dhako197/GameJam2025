@@ -13,6 +13,7 @@ public class FollowPlayer : MonoBehaviour
     private float shake = 0;
     private readonly float shakeAmount = 0.025f;
     private readonly float decreaseFactor = 1.5f;
+    
 
     void Start()
     {

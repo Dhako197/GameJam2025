@@ -254,7 +254,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 632681eeb576f6d4c9009b12dfc711df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkingClip: {fileID: 8300000, guid: 02af28e6e5a9ec143a09b86c472d38c6, type: 3}
+  walkingClip: {fileID: 8300000, guid: b4b5867539477a74bbfdfdf20280ad4f, type: 3}
   talkingClip: {fileID: 8300000, guid: f0b23a98d173ed9428c0d4455450d826, type: 3}
   spittingingClip: {fileID: 8300000, guid: 5e1515c17699b6240a8e788dfa45dd69, type: 3}
 --- !u!82 &8745340775784434247
@@ -883,6 +883,7 @@ Transform:
   - {fileID: 2553887897041634661}
   - {fileID: 2137487182047069987}
   - {fileID: 7577168760852473201}
+  - {fileID: 4083773169929302438}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2063515469076630163
@@ -1131,8 +1132,8 @@ MonoBehaviour:
   - "Investigar\xE9, quiz\xE1 encuentre algo mas para acabar con la pandilla"
   LlavesObj: {fileID: 0}
   replacementKeys: {fileID: 0}
-  controladorDisparo: {fileID: 0}
-  prefabBala: {fileID: 0}
+  bulletSpawn: {fileID: 4083773169929302438}
+  prefabBala: {fileID: 8583300196187981037, guid: d091de00eae254fa79306cbb67401e90, type: 3}
   cantidadBalas: 0
 --- !u!1 &6765438903032438298
 GameObject:
@@ -1455,6 +1456,37 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &7543690165712411981
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4083773169929302438}
+  m_Layer: 0
+  m_Name: BulletPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4083773169929302438
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7543690165712411981}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 4.9, y: -2.6, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8034607762230154977}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7940409514760102849
 GameObject:
   m_ObjectHideFlags: 0

@@ -5,17 +5,21 @@ using UnityEngine;
 public class Bala : MonoBehaviour
 {
     // Start is called before the first frame update
-    [SerializeField] private float velocidad;
+    [SerializeField] private float force = 5;
     [SerializeField] private float daño;
-    void Start()
+    [SerializeField] private float angle = 45;
+    private Rigidbody rb;
+
+    private void Awake()
     {
-        
+        rb = GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
-    void Update()
+    void Start()
     {
-        transform.Translate(Vector2.right * velocidad * Time.deltaTime);
+        //Vector2 direction = new Vector2(force * Mathf.Cos(angle), force * Mathf.Sin(angle));
+        //transform.Translate(direction * Time.deltaTime);
+        rb.AddRelativeForce(Vector2.one.normalized * force, ForceMode.Impulse);
     }
     
     private void OnTriggerEnter(Collider other)
@@ -23,6 +27,11 @@ public class Bala : MonoBehaviour
         if (other.CompareTag("Nerd"))
         {
             other.GetComponent<Nerd>().RecibirDaño(daño);
+            Destroy(gameObject);
+        }
+
+        if (other.CompareTag("Ground"))
+        {
             Destroy(gameObject);
         }
     }

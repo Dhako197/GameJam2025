@@ -17,6 +17,7 @@ public class BubblerScript : MonoBehaviour
     private readonly string isTalkingAnimation = "Talk";
     private readonly string forwardMovementAnimation = "forwardMovement";
     private readonly string backwardMovementAnimation = "backwardMovement";
+    private readonly string hasBuiltStrawAnimation = "hasBuiltStraw";
 
     private Animator animator;
     private BubblerSoundController bubblerSoundcontroller;
@@ -24,7 +25,6 @@ public class BubblerScript : MonoBehaviour
     private TextMeshProUGUI textBoxComments;
     private TextMeshProUGUI textBoxIntro;
     private FollowPlayer followPlayerScript;
-    private AudioSource audioSource;
 
     private float opinionCooldownTimer = 0;
     private float opinionCooldownCounter = 0;
@@ -35,6 +35,7 @@ public class BubblerScript : MonoBehaviour
     private bool canMove = true;
     private bool canShoot = false;
     private float prevMovement = 1;
+    private bool hasBuiltStraw = false;
     private IInteractable currentInteractable;
     private Vector3 initialPosition = Vector3.zero;
     private readonly List<string> dialogs = new List<string>();
@@ -54,7 +55,7 @@ public class BubblerScript : MonoBehaviour
     [SerializeField] private Sprite replacementKeys;
 
     [Header("Disparo")]
-    [SerializeField] private Transform controladorDisparo;
+    [SerializeField] private Transform bulletSpawn;
     [SerializeField] private GameObject prefabBala;
     [SerializeField] private int cantidadBalas;
 
@@ -65,11 +66,8 @@ public class BubblerScript : MonoBehaviour
         textBoxInteractions = bubbleInteractions.GetComponentInChildren<TextMeshProUGUI>();
         textBoxComments = bubbleComments.GetComponentInChildren<TextMeshProUGUI>();
         textBoxIntro = bubbleTextDinamico.GetComponentInChildren<TextMeshProUGUI>();
-        audioSource = GetComponent<AudioSource>();
-        audioSource = GetComponent<AudioSource>();
 
         animator = GetComponentInChildren<Animator>();
-        canShoot = SceneManager.GetActiveScene().name.Contains("Disparo");
         followPlayerScript = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<FollowPlayer>();
 
         initialPosition = transform.position;
@@ -82,6 +80,8 @@ public class BubblerScript : MonoBehaviour
             }
             animator.SetBool(isTalkingAnimation, true);
         }
+
+        SetHasBuiltStraw();
     }
 
     void Update()
@@ -92,6 +92,7 @@ public class BubblerScript : MonoBehaviour
         Interact();
         StartDialog();
         ClearOpinion();
+        CheckHasBuiltStraw();
     }
 
     void OnTriggerEnter(Collider other)
@@ -140,10 +141,12 @@ public class BubblerScript : MonoBehaviour
         if (canShoot && Input.GetButtonDown("Shoot"))
         {
             Debug.Log("Disparando...");
+            
+            Instantiate(prefabBala, bulletSpawn.position, bulletSpawn.rotation);
             if (cantidadBalas > 0)
             {
                 cantidadBalas--;
-                Instantiate(prefabBala, controladorDisparo.position, controladorDisparo.rotation); ;
+                Instantiate(prefabBala, bulletSpawn.position, bulletSpawn.rotation); ;
             }
             else
             {
@@ -216,7 +219,7 @@ public class BubblerScript : MonoBehaviour
                 currentInteractable.GetObject().GetComponentInChildren<Puerta>().Open();
                 // TODO: this needs change, we no longer use more scenes
                 // lazy load assets
-                Invoke(nameof(LoadNextScene), 1); // late load next scene
+                // delete unused assets
             }
 
             OpinionBubbleShow(!canOpen, "Aun no tengo la llave");
@@ -361,9 +364,20 @@ public class BubblerScript : MonoBehaviour
         OpinionBubbleShow(false);
     }
 
-    void LoadNextScene()
+    void CheckHasBuiltStraw()
     {
-        SceneManager.LoadScene("Scenes/Dhako/Test");
+        bool builtStraw = animator.GetBool(hasBuiltStrawAnimation);
+        // one way conditional, therefore harcoded bool param
+        if (hasBuiltStraw != builtStraw)
+        {
+            animator.SetBool(hasBuiltStrawAnimation, true);
+        }
+    }
+
+    void SetHasBuiltStraw()
+    {
+        hasBuiltStraw = true;
+        canShoot = true;
     }
 
     public bool IsSitting()
