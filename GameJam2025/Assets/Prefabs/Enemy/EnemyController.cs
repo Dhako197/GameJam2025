@@ -39,6 +39,17 @@ public class EnemyController : MonoBehaviour
         CheckRepositionChange();
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        bool isWall = other.CompareTag("Wall");
+        if (isWall && needsReposition)
+        {
+            Vector3 inverted = GetInvertedDestinationUnit();
+            Debug.Log("Inverted: " + inverted);
+            destination = inverted;
+        }
+    }
+
     void CheckResetBubbleTimer()
     {
         if (onCooldown)
@@ -76,7 +87,7 @@ public class EnemyController : MonoBehaviour
         {
             return;
         }
-
+        
         transform.position = Vector3.MoveTowards(transform.position, new Vector3(destination.x, transform.position.y, destination.z), Time.deltaTime * speed);
         Vector3 diff = destination - transform.position;
 
@@ -107,10 +118,11 @@ public class EnemyController : MonoBehaviour
     Vector3 GetDestinationRandom()
     {
         Vector2 destinationRandomizer = UnityEngine.Random.insideUnitCircle * movementRatio;
-        float minimumDistance = movementRatio / 2;
+        float minimumDistance = movementRatio / 4;
         float x = destinationRandomizer.x < minimumDistance ? minimumDistance : destinationRandomizer.x;
         float z = destinationRandomizer.y < minimumDistance ? minimumDistance : destinationRandomizer.y;
-        return new Vector3(x, 0, z);
+
+        return new Vector3(x, 0, z) + transform.position;
     }
 
     Vector3 GetDestinationRandom(float fixedDistance)
@@ -118,7 +130,15 @@ public class EnemyController : MonoBehaviour
         Vector2 destinationRandomizer = UnityEngine.Random.insideUnitCircle * fixedDistance;
         float x = destinationRandomizer.x;
         float z = destinationRandomizer.y;
-        return new Vector3(x, 0, z);
+        return new Vector3(x, 0, z) + transform.position;
+    }
+
+    Vector3 GetInvertedDestinationUnit()
+    {
+        Vector3 invertedDestination = destination * -1;
+        float x = invertedDestination.x > 0 ? 1 : -1;
+        float z = invertedDestination.z > 0 ? 1 : -1;
+        return new Vector3(x, 0, z) + transform.position;
     }
 
     public void TakeDamage(float damage)

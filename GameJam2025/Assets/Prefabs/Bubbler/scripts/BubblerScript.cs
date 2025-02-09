@@ -79,12 +79,10 @@ public class BubblerScript : MonoBehaviour
         {
             for (int i = 0; i < introTextos.Length; i++)
             {
-                //dialogs.Add(introTextos[i]);
+                dialogs.Add(introTextos[i]);
             }
-            //animator.SetBool(isTalkingAnimation, true);
+            animator.SetBool(isTalkingAnimation, true);
         }
-
-        SetHasBuiltStraw();
     }
 
     void Update()
@@ -174,11 +172,10 @@ public class BubblerScript : MonoBehaviour
     {
         if (canShoot && Input.GetButtonDown("Shoot"))
         {
-            //int bullets = InventarioController.Instance.GetGumAmount();
-            int bullets = 1;
+            int bullets = InventarioController.Instance.GetGumAmount();
             if (bullets > 0)
             {
-                //InventarioController.Instance.UseBullet();
+                InventarioController.Instance.UseBullet();
                 movementCoolDown = true;
                 animator.SetBool(isShootingAnimation, true);
             }
@@ -354,7 +351,7 @@ public class BubblerScript : MonoBehaviour
 
         float currentMovement = horizontalMovement > 0 ? 1 : -1;
         float localSpeed = crouching ? speed / 2 : speed;
-        Vector3 movement = new Vector3(horizontalMovement, 0, verticalMovement).normalized * localSpeed * Time.deltaTime;
+        Vector3 movement = localSpeed * Time.deltaTime * new Vector3(horizontalMovement, 0, verticalMovement).normalized;
 
         transform.Translate(movement, Space.Self);
 
@@ -376,6 +373,8 @@ public class BubblerScript : MonoBehaviour
         Vector3 seatPosition = currentInteractable.GetObject().transform.position;
         transform.position = new Vector3(seatPosition.x, transform.position.y, seatPosition.z + 0.5f);
         animator.SetBool(isSittingAnimation, true);
+        movementCoolDown = true;
+        Invoke("FinishCooldown", 1f);
     }
 
     void OpinionBubbleShow(bool enable)
@@ -487,7 +486,7 @@ public class BubblerScript : MonoBehaviour
         }
 
         isFirstCatch = false;
-        dialogs.Add("Mr.Pluff no me dejar� salir");
+        dialogs.Add("Mr.Pluff no me deja salir");
         dialogs.Add("debo estar sentado cuando despierte");
     }
 

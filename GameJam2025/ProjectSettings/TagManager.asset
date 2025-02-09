@@ -8,6 +8,7 @@ TagManager:
   - Puerta
   - Ground
   - Nerd
+  - Wall
   layers:
   - Default
   - TransparentFX
