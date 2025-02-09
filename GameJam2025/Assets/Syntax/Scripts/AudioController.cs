@@ -10,8 +10,8 @@ public class AudioController : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         audioSource.clip = FirstClip;
         audioSource.loop = true;
-        //audioSource.volume = 0.65f;
-        audioSource.volume = 0f;
+        audioSource.volume = 0.65f;
+        //audioSource.volume = 0f;
         audioSource.Play();
     }
 }
