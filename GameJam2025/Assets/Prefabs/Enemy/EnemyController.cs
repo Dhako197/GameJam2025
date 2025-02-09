@@ -6,6 +6,7 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
     [SerializeField] private int seed = 0;
+    private float life = 60;
     private float baseBubbleTime = 5.0f;
     private float randomRange = 3;
     private float counter = 0;
@@ -14,15 +15,23 @@ public class EnemyController : MonoBehaviour
     private float cooldownTime = 5;
     private Animator animator;
 
-    // Start is called before the first frame update
+    private readonly string takeDamageAction = "takeDamage";
+    private readonly string isTrappedAction = "isTrapped";
+    private readonly string startGumAction = "startGum";
+
     void Start()
     {
         UnityEngine.Random.InitState(seed);
         animator = GetComponentInChildren<Animator>();
     }
 
-    // Update is called once per frame
     void Update()
+    {
+        checkResetTimer();
+
+    }
+
+    void checkResetTimer()
     {
         counter += Time.deltaTime;
 
@@ -39,7 +48,7 @@ public class EnemyController : MonoBehaviour
 
         if (counter > timeLimit)
         {
-            animator.SetBool("startGum", true);
+            animator.SetBool(startGumAction, true);
             counter = 0;
             onCooldown = true;
         }
@@ -48,10 +57,22 @@ public class EnemyController : MonoBehaviour
 
     void setTimeLimit()
     {
-        animator.SetBool("startGum", false);
+        animator.SetBool(startGumAction, false);
         counter = 0;
         float randomizer = UnityEngine.Random.value;
         bool isAddition = randomizer > 0.5;
         timeLimit = baseBubbleTime + (randomRange * (randomizer) * (isAddition ? 1 : -1));
+    }
+
+    public void TakeDamage(float damage)
+    {
+        if (life <= 0)
+        {
+            return;
+        }
+
+        string action = life - damage > 0 ? takeDamageAction : isTrappedAction;
+        life -= damage;
+        animator.SetBool(action, true);
     }
 }

@@ -18,6 +18,7 @@ public class BubblerScript : MonoBehaviour
     private readonly string forwardMovementAnimation = "forwardMovement";
     private readonly string backwardMovementAnimation = "backwardMovement";
     private readonly string hasBuiltStrawAnimation = "hasBuiltStraw";
+    private readonly string isShootingAnimation = "isShooting";
 
     private Animator animator;
     private BubblerSoundController bubblerSoundcontroller;
@@ -28,6 +29,7 @@ public class BubblerScript : MonoBehaviour
 
     private float opinionCooldownTimer = 0;
     private float opinionCooldownCounter = 0;
+    private bool movementCoolDown = false;
     private bool crouching = false;
     private bool isSitting = false;
     private bool isFirstCatch = true;
@@ -77,16 +79,21 @@ public class BubblerScript : MonoBehaviour
         {
             for (int i = 0; i < introTextos.Length; i++)
             {
-                dialogs.Add(introTextos[i]);
+                //dialogs.Add(introTextos[i]);
             }
-            animator.SetBool(isTalkingAnimation, true);
+            //animator.SetBool(isTalkingAnimation, true);
         }
 
-        //SetHasBuiltStraw();
+        SetHasBuiltStraw();
     }
 
     void Update()
     {
+        if (movementCoolDown)
+        {
+            return;
+        }
+
         Walk();
         Crouch();
         Shoot();
@@ -148,12 +155,12 @@ public class BubblerScript : MonoBehaviour
         if (canShoot && Input.GetButtonDown("Shoot"))
         {
             Debug.Log("Disparando...");
-            
-            Instantiate(prefabBala, bulletSpawn.position, bulletSpawn.rotation);
-            if (cantidadBalas > 0)
+            //if (cantidadBalas > 0)
+            if (true)
             {
                 cantidadBalas--;
-                Instantiate(prefabBala, bulletSpawn.position, bulletSpawn.rotation); ;
+                movementCoolDown = true;
+                animator.SetBool(isShootingAnimation, true);
             }
             else
             {
@@ -445,5 +452,16 @@ public class BubblerScript : MonoBehaviour
         isFirstCatch = false;
         dialogs.Add("Mr.Pluff no me dejar� salir");
         dialogs.Add("debo estar sentado cuando despierte");
+    }
+
+    public void ThrowBullet()
+    {
+        Instantiate(prefabBala, bulletSpawn.position, bulletSpawn.rotation);
+    }
+
+    public void FinishCooldown()
+    {
+        animator.SetBool(isShootingAnimation, false);
+        movementCoolDown = false;
     }
 }

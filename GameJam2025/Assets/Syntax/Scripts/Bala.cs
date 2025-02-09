@@ -6,8 +6,8 @@ public class Bala : MonoBehaviour
 {
     // Start is called before the first frame update
     [SerializeField] private float force = 5;
-    [SerializeField] private float daño;
-    [SerializeField] private float angle = 45;
+    [SerializeField] private float daño = 20;
+    //[SerializeField] private float angle = 45;
     private Rigidbody rb;
 
     private void Awake()
@@ -26,7 +26,7 @@ public class Bala : MonoBehaviour
     {
         if (other.CompareTag("Nerd"))
         {
-            other.GetComponent<Nerd>().RecibirDaño(daño);
+            other.GetComponent<EnemyController>().TakeDamage(daño);
             Destroy(gameObject);
         }
 

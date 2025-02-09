@@ -5,6 +5,7 @@ using UnityEngine;
 public class BubblerSoundController : MonoBehaviour
 {
     private AudioSource audioController;
+    private BubblerScript bubblerScript;
     private Animator animator;
     [SerializeField] private AudioClip walkingClip;
     [SerializeField] private AudioClip talkingClip;
@@ -16,6 +17,7 @@ public class BubblerSoundController : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         audioController = GetComponent<AudioSource>();
+        bubblerScript = GameObject.FindObjectOfType<BubblerScript>();
         audioController.loop = false;
     }
 
@@ -50,5 +52,15 @@ public class BubblerSoundController : MonoBehaviour
         audioController.loop = false;
         audioController.clip = spittingingClip;
         audioController.Play();
+    }
+
+    public void StartShoot()
+    {
+        bubblerScript.ThrowBullet();
+    }
+
+    public void FinishCooldown()
+    {
+        bubblerScript.FinishCooldown();
     }
 }
