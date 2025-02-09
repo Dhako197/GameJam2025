@@ -79,10 +79,12 @@ public class BubblerScript : MonoBehaviour
         {
             for (int i = 0; i < introTextos.Length; i++)
             {
-                dialogs.Add(introTextos[i]);
+                //dialogs.Add(introTextos[i]);
             }
-            animator.SetBool(isTalkingAnimation, true);
+            //animator.SetBool(isTalkingAnimation, true);
         }
+
+        SetHasBuiltStraw();
     }
 
     void Update()
@@ -141,7 +143,6 @@ public class BubblerScript : MonoBehaviour
             if (phase == "final" && !canShoot)
             {
                 bool hasEnoughGums = InventarioController.Instance.GetGumAmount() >= requiredGums;
-                //bool hasEnoughGums = true;
                 if (hasEnoughGums)
                 {
                     SetHasBuiltStraw();
@@ -173,10 +174,11 @@ public class BubblerScript : MonoBehaviour
     {
         if (canShoot && Input.GetButtonDown("Shoot"))
         {
-            int bullets = InventarioController.Instance.GetGumAmount();
+            //int bullets = InventarioController.Instance.GetGumAmount();
+            int bullets = 1;
             if (bullets > 0)
             {
-                InventarioController.Instance.UseBullet();
+                //InventarioController.Instance.UseBullet();
                 movementCoolDown = true;
                 animator.SetBool(isShootingAnimation, true);
             }
@@ -264,8 +266,7 @@ public class BubblerScript : MonoBehaviour
             if (phase == "final")
             {
                 bool canOpen = InventarioController.Instance.GetGumAmount() >= requiredGums 
-                               && InventarioController.Instance.GetStrawAmount()>=1;
-                //bool canOpen = true;
+                               && InventarioController.Instance.HasStraw();
                 if (canOpen)
                 {
                     p.Open();

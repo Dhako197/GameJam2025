@@ -5,9 +5,9 @@ using UnityEngine;
 public class Bala : MonoBehaviour
 {
     // Start is called before the first frame update
-    [SerializeField] private float force = 5;
+    [SerializeField] private float force = 8f;
     [SerializeField] private float daño = 20;
-    //[SerializeField] private float angle = 45;
+    private readonly float angle = Mathf.PI/3; // rad for 60grad
     private Rigidbody rb;
 
     private void Awake()
@@ -17,9 +17,9 @@ public class Bala : MonoBehaviour
 
     void Start()
     {
-        //Vector2 direction = new Vector2(force * Mathf.Cos(angle), force * Mathf.Sin(angle));
-        //transform.Translate(direction * Time.deltaTime);
-        rb.AddRelativeForce(Vector2.one.normalized * force, ForceMode.Impulse);
+        float x = Mathf.Cos(angle) * force;
+        float y = Mathf.Sin(angle) * force;
+        rb.AddForce(new Vector3(x, y, 0), ForceMode.Impulse);
     }
     
     private void OnTriggerEnter(Collider other)

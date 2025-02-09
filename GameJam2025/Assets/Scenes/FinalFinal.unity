@@ -49877,10 +49877,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 54448161481732621, guid: 43cbaaa3915944970ba39265e193fcde, type: 3}
-      propertyPath: rolloffMode
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2137487182047069987, guid: 43cbaaa3915944970ba39265e193fcde, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0.7
