@@ -26,11 +26,21 @@ public class TimerManager : MonoBehaviour
         UpdateClock(simulatedTime);
     }
 
-    private void Update()
+    /*private void Update()
     {
         elapsedTime += Time.deltaTime;
         float gameTimeElapsed = elapsedTime * gameSecondsPerRealSecond;
         simulatedTime = startTime.AddSeconds(gameTimeElapsed);
+
+        UpdateClock(simulatedTime);
+        LogHourChange(simulatedTime);
+        CheckGameOver(simulatedTime);
+    }*/
+    
+    private void Update()
+    {
+        TimeSpan tiempoTranscurrido = TimeSpan.FromSeconds(Time.time * gameSecondsPerRealSecond);
+        simulatedTime = startTime + tiempoTranscurrido;
 
         UpdateClock(simulatedTime);
         LogHourChange(simulatedTime);

@@ -17,13 +17,6 @@ public class MenuPerdiste : MonoBehaviour
         Time.timeScale = 0f;
     }
 
-    public void Resume()
-    {
-        perdisteMenuUI.SetActive(false);
-        Time.timeScale = 1f;
-        
-    }
-
     void Pause()
     {
         perdisteMenuUI.SetActive(true);
@@ -33,7 +26,7 @@ public class MenuPerdiste : MonoBehaviour
     public void Renaudar()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene("MainMenu"); //Se pone primer escena del juego
+        SceneManager.LoadScene("FinalFinal"); //Se pone primer escena del juego
     }
 
     public void QuitGame()
