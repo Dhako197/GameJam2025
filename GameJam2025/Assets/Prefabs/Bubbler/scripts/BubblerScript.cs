@@ -10,6 +10,7 @@ public class BubblerScript : MonoBehaviour
 {
     [SerializeField] private float speed = 8f;
     [SerializeField] private float sensitivity = 0.25f;
+    [SerializeField] private int requiredGums = 6;
     [SerializeField] private bool requiresIntro;
     [SerializeField] private Transform _transform;
 
@@ -60,7 +61,6 @@ public class BubblerScript : MonoBehaviour
     [Header("Disparo")]
     [SerializeField] private Transform bulletSpawn;
     [SerializeField] private GameObject prefabBala;
-    [SerializeField] private int cantidadBalas;
 
 
     void Start()
@@ -79,12 +79,10 @@ public class BubblerScript : MonoBehaviour
         {
             for (int i = 0; i < introTextos.Length; i++)
             {
-                //dialogs.Add(introTextos[i]);
+                dialogs.Add(introTextos[i]);
             }
-            //animator.SetBool(isTalkingAnimation, true);
+            animator.SetBool(isTalkingAnimation, true);
         }
-
-        SetHasBuiltStraw();
     }
 
     void Update()
@@ -126,8 +124,29 @@ public class BubblerScript : MonoBehaviour
 
         if (other.CompareTag("Puerta"))
         {
-            isSecondFase = true;
-            Debug.Log("Inicia la segunda fase");
+            Puerta p = other.GetComponent<Puerta>();
+
+            string phase = p.GetPhase();
+
+            if (phase == "second" && !isSecondFase)
+            {
+                bool isOpen = p.GetIsOpen();
+                if (isOpen)
+                {
+                    isSecondFase = true;
+                }
+                return;
+            }
+
+            if (phase == "final" && !canShoot)
+            {
+                //bool hasEnoughGums = InventarioController.Instance.GetGumAmount() > requiredGums;
+                bool hasEnoughGums = true;
+                if (hasEnoughGums)
+                {
+                    SetHasBuiltStraw();
+                }
+            }
         }
 
     }
@@ -154,17 +173,17 @@ public class BubblerScript : MonoBehaviour
     {
         if (canShoot && Input.GetButtonDown("Shoot"))
         {
-            Debug.Log("Disparando...");
-            //if (cantidadBalas > 0)
-            if (true)
+            int bullets = InventarioController.Instance.GetGumAmount();
+            if (bullets > 0)
             {
-                cantidadBalas--;
+                InventarioController.Instance.UseBullet();
                 movementCoolDown = true;
                 animator.SetBool(isShootingAnimation, true);
             }
             else
             {
                 Debug.Log("No tienes balas...");
+                // perdiste... syntax...
             }
         }
 
@@ -227,17 +246,33 @@ public class BubblerScript : MonoBehaviour
 
         if (action == "Abrir")
         {
-            bool canOpen = InventarioController.Instance.HasDoorKeys();
-            if (canOpen)
+            Puerta p = item.GetComponent<Puerta>();
+            string phase = p.GetPhase();
+
+            if (phase == "second")
             {
-                currentInteractable.GetObject().GetComponentInChildren<Puerta>().Open();
-                // TODO: this needs change, we no longer use more scenes
-                // lazy load assets
-                // delete unused assets
+                bool canOpen = InventarioController.Instance.HasDoorKeys();
+                if (canOpen)
+                {
+                    p.Open();
+                }
+
+                OpinionBubbleShow(!canOpen, "Aun no tengo la llave");
+                return;
             }
 
-            OpinionBubbleShow(!canOpen, "Aun no tengo la llave");
-            return;
+            if (phase == "final")
+            {
+                //bool canOpen = InventarioController.Instance.GetGumAmount() > requiredGums;
+                bool canOpen = true;
+                if (canOpen)
+                {
+                    p.Open();
+                }
+
+                OpinionBubbleShow(!canOpen, "Necesito algo mas para mi venganza");
+                return;
+            }
         }
 
         if (action == "Reemplazar")

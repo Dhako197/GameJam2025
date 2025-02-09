@@ -1117,6 +1117,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   sensitivity: 0.25
+  requiredGums: 5
   requiresIntro: 1
   _transform: {fileID: 1906699670321459027}
   bubbleInteractions: {fileID: 5487829058950787354}
@@ -1134,7 +1135,6 @@ MonoBehaviour:
   replacementKeys: {fileID: 0}
   bulletSpawn: {fileID: 4083773169929302438}
   prefabBala: {fileID: 8583300196187981037, guid: d091de00eae254fa79306cbb67401e90, type: 3}
-  cantidadBalas: 0
 --- !u!1 &6765438903032438298
 GameObject:
   m_ObjectHideFlags: 0

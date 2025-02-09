@@ -225,4 +225,14 @@ public class InventarioController : MonoBehaviour
 
         shake = 0.1f;
     }
+
+    public int GetGumAmount()
+    {
+        return _inventario[0].Cantidad;
+    }
+
+    public void UseBullet()
+    {
+        _inventario[0].Cantidad -= 1;
+    }
 }

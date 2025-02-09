@@ -6,6 +6,7 @@ using UnityEngine;
 public class Puerta : MonoBehaviour, IInteractable
 {
     [SerializeField] private SpriteRenderer _spriteRenderer;
+    [SerializeField] private string phase;
     private BoxCollider boxCollider;
     private Animator animator;
     private int id;
@@ -37,6 +38,16 @@ public class Puerta : MonoBehaviour, IInteractable
     public int GetId()
     {
         return id;
+    }
+
+    public bool GetIsOpen()
+    {
+        return animator.GetBool("isOpen");
+    }
+
+    public string GetPhase()
+    {
+        return phase;
     }
 }
     
