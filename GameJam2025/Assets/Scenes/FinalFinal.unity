@@ -9004,6 +9004,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3598763480496805408, guid: 44e857af62f522b4d9da258e4f028bb2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4090819818881217965, guid: 44e857af62f522b4d9da258e4f028bb2, type: 3}
       propertyPath: m_fontColor.b
       value: 0
@@ -31823,6 +31827,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3598763480496805408, guid: 44e857af62f522b4d9da258e4f028bb2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4090819818881217965, guid: 44e857af62f522b4d9da258e4f028bb2, type: 3}
       propertyPath: m_fontColor.b
       value: 0
@@ -39573,7 +39581,7 @@ MonoBehaviour:
   CantidadUI: {fileID: 1434999203}
   Cantidad: 0
   ObjectID: 1
-  totalObjs: 6
+  totalObjs: 12
 --- !u!222 &1776000895
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -45980,6 +45988,10 @@ PrefabInstance:
       value: ObjetoInventario (3)
       objectReference: {fileID: 0}
     - target: {fileID: 2702058057747772389, guid: 44e857af62f522b4d9da258e4f028bb2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3598763480496805408, guid: 44e857af62f522b4d9da258e4f028bb2, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
