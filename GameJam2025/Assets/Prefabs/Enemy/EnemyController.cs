@@ -6,23 +6,33 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
     [SerializeField] private int seed = 0;
+    [SerializeField] private AudioClip damageClip;
     private float life = 60;
     private float counter = 0;
     private float timeLimit = 0;
     private bool onCooldown = false;
     private bool needsReposition = false;
     private Vector3 destination = Vector3.zero;
+    private Animator animator;
+    private AudioSource audioController;
+
     private readonly float randomRange = 3;
     private readonly float baseBubbleTime = 5.0f;
     private readonly float cooldownTime = 5;
     private readonly float movementRatio = 8;
     private readonly float speed = 3f;
-    private Animator animator;
 
     private readonly string takeDamageAction = "takeDamage";
     private readonly string isTrappedAction = "isTrapped";
     private readonly string startGumAction = "startGum";
     private readonly string repositionAction = "reposition";
+
+    private void Awake()
+    {
+        audioController = GetComponent<AudioSource>();
+        audioController.loop = false;
+        audioController.clip = damageClip;
+    }
 
     void Start()
     {
@@ -45,7 +55,6 @@ public class EnemyController : MonoBehaviour
         if (isWall && needsReposition)
         {
             Vector3 inverted = GetInvertedDestinationUnit();
-            Debug.Log("Inverted: " + inverted);
             destination = inverted;
         }
     }
@@ -154,6 +163,7 @@ public class EnemyController : MonoBehaviour
             return;
         }
 
+        audioController.Play();
         string action = life - damage > 0 ? takeDamageAction : isTrappedAction;
         life -= damage;
         animator.SetBool(action, true);

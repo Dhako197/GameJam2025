@@ -856,8 +856,8 @@ GameObject:
   - component: {fileID: 7332992138687023558}
   - component: {fileID: 1209377588888255663}
   - component: {fileID: 6659320880877722096}
-  - component: {fileID: 54448161481732621}
   - component: {fileID: 8989441214480069350}
+  - component: {fileID: 54448161481732621}
   m_Layer: 0
   m_Name: Bubler
   m_TagString: Player
@@ -1007,6 +1007,41 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8989441214480069350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6418058930987333323}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7208a361b9ec3764296726524e41faaa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 5
+  sensitivity: 0.25
+  requiredGums: 5
+  requiresIntro: 1
+  _transform: {fileID: 1906699670321459027}
+  addItemClip: {fileID: 8300000, guid: d5003da34e0cd304da4a70806c291a08, type: 3}
+  openDoorClip: {fileID: 8300000, guid: 7ece65f6cda386e40b1ac4c73e65a4a8, type: 3}
+  takeKeysClip: {fileID: 8300000, guid: 158609ec30fabdc40a44faa79bccc0a1, type: 3}
+  bubbleInteractions: {fileID: 5487829058950787354}
+  bubbleComments: {fileID: 6765438903032438298}
+  bubbleTextDinamico: {fileID: 7940409514760102849}
+  introTextos:
+  - Otra vez en castigo por mis malas notas...
+  - Estoy cansado de que la pandilla chicletilla siempre me trate mal y nunca los
+    castiguen...
+  - "Hoy me vengar\xE9"
+  - "All\xED est\xE1n las llaves, podr\xEDa intercambiarlas por algo para que no
+    se de cuenta..."
+  - "Investigar\xE9, quiz\xE1 encuentre algo mas para acabar con la pandilla"
+  LlavesObj: {fileID: 0}
+  replacementKeys: {fileID: 0}
+  bulletSpawn: {fileID: 4083773169929302438}
+  prefabBala: {fileID: 8583300196187981037, guid: d091de00eae254fa79306cbb67401e90, type: 3}
 --- !u!82 &54448161481732621
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1103,38 +1138,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &8989441214480069350
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6418058930987333323}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7208a361b9ec3764296726524e41faaa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 5
-  sensitivity: 0.25
-  requiredGums: 5
-  requiresIntro: 1
-  _transform: {fileID: 1906699670321459027}
-  bubbleInteractions: {fileID: 5487829058950787354}
-  bubbleComments: {fileID: 6765438903032438298}
-  bubbleTextDinamico: {fileID: 7940409514760102849}
-  introTextos:
-  - Otra vez en castigo por mis malas notas...
-  - Estoy cansado de que la pandilla chicletilla siempre me trate mal y nunca los
-    castiguen...
-  - "Hoy me vengar\xE9"
-  - "All\xED est\xE1n las llaves, podr\xEDa intercambiarlas por algo para que no
-    se de cuenta..."
-  - "Investigar\xE9, quiz\xE1 encuentre algo mas para acabar con la pandilla"
-  LlavesObj: {fileID: 0}
-  replacementKeys: {fileID: 0}
-  bulletSpawn: {fileID: 4083773169929302438}
-  prefabBala: {fileID: 8583300196187981037, guid: d091de00eae254fa79306cbb67401e90, type: 3}
 --- !u!1 &6765438903032438298
 GameObject:
   m_ObjectHideFlags: 0

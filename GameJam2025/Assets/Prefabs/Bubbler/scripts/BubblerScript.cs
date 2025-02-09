@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using UnityEditor.Build;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -21,12 +22,14 @@ public class BubblerScript : MonoBehaviour
     private readonly string hasBuiltStrawAnimation = "hasBuiltStraw";
     private readonly string isShootingAnimation = "isShooting";
 
+    private AudioSource audioController;
     private Animator animator;
     private BubblerSoundController bubblerSoundcontroller;
     private TextMeshProUGUI textBoxInteractions;
     private TextMeshProUGUI textBoxComments;
     private TextMeshProUGUI textBoxIntro;
     private FollowPlayer followPlayerScript;
+    private Rigidbody rb;
 
     private float opinionCooldownTimer = 0;
     private float opinionCooldownCounter = 0;
@@ -39,11 +42,17 @@ public class BubblerScript : MonoBehaviour
     private bool canShoot = false;
     private bool isSecondFase = false;
     private float prevMovement = 1;
+    private float fixedSittingYOffset = 1.15f;
     private bool hasBuiltStraw = false;
     private IInteractable currentInteractable;
     private Vector3 initialPosition = Vector3.zero;
     private readonly List<string> dialogs = new List<string>();
     private readonly List<IInteractable> interactables = new List<IInteractable>();
+
+    [Header("Audio")]
+    [SerializeField] private AudioClip addItemClip;
+    [SerializeField] private AudioClip openDoorClip;
+    [SerializeField] private AudioClip takeKeysClip;
 
     [Header("Burbujas de dialogo")]
     [SerializeField] private GameObject bubbleInteractions;
@@ -62,17 +71,22 @@ public class BubblerScript : MonoBehaviour
     [SerializeField] private Transform bulletSpawn;
     [SerializeField] private GameObject prefabBala;
 
-
-    void Start()
+    private void Awake()
     {
         bubblerSoundcontroller = GetComponentInChildren<BubblerSoundController>();
         textBoxInteractions = bubbleInteractions.GetComponentInChildren<TextMeshProUGUI>();
         textBoxComments = bubbleComments.GetComponentInChildren<TextMeshProUGUI>();
         textBoxIntro = bubbleTextDinamico.GetComponentInChildren<TextMeshProUGUI>();
-
+        audioController = GetComponent<AudioSource>();
         animator = GetComponentInChildren<Animator>();
-        followPlayerScript = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<FollowPlayer>();
+        rb = GetComponent<Rigidbody>();
 
+        audioController.loop = false;
+    }
+
+    void Start()
+    {   
+        followPlayerScript = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<FollowPlayer>();
         initialPosition = transform.position;
 
         if (requiresIntro)
@@ -229,7 +243,9 @@ public class BubblerScript : MonoBehaviour
         {
             if (item != null)
             {
+                followPlayerScript.Shake();
                 InventarioController.Instance.SetObjectUI(item.GetComponent<PicableTest>());
+                PlaySound(addItemClip);
             }
             return;
         }
@@ -248,30 +264,31 @@ public class BubblerScript : MonoBehaviour
             Puerta p = item.GetComponent<Puerta>();
             string phase = p.GetPhase();
 
+            bool canOpen = false;
+            string errorMessage = "";
+
             if (phase == "second")
             {
-                bool canOpen = InventarioController.Instance.HasDoorKeys();
-                if (canOpen)
-                {
-                    p.Open();
-                }
-
-                OpinionBubbleShow(!canOpen, "Aun no tengo la llave");
-                return;
+                canOpen = InventarioController.Instance.HasDoorKeys();
+                errorMessage = "Aun no tengo la llave";
             }
 
             if (phase == "final")
             {
-                bool canOpen = InventarioController.Instance.GetGumAmount() >= requiredGums 
-                               && InventarioController.Instance.HasStraw();
-                if (canOpen)
-                {
-                    p.Open();
-                }
+                bool hasEnoughGums = InventarioController.Instance.GetGumAmount() >= requiredGums;
+                canOpen = hasEnoughGums && InventarioController.Instance.HasStraw();
+                errorMessage = "Necesito chicles y un pitillo para mi venganza";
+            }
 
-                OpinionBubbleShow(!canOpen, "Necesito algo mas para mi venganza");
+            if (canOpen)
+            {
+                PlaySound(openDoorClip);
+                p.Open();
                 return;
             }
+
+            OpinionBubbleShow(!canOpen, errorMessage);
+            return;
         }
 
         if (action == "Reemplazar")
@@ -279,6 +296,7 @@ public class BubblerScript : MonoBehaviour
             bool canReplace = InventarioController.Instance.HasReplacementKeys();
             if (canReplace)
             {
+                PlaySound(takeKeysClip);
                 InventarioController.Instance.ReplaceKeys();
                 LlavesObj.GetComponentInChildren<SpriteRenderer>().sprite = replacementKeys;
             }
@@ -343,6 +361,7 @@ public class BubblerScript : MonoBehaviour
         }
 
         isSitting = false;
+        UnFreezeY();
         bubblerSoundcontroller.PlayWalking();
         animator.SetBool(isTalkingAnimation, false);
         animator.SetBool(isSittingAnimation, false);
@@ -371,10 +390,10 @@ public class BubblerScript : MonoBehaviour
     {
         isSitting = true;
         Vector3 seatPosition = currentInteractable.GetObject().transform.position;
-        transform.position = new Vector3(seatPosition.x, transform.position.y, seatPosition.z + 0.5f);
+        transform.position = new Vector3(seatPosition.x, fixedSittingYOffset, seatPosition.z + 0.35f);
         animator.SetBool(isSittingAnimation, true);
-        movementCoolDown = true;
-        Invoke("FinishCooldown", 1f);
+        FreezeY();
+        StartTimedCooldown();
     }
 
     void OpinionBubbleShow(bool enable)
@@ -428,6 +447,34 @@ public class BubblerScript : MonoBehaviour
     {
         hasBuiltStraw = true;
         canShoot = true;
+    }
+
+    void StartTimedCooldown()
+    {
+        movementCoolDown = true;
+        Invoke("FinishCooldown", 1f);
+    }
+
+    void StartTimedCooldown(float time)
+    {
+        movementCoolDown = true;
+        Invoke("FinishCooldown", time);
+    }
+
+    void PlaySound(AudioClip clip)
+    {
+        audioController.clip = clip;
+        audioController.Play();
+    }
+
+    void FreezeY()
+    {
+        rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotation;
+    }
+
+    void UnFreezeY()
+    {
+        rb.constraints = RigidbodyConstraints.FreezeRotation;
     }
 
     public bool IsSitting()
