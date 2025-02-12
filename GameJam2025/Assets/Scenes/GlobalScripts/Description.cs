@@ -4,19 +4,30 @@ public class Description
 {
     public string description;
     public Transform transform;
-    public float offset;
+    public float offsetY;
+    public float offsetX;
 
-    public Description(string d, Transform t)
+    public Description(string description, Transform transform)
     {
-        description = d;
-        transform = t;
-        offset = 0;
+        this.description = description;
+        this.transform = transform;
+        offsetY = 0;
+        offsetX = 0;
     }
 
-    public Description(string d, Transform t, float o)
+    public Description(string description, Transform transform, float offsetY)
     {
-        description = d;
-        transform = t;
-        offset = 0;
+        this.description = description;
+        this.transform = transform;
+        this.offsetY = offsetY;
+        offsetX = 0;
+    }
+
+    public Description(string description, Transform transform, float offsetY, float offsetX)
+    {
+        this.description = description;
+        this.transform = transform;
+        this.offsetY = offsetY;
+        this.offsetX = offsetX;
     }
 }

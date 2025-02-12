@@ -5,8 +5,15 @@ using UnityEngine;
 
 public class Puerta : MonoBehaviour, IInteractable
 {
+    [Header("DoorLogic")]
     [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private string phase;
+
+    [Header("Description")]
+    [SerializeField] private float customNameOffsetY = 0;
+    [SerializeField] private float customNameOffsetX = 0;
+
+    private readonly string objectName = "Puerta";
     private BoxCollider boxCollider;
     private Animator animator;
     private int id;
@@ -52,7 +59,7 @@ public class Puerta : MonoBehaviour, IInteractable
 
     public Description GetDescription()
     {
-        return new Description("Puerta", transform);
+        return new Description(objectName, transform, customNameOffsetY, customNameOffsetX);
     }
 }
     
