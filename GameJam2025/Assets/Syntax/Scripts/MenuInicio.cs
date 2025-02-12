@@ -4,7 +4,6 @@ using UnityEngine.SceneManagement;
 
 public class ShowImageWithSmoothTransition : MonoBehaviour
 {
-    private InitialVideoController initialVideoController;
     public CanvasGroup imageCanvasGroup;
     public CanvasGroup menuCanvasGroup;
     public float displayTime = 3f;
@@ -12,21 +11,13 @@ public class ShowImageWithSmoothTransition : MonoBehaviour
 
     private void Start()
     {
-        initialVideoController = GetComponent<InitialVideoController>();
-        bool initialImage = true;
+        bool initialImage = !InitialVideoController.Instance.GetHasVideoRun();
 
         if (imageCanvasGroup != null)
         {
-            imageCanvasGroup.alpha = 1;
+            imageCanvasGroup.alpha = initialImage ? 1 : 0;
             imageCanvasGroup.interactable = initialImage;
             imageCanvasGroup.blocksRaycasts = initialImage;
-        }
-
-        if (menuCanvasGroup != null)
-        {
-            menuCanvasGroup.alpha = 0;
-            menuCanvasGroup.interactable = !initialImage;
-            menuCanvasGroup.blocksRaycasts = !initialImage;
         }
 
         StartCoroutine(ShowImageThenMenuWithSmoothTransition());
@@ -46,9 +37,6 @@ public class ShowImageWithSmoothTransition : MonoBehaviour
             if (imageCanvasGroup != null)
                 imageCanvasGroup.alpha = Mathf.Clamp01(1 - t);
 
-            if (menuCanvasGroup != null)
-                menuCanvasGroup.alpha = Mathf.Clamp01(t);
-
             yield return null;
         }
 
@@ -58,15 +46,8 @@ public class ShowImageWithSmoothTransition : MonoBehaviour
             imageCanvasGroup.interactable = false;
             imageCanvasGroup.blocksRaycasts = false;
         }
-
-
-        if (menuCanvasGroup != null)
-        {
-            menuCanvasGroup.alpha = 1;
-            menuCanvasGroup.interactable = true;
-            menuCanvasGroup.blocksRaycasts = true;
-        }
     }
+
     public void StartGame()
     {
         string nextScene = InitialVideoController.Instance.GetHasVideoRun() ? "FinalFinal" : "VideoLore";

@@ -1,18 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditorInternal.Profiling.Memory.Experimental;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SocialPlatforms;
-using Unity.VisualScripting;
 
 public class InventarioController : MonoBehaviour
 {
     public static InventarioController Instance { get; private set; }
 
     [SerializeField] private GameObject textCounter;
+    [SerializeField] private GameObject textAdition;
     [SerializeField] private int totalGums;
 
     [Header("InfoCards")]
@@ -32,9 +30,11 @@ public class InventarioController : MonoBehaviour
     private readonly List<ObjetoInventario> uiItemBox = new List<ObjetoInventario>();
     private readonly List<FoundItem> foundItems = new List<FoundItem>();
     private TextMeshProUGUI textField;
+    private TextMeshProUGUI textAditionField;
     private GameObject currentInfoCard;
     private bool isUiOpen = false;
     private bool hasRealKeys = false;
+    private bool needsAddition = false;
 
     private readonly string llaves = "llaves";
     private readonly string chicle = "chicle";
@@ -55,6 +55,7 @@ public class InventarioController : MonoBehaviour
     void Start()
     {
         textField = textCounter.GetComponent<TextMeshProUGUI>();
+        textAditionField = textAdition.GetComponent<TextMeshProUGUI>();
         textField.enabled = false;
         currentInfoCard = gumnInfoCard;
         foreach (ObjetoInventario box in gameObject.GetComponentsInChildren<ObjetoInventario>())
@@ -74,6 +75,8 @@ public class InventarioController : MonoBehaviour
             }
             
         }
+
+        CheckAddition();
     }
 
     private void Resume()
@@ -93,6 +96,11 @@ public class InventarioController : MonoBehaviour
 
     void UpdateInventoryUI()
     {
+        UpdateInventoryUI(0);
+    }
+
+    void UpdateInventoryUI(int increased)
+    {
         List<FoundItem> newItems = new List<FoundItem>();
         List<int> boxInUse = new List<int>();
 
@@ -109,7 +117,17 @@ public class InventarioController : MonoBehaviour
 
                 if(isGum)
                 {
+                    
                     textField.text = foundItem.amount + "/" + totalGums;
+
+                    if (increased > 0)
+                    {
+                        needsAddition = true;
+                        Vector3 position = textCounter.transform.localPosition;
+                        textAdition.transform.localPosition = new Vector3(position.x + 100, position.y + 300, position.z);
+                        textAditionField.enabled = true;
+                        textAditionField.text = "+" + increased;
+                    }
                 }
                 continue;
             }
@@ -142,7 +160,6 @@ public class InventarioController : MonoBehaviour
                 RectTransform boxTransform = itembox.gameObject.GetComponent<RectTransform>();
                 
                 itembox.NombreObjeto = newItem.itemName;
-                itembox.totalObjs = isGum ? totalGums : 0;
                 itembox.gameObject.GetComponent<Image>().sprite = GetImage(newItem.itemName);
                 boxTransform.sizeDelta = new Vector2(100, isGum ? 50 : 100);
 
@@ -187,6 +204,21 @@ public class InventarioController : MonoBehaviour
         }
     }
 
+    public void CheckAddition()
+    {
+        if (!needsAddition) { return;  }
+        //Debug.Log("needsAddition: " + needsAddition);
+        Vector3 diff = textAditionField.gameObject.transform.localPosition - textCounter.transform.localPosition;
+        
+        if (Math.Abs(diff.x) < 10 && Math.Abs(diff.y) < 10)
+        {
+            needsAddition = false;
+            textAditionField.enabled = false;
+            return;
+        }
+
+        textAdition.transform.localPosition = Vector3.MoveTowards(textAdition.transform.localPosition, textCounter.transform.localPosition, Time.deltaTime * 600f);
+    }
 
     private IEnumerator Cooldown()
     {
@@ -246,7 +278,7 @@ public class InventarioController : MonoBehaviour
         }
 
         foundItems[itemIndex].amount += foundItem.amount;
-        UpdateInventoryUI();
+        UpdateInventoryUI(foundItem.amount);
     }
 
     public void RemoveItem(FoundItem foundItem)

@@ -10,9 +10,11 @@ public class FadeInController : MonoBehaviour
     private float counter = 0;
     private bool isDone = false;
 
-    private void Awake()
+    private void Start()
     {
         blackout.alpha = 1;
+        isDone = false;
+        counter = 0;
     }
 
     void Update()
@@ -25,6 +27,7 @@ public class FadeInController : MonoBehaviour
 
         if (counter > fadeInTime)
         {
+            blackout.gameObject.SetActive(false);
             isDone = true;
         }
     }

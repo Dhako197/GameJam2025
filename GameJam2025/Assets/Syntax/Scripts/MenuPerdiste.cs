@@ -10,19 +10,16 @@ public class MenuPerdiste : MonoBehaviour
     private void Start()
     {
         perdisteMenuUI.SetActive(true);
-        Time.timeScale = 0f;
         AudioController.Instance.SetVolume(0.3f);
     }
     
     public void ShowMenu()
     {
         perdisteMenuUI.SetActive(true);
-        Time.timeScale = 0f;
     }
 
     public void Renaudar()
     {
-        Time.timeScale = 1f;
         AudioController.Instance.SetVolume();
         SceneManager.LoadScene("FinalFinal"); //Se pone primer escena del juego
     }

@@ -9,7 +9,5 @@ public class ObjetoInventario : MonoBehaviour
 {
     public TextMeshProUGUI CantidadUI;
     public string NombreObjeto;
-    public int Cantidad;
     public int ObjectID = 0;
-    public int totalObjs;
 }
