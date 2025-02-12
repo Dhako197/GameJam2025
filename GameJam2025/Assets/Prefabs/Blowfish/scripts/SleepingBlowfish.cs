@@ -34,10 +34,10 @@ public class SleepingBlowfish : MonoBehaviour
     void Start()
     {
         sceneCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<FollowPlayer>();
+        player = GameObject.FindGameObjectWithTag("Player");
 
         teacherAudioController = GetComponentInChildren<TeacherAudioController>();
         animators = GetComponentsInChildren<Animator>();
-        player = GameObject.FindGameObjectWithTag("Player");
         playerController = player.GetComponent<BubblerScript>();
         sleepLimit = sleepTimeBase + RandomizeSleepTime();
         for (int i = 0; i < animators.Length; i++)
@@ -92,7 +92,7 @@ public class SleepingBlowfish : MonoBehaviour
             Vector3 diff = destination - transform.position;
 
             // proximity when returning behind desk is smaller than catching player
-            float proximity = destinationName == String.Empty ? 0.5f : 1.5f;
+            float proximity = destinationName == String.Empty ? 0.5f : 1f;
 
             if (Math.Abs(diff.x) < proximity && Math.Abs(diff.z) < proximity)
             {

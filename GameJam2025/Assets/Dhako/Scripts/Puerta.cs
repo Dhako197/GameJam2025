@@ -49,5 +49,10 @@ public class Puerta : MonoBehaviour, IInteractable
     {
         return phase;
     }
+
+    public Description GetDescription()
+    {
+        return new Description("Puerta", transform);
+    }
 }
     

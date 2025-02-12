@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 6262978092548921962}
   - component: {fileID: 1064895543350300120}
   - component: {fileID: 5343877220120799969}
-  - component: {fileID: 8128794179417874608}
   m_Layer: 0
   m_Name: AlgaVerdeazul
   m_TagString: Untagged
@@ -107,16 +106,3 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &8128794179417874608
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 323701110555892681}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ad6bc83738348042acf0dc415645dcd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  freezeXZAxis: 1

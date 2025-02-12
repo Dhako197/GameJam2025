@@ -35,5 +35,10 @@ public class PicableTest : MonoBehaviour, IInteractable
     {
         return _actionId;
     }
+
+    public Description GetDescription()
+    {
+        return new Description("Stil IDK", transform);
+    }
     
 }

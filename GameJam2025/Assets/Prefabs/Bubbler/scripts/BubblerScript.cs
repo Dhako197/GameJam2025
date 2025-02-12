@@ -1,11 +1,8 @@
-using DG.Tweening;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using UnityEditor.Build;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class BubblerScript : MonoBehaviour
 {
@@ -28,6 +25,8 @@ public class BubblerScript : MonoBehaviour
     private TextMeshProUGUI textBoxInteractions;
     private TextMeshProUGUI textBoxComments;
     private TextMeshProUGUI textBoxIntro;
+    private RectTransform descriptorCanvas;
+    private TextMeshProUGUI descriptor;
     private FollowPlayer followPlayerScript;
     private Rigidbody rb;
 
@@ -87,6 +86,10 @@ public class BubblerScript : MonoBehaviour
     void Start()
     {   
         followPlayerScript = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<FollowPlayer>();
+        descriptor = GameObject.FindGameObjectWithTag("Descriptor").GetComponent<TextMeshProUGUI>();
+        descriptorCanvas = descriptor.GetComponentInParent<RectTransform>();
+
+        descriptor.enabled = false;
         initialPosition = transform.position;
 
         if (requiresIntro)
@@ -117,8 +120,14 @@ public class BubblerScript : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        if (movementCoolDown) { return; }
+
         IInteractable interactable = other.GetComponent<IInteractable>();
+
         if (interactable == null) { return; }
+
+        Description description = interactable.GetDescription();
+        DisplayDescriptor(description.transform, description.description, description.offset);
         string action = interactable.GetAction();
 
         if (action == "Reemplazar")
@@ -173,6 +182,7 @@ public class BubblerScript : MonoBehaviour
 
         if (interactables.Count == 0)
         {
+            descriptor.enabled = false;
             currentInteractable = null;
             bubbleInteractions.SetActive(false);
         }
@@ -189,7 +199,10 @@ public class BubblerScript : MonoBehaviour
             int bullets = InventarioController.Instance.GetGumAmount();
             if (bullets > 0)
             {
-                InventarioController.Instance.UseBullet();
+                if (bullets != 1)
+                {
+                    InventarioController.Instance.UseBullet();
+                }
                 movementCoolDown = true;
                 animator.SetBool(isShootingAnimation, true);
             }
@@ -219,6 +232,13 @@ public class BubblerScript : MonoBehaviour
                 GameObject item = currentInteractable.GetObject();
 
                 InteractionExecution(action, item);
+
+                if (action == "Sentarse")
+                {
+                    ClearInteractable();
+                    return;
+                }
+
                 ClearLastInteractable();
             }
         }
@@ -477,6 +497,14 @@ public class BubblerScript : MonoBehaviour
         rb.constraints = RigidbodyConstraints.FreezeRotation;
     }
 
+    void DisplayDescriptor(Transform target, string description, float offset)
+    {
+        descriptor.text = description;
+        Vector3 newPosition = new Vector3(target.position.x, target.position.y + offset, target.position.z);
+        descriptor.transform.position = newPosition;
+        descriptor.enabled = true;
+    }
+
     public bool IsSitting()
     {
         return isSitting;
@@ -508,11 +536,14 @@ public class BubblerScript : MonoBehaviour
 
         if (interactables.Count == 0)
         {
+            descriptor.enabled = false;
             bubbleInteractions.SetActive(false);
             return;
         }
 
         currentInteractable = interactables.Last();
+        Description newDescription = currentInteractable.GetDescription();
+        DisplayDescriptor(newDescription.transform, newDescription.description, newDescription.offset);
         textBoxInteractions.text = BuildActionMessage(currentInteractable.GetAction());
     }
 
@@ -522,6 +553,7 @@ public class BubblerScript : MonoBehaviour
         bubbleInteractions.SetActive(false);
         interactables.Clear();
         currentInteractable = null;
+        descriptor.enabled = false;
         canMove = true;
     }
 

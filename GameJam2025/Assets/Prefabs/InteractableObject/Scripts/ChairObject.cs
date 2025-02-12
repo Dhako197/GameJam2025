@@ -25,4 +25,9 @@ public class ChairObject : MonoBehaviour, IInteractable
     {
         return id;
     }
+    
+    public Description GetDescription()
+    {
+        return new Description("Silla", transform, 0.5f);
+    }
 }

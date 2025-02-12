@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4044207142065269588}
   - component: {fileID: 5836188417029488440}
-  - component: {fileID: 6365174475124722531}
   - component: {fileID: 2386345618859088086}
   m_Layer: 0
   m_Name: AlgaAmarilla
@@ -86,19 +85,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6365174475124722531
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8348245156431737046}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ad6bc83738348042acf0dc415645dcd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  freezeXZAxis: 1
 --- !u!95 &2386345618859088086
 Animator:
   serializedVersion: 5

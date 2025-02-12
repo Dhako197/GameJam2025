@@ -28,4 +28,9 @@ public class NonCollectibleObject : MonoBehaviour, IInteractable
     {
         return id;
     }
+
+    public Description GetDescription()
+    {
+        return new Description("IDK", transform);
+    }
 }

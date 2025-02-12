@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class ShowImageWithSmoothTransition : MonoBehaviour
 {
+    private InitialVideoController initialVideoController;
     public CanvasGroup imageCanvasGroup;
     public CanvasGroup menuCanvasGroup;
     public float displayTime = 3f;
@@ -11,18 +12,21 @@ public class ShowImageWithSmoothTransition : MonoBehaviour
 
     private void Start()
     {
+        initialVideoController = GetComponent<InitialVideoController>();
+        bool initialImage = true;
+
         if (imageCanvasGroup != null)
         {
             imageCanvasGroup.alpha = 1;
-            imageCanvasGroup.interactable = true;
-            imageCanvasGroup.blocksRaycasts = true;
+            imageCanvasGroup.interactable = initialImage;
+            imageCanvasGroup.blocksRaycasts = initialImage;
         }
 
         if (menuCanvasGroup != null)
         {
             menuCanvasGroup.alpha = 0;
-            menuCanvasGroup.interactable = false;
-            menuCanvasGroup.blocksRaycasts = false;
+            menuCanvasGroup.interactable = !initialImage;
+            menuCanvasGroup.blocksRaycasts = !initialImage;
         }
 
         StartCoroutine(ShowImageThenMenuWithSmoothTransition());
@@ -65,13 +69,12 @@ public class ShowImageWithSmoothTransition : MonoBehaviour
     }
     public void StartGame()
     {
-        Debug.Log("Iniciar juego...");
-        SceneManager.LoadScene("FinalFinal");
+        string nextScene = InitialVideoController.Instance.GetHasVideoRun() ? "FinalFinal" : "VideoLore";
+        SceneManager.LoadScene(nextScene);
     }
     
     public void ExitGame()
     {
-        Debug.Log("Salir del juego...");
         Application.Quit();
     }
 }

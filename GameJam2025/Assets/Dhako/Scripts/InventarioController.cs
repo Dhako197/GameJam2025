@@ -7,17 +7,12 @@ using UnityEngine.UI;
 public class InventarioController : MonoBehaviour
 {
     public static InventarioController Instance { get; private set; }
-    [SerializeField] private ObjetoInventario[] _inventario;
-    private float shake = 0;
-    private ObjetoInventario itemToShake = null;
-    private readonly float shakeAmount = 0.025f;
-    private readonly float decreaseFactor = 1.5f;
 
-    [Header("InfoCards")] 
+    [SerializeField] private ObjetoInventario[] _inventario;
     [SerializeField] private GameObject[] infocard;
 
+    private readonly List<int> entered = new List<int>();
     private bool isUiOpen = false;
-    private List<int> entered = new List<int>();
 
     private void Awake()
     {
@@ -49,8 +44,6 @@ public class InventarioController : MonoBehaviour
             }
             
         }
-
-        CheckShake();
     }
 
     private void Resume()
@@ -66,7 +59,6 @@ public class InventarioController : MonoBehaviour
 
     public void SetObjectUI(PicableTest picableTest)
     {
-        
        foreach (var obj in _inventario)
        {
            if (picableTest._id == obj.ObjectID)
@@ -79,9 +71,6 @@ public class InventarioController : MonoBehaviour
                else
                {    
                     obj.Cantidad++;
-                    // shake
-                    itemToShake = obj;
-                    Shake();
                }
                
                Destroy(picableTest.gameObject);
@@ -205,25 +194,6 @@ public class InventarioController : MonoBehaviour
         // add loader
 
         SetObByID(3);
-    }
-
-    void CheckShake()
-    {
-        if (shake > 0)
-        {
-            Vector3 randomize = UnityEngine.Random.insideUnitSphere * shakeAmount;
-            itemToShake.transform.Translate(new Vector3(randomize.x, randomize.y, 0), Space.Self);
-            shake -= Time.deltaTime * decreaseFactor;
-            return;
-        }
-
-        shake = 0.0f;
-    }
-
-    public void Shake()
-    {
-
-        shake = 0.1f;
     }
 
     public int GetGumAmount()
