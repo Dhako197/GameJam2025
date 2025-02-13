@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Syntax/Scenes/Perdiste.unity
     guid: f5c7b51061f4f4e4eb15fad0b3b3436b
+  - enabled: 1
+    path: Assets/Syntax/Scenes/Credits.unity
+    guid: d47fb30bd02cbc643a2df5ea77ff34d2
   m_configObjects: {}
