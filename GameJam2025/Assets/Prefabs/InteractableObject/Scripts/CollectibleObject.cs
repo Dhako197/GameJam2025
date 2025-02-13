@@ -23,4 +23,9 @@ public class CollectibleObject : MonoBehaviour, IInteractable
     {
         return id;
     }
+
+    public Description GetDescription()
+    {
+        return new Description("Artilugio", transform, 0);
+    }
 }

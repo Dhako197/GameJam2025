@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InteractuableInfo : MonoBehaviour,IInteractable
+public class InteractuableInfo : MonoBehaviour, IInteractable
 {
     public int InfoId;
     private int id;
@@ -25,5 +25,10 @@ public class InteractuableInfo : MonoBehaviour,IInteractable
     public int GetId()
     {
         return id;
+    }
+
+    public Description GetDescription()
+    {
+        return new Description("Curiosidad", transform, 0.5f);
     }
 }

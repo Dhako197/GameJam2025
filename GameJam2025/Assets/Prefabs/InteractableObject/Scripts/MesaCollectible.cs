@@ -54,4 +54,9 @@ public class MesaCollectible : MonoBehaviour, IInteractable
     {
         return id;
     }
+
+    public Description GetDescription()
+    {
+        return new Description("Mesa", transform, 1);
+    }
 }

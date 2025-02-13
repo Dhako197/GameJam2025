@@ -6,5 +6,6 @@ public interface IInteractable
 {
     string GetAction();
     GameObject GetObject();
+    Description GetDescription();
     int GetId();
 } 

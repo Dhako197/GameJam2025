@@ -1,23 +1,44 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class InventarioController : MonoBehaviour
 {
     public static InventarioController Instance { get; private set; }
-    [SerializeField] private ObjetoInventario[] _inventario;
-    private float shake = 0;
-    private ObjetoInventario itemToShake = null;
-    private readonly float shakeAmount = 0.025f;
-    private readonly float decreaseFactor = 1.5f;
 
-    [Header("InfoCards")] 
-    [SerializeField] private GameObject[] infocard;
+    [SerializeField] private GameObject textCounter;
+    [SerializeField] private GameObject textAdition;
+    [SerializeField] private int totalGums;
 
+    [Header("InfoCards")]
+    [SerializeField] private GameObject gumnInfoCard;
+    [SerializeField] private GameObject toyKeynInfoCard;
+    [SerializeField] private GameObject realKeynInfoCard;
+    [SerializeField] private GameObject origaminInfoCard;
+    [SerializeField] private GameObject coralInfoCard;
+    [SerializeField] private GameObject strawInfoCard;
+
+    [Header("InventorySprites")]
+    [SerializeField] private Sprite gumImage;
+    [SerializeField] private Sprite strawImage;
+    [SerializeField] private Sprite realKeysImage;
+    [SerializeField] private Sprite toyKeysImage;
+
+    private readonly List<ObjetoInventario> uiItemBox = new List<ObjetoInventario>();
+    private readonly List<FoundItem> foundItems = new List<FoundItem>();
+    private TextMeshProUGUI textField;
+    private TextMeshProUGUI textAditionField;
+    private GameObject currentInfoCard;
     private bool isUiOpen = false;
-    private List<int> entered = new List<int>();
+    private bool hasRealKeys = false;
+    private bool needsAddition = false;
+
+    private readonly string llaves = "llaves";
+    private readonly string chicle = "chicle";
+    private readonly string pitillo = "pitillo";
 
     private void Awake()
     {
@@ -33,9 +54,14 @@ public class InventarioController : MonoBehaviour
 
     void Start()
     {
-        for (int i = 0; i < _inventario.Length; i++)
+        textField = textCounter.GetComponent<TextMeshProUGUI>();
+        textAditionField = textAdition.GetComponent<TextMeshProUGUI>();
+        textField.enabled = false;
+        currentInfoCard = gumnInfoCard;
+        foreach (ObjetoInventario box in gameObject.GetComponentsInChildren<ObjetoInventario>())
         {
-            _inventario[i].gameObject.SetActive(false);
+            uiItemBox.Add(box);
+            box.gameObject.SetActive(false);
         }
     }
 
@@ -50,194 +76,224 @@ public class InventarioController : MonoBehaviour
             
         }
 
-        CheckShake();
+        CheckAddition();
     }
 
     private void Resume()
     {
-        foreach (var go in infocard)
-        {
-            go.SetActive(false);
-        }
-
+        currentInfoCard.SetActive(false);
         isUiOpen = false;
         Time.timeScale = 1;
     }
 
-    public void SetObjectUI(PicableTest picableTest)
+    Sprite GetImage(string item)
     {
-        
-       foreach (var obj in _inventario)
-       {
-           if (picableTest._id == obj.ObjectID)
-           {
-               obj.gameObject.SetActive(true);
-               if (picableTest._id == 3)
-               {
-                   obj.Cantidad = 1;
-               }
-               else
-               {    
-                    obj.Cantidad++;
-                    // shake
-                    itemToShake = obj;
-                    Shake();
-               }
-               
-               Destroy(picableTest.gameObject);
-               CheckInfo(obj.Cantidad,picableTest._id);
-               break;
-           }
-       }
+        if (item == llaves) { return toyKeysImage; }
+        if (item == chicle) { return gumImage; }
+        if (item == pitillo) { return strawImage; }
+        return null;
     }
 
-    public void SetObByID(int Id)
+    void UpdateInventoryUI()
     {
-        foreach (var obj in _inventario)
+        UpdateInventoryUI(0);
+    }
+
+    void UpdateInventoryUI(int increased)
+    {
+        List<FoundItem> newItems = new List<FoundItem>();
+        List<int> boxInUse = new List<int>();
+
+        for (int i = 0; i < foundItems.Count; i++)
         {
-            if (Id == obj.ObjectID)
+            FoundItem foundItem = foundItems[i];
+            int assignedItemBox = uiItemBox.FindIndex(box => box.NombreObjeto == foundItem.itemName);
+
+            // if item already has a box we only update amount
+            if (assignedItemBox != -1)
             {
-                obj.gameObject.SetActive(true);
-                obj.Cantidad++;
-                CheckInfo(obj.Cantidad, Id);
-                break;
+                boxInUse.Add(assignedItemBox);
+                bool isGum = foundItem.itemName == chicle;
+
+                if(isGum)
+                {
+                    
+                    textField.text = foundItem.amount + "/" + totalGums;
+
+                    if (increased > 0)
+                    {
+                        needsAddition = true;
+                        Vector3 position = textCounter.transform.localPosition;
+                        textAdition.transform.localPosition = new Vector3(position.x + 100, position.y + 300, position.z);
+                        textAditionField.enabled = true;
+                        textAditionField.text = "+" + increased;
+                    }
+                }
+                continue;
+            }
+
+            // save new item for check
+            newItems.Add(foundItems[i]);
+        }
+
+        for (int i = 0; i < uiItemBox.Count; i++)
+        {
+            // find empty box
+            if (!boxInUse.Contains(i))
+            {
+                ObjetoInventario itembox = uiItemBox[i];
+                
+                // no new item, delete data
+                if (newItems.Count == 0)
+                {
+                    itembox.NombreObjeto = "";
+                    itembox.gameObject.SetActive(false);
+                    continue;
+                }
+
+                // new item in queue, assig to box
+                itembox.gameObject.SetActive(true);
+
+                FoundItem newItem = newItems[0];
+
+                bool isGum = newItem.itemName == chicle;
+                RectTransform boxTransform = itembox.gameObject.GetComponent<RectTransform>();
+                
+                itembox.NombreObjeto = newItem.itemName;
+                itembox.gameObject.GetComponent<Image>().sprite = GetImage(newItem.itemName);
+                boxTransform.sizeDelta = new Vector2(100, isGum ? 50 : 100);
+
+                if (isGum)
+                {
+                    textField.enabled = true;
+                    RectTransform rt = textCounter.GetComponent<RectTransform>();
+                    Vector3 position = rt.position;
+                    rt.position = new Vector3(boxTransform.position.x, position.y, position.z);
+                    textField.text = newItem.amount + "/" + totalGums;
+                }
+
+                CheckInfo(newItem.itemName);
+                newItems.RemoveAt(0);
             }
         }
     }
 
-    private void CheckInfo(int catidad, int id)
+    private void CheckInfo(string itemName)
     {
-        if (catidad == 1 && !hasEntered(id))
-        { 
-            switch (id)
-            {
-                case 1:
-                    infocard[0].SetActive(true);
-                    break;
-                case 2:
-                    infocard[1].SetActive(true);
-                    break;
-                case 3:
-                    infocard[2].SetActive(true);
-                    break;
-                case 6:
-                    infocard[5].SetActive(true);
-                    Debug.Log("abre info pitillo");
-                    break;
-            }
+        if (itemName == chicle) { currentInfoCard = gumnInfoCard; }
+        if (itemName == pitillo) { currentInfoCard = strawInfoCard; }
+        if (itemName == llaves) { currentInfoCard = hasRealKeys ? realKeynInfoCard : toyKeynInfoCard; }
 
-            markEntered(id);
-            Time.timeScale = 0;
-            StartCoroutine("Cooldown");
-        }
+        currentInfoCard.SetActive(true);
+
+        StartCoroutine("Cooldown");
     }
 
     public void NoCollectionableInfo(InteractuableInfo interactableInfo)
     {
         int id = interactableInfo.InfoId;
+
+        // needs change
         if (isUiOpen == false)
         {
-            Debug.Log(isUiOpen);
-            Debug.Log(id);
-            switch (id)
-            {
-                case 4:
-                    infocard[3].SetActive(true);
-                    break;
-                case 5:
-                    infocard[4].SetActive(true);
-                    break;
-            }
-            Debug.Log("Entro a la info");
-            Time.timeScale = 0;
+            if (id == 4) { currentInfoCard = origaminInfoCard; }
+            if (id == 5) { currentInfoCard = coralInfoCard; }
+
+            currentInfoCard.SetActive(true);
             StartCoroutine("Cooldown");
         }
     }
 
+    public void CheckAddition()
+    {
+        if (!needsAddition) { return;  }
+        //Debug.Log("needsAddition: " + needsAddition);
+        Vector3 diff = textAditionField.gameObject.transform.localPosition - textCounter.transform.localPosition;
+        
+        if (Math.Abs(diff.x) < 10 && Math.Abs(diff.y) < 10)
+        {
+            needsAddition = false;
+            textAditionField.enabled = false;
+            return;
+        }
+
+        textAdition.transform.localPosition = Vector3.MoveTowards(textAdition.transform.localPosition, textCounter.transform.localPosition, Time.deltaTime * 600f);
+    }
+
     private IEnumerator Cooldown()
     {
+        Time.timeScale = 0;
         yield return new WaitForSecondsRealtime(0.5f);
         Time.timeScale = 1;
         isUiOpen = true;
     }
 
-    public void UseItem(int ID)
-    {
-        for (int i = 0; i < _inventario.Length; i++)
-        {
-            if (ID == _inventario[i].ObjectID)
-            {
-                _inventario[i].Cantidad--;
-                if (_inventario[i].Cantidad <= 0)
-                {
-                    _inventario[i].ObjectID = 0;
-                    _inventario[i].gameObject.SetActive(false);
-                }
-                break;
-            }
-        }
-    }
-    
-    void markEntered(int id)
-    {
-        entered.Add(id);
-    }
-
-    bool hasEntered(int id)
-    {
-        return entered.Contains(id);
-    }
-
     public bool HasDoorKeys()
     {
-        return _inventario[2].Cantidad > 0;
+        return hasRealKeys;
     }
 
     public bool HasReplacementKeys()
     {
-        return _inventario[1].Cantidad > 0;
+        return foundItems.Find(item => item.itemName == llaves) != null;
     }
 
     public void ReplaceKeys()
     {
-        UseItem(2);
-
-        // add loader
-
-        SetObByID(3);
-    }
-
-    void CheckShake()
-    {
-        if (shake > 0)
-        {
-            Vector3 randomize = UnityEngine.Random.insideUnitSphere * shakeAmount;
-            itemToShake.transform.Translate(new Vector3(randomize.x, randomize.y, 0), Space.Self);
-            shake -= Time.deltaTime * decreaseFactor;
-            return;
-        }
-
-        shake = 0.0f;
-    }
-
-    public void Shake()
-    {
-
-        shake = 0.1f;
+        ObjetoInventario itembox = uiItemBox.Find(item => item.NombreObjeto == llaves);
+        itembox.gameObject.GetComponent<Image>().sprite = realKeysImage;
+        hasRealKeys = true;
+        CheckInfo(llaves);
     }
 
     public int GetGumAmount()
     {
-        return _inventario[0].Cantidad;
+        FoundItem gums = foundItems.Find(item => item.itemName == chicle);
+        if (gums == null) { return 0; }
+
+        return gums.amount;
     }
 
     public bool HasStraw()
     {
-        return _inventario[3].Cantidad != 0;
+        return foundItems.Find(item => item.itemName == pitillo) != null;
     }
 
     public void UseBullet()
     {
-        _inventario[0].Cantidad -= 1;
+        int gumsBoxIndex = foundItems.FindIndex(item => item.itemName == chicle);
+        if (gumsBoxIndex == -1) { return; }
+        foundItems[gumsBoxIndex].amount -= 1;
+        UpdateInventoryUI();
+    }
+
+    public void AddItem(FoundItem foundItem)
+    {
+        int itemIndex = foundItems.FindIndex(item => item.itemName == foundItem.itemName);
+        if (itemIndex == -1)
+        {
+            foundItems.Add(foundItem);
+            UpdateInventoryUI();
+            return;
+        }
+
+        foundItems[itemIndex].amount += foundItem.amount;
+        UpdateInventoryUI(foundItem.amount);
+    }
+
+    public void RemoveItem(FoundItem foundItem)
+    {
+        RemoveItem(foundItem, false);
+    }
+
+    public void RemoveItem(FoundItem foundItem, bool isReplace)
+    {
+        foundItems.Remove(foundItem);
+
+        if (!isReplace)
+        {
+            UpdateInventoryUI();
+            return;
+        }
     }
 }

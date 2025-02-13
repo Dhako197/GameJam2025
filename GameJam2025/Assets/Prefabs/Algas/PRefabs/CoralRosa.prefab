@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 947608691082630537}
   - component: {fileID: 928820931980893706}
   - component: {fileID: 6313097763624830544}
-  - component: {fileID: 6050583554161304213}
   m_Layer: 0
   m_Name: CoralRosa
   m_TagString: Untagged
@@ -107,16 +106,3 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &6050583554161304213
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9124599783370586193}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ad6bc83738348042acf0dc415645dcd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  freezeXZAxis: 1

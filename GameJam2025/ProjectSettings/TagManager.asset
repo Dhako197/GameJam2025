@@ -9,6 +9,7 @@ TagManager:
   - Ground
   - Nerd
   - Wall
+  - Descriptor
   layers:
   - Default
   - TransparentFX

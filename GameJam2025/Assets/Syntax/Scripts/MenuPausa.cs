@@ -8,7 +8,7 @@ public class MenuPausa : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetButtonDown("Options"))
         {
             if (isPaused)
                 Resume();
@@ -19,8 +19,8 @@ public class MenuPausa : MonoBehaviour
 
     public void Resume()
     {
-        pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
+        pauseMenuUI.SetActive(false);
         isPaused = false;
     }
 
@@ -34,12 +34,6 @@ public class MenuPausa : MonoBehaviour
     public void LoadMenu()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene("MainMenu");
-    }
-
-    public void QuitGame()
-    {
-        Debug.Log("Saliendo del juego...");
-        Application.Quit();
+        SceneManager.LoadScene("MenuInicial");
     }
 }

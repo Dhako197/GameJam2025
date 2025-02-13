@@ -363,7 +363,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8794814964674519136}
   - component: {fileID: 3415188825939840775}
-  - component: {fileID: 1889016397288141985}
   m_Layer: 0
   m_Name: marcosprite
   m_TagString: Untagged
@@ -438,16 +437,3 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1889016397288141985
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9010312750620177571}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ad6bc83738348042acf0dc415645dcd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  freezeXZAxis: 1

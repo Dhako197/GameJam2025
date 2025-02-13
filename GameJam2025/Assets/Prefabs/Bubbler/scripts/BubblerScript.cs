@@ -1,9 +1,7 @@
-using DG.Tweening;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using UnityEditor.Build;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,9 +9,11 @@ public class BubblerScript : MonoBehaviour
 {
     [SerializeField] private float speed = 8f;
     [SerializeField] private float sensitivity = 0.25f;
+    [SerializeField] private float fadeOutTime = 5f;
     [SerializeField] private int requiredGums = 6;
     [SerializeField] private bool requiresIntro;
     [SerializeField] private Transform _transform;
+    [SerializeField] private CanvasGroup blackout;
 
     private readonly string isSittingAnimation = "isSitting";
     private readonly string isTalkingAnimation = "Talk";
@@ -28,11 +28,15 @@ public class BubblerScript : MonoBehaviour
     private TextMeshProUGUI textBoxInteractions;
     private TextMeshProUGUI textBoxComments;
     private TextMeshProUGUI textBoxIntro;
+    private RectTransform descriptorCanvas;
+    private TextMeshProUGUI descriptor;
     private FollowPlayer followPlayerScript;
     private Rigidbody rb;
 
     private float opinionCooldownTimer = 0;
     private float opinionCooldownCounter = 0;
+    private float endrunCounter = 0;
+    private bool endRun = false;
     private bool movementCoolDown = false;
     private bool crouching = false;
     private bool isSitting = false;
@@ -41,11 +45,12 @@ public class BubblerScript : MonoBehaviour
     private bool canMove = true;
     private bool canShoot = false;
     private bool isSecondFase = false;
-    private float prevMovement = 1;
-    private float fixedSittingYOffset = 1.15f;
     private bool hasBuiltStraw = false;
+    private float prevMovement = 1;
+    private string nextScene = "Credits";
     private IInteractable currentInteractable;
     private Vector3 initialPosition = Vector3.zero;
+    private readonly float fixedSittingYOffset = 1.15f;
     private readonly List<string> dialogs = new List<string>();
     private readonly List<IInteractable> interactables = new List<IInteractable>();
 
@@ -87,6 +92,10 @@ public class BubblerScript : MonoBehaviour
     void Start()
     {   
         followPlayerScript = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<FollowPlayer>();
+        descriptor = GameObject.FindGameObjectWithTag("Descriptor").GetComponent<TextMeshProUGUI>();
+        descriptorCanvas = descriptor.GetComponentInParent<RectTransform>();
+
+        descriptor.enabled = false;
         initialPosition = transform.position;
 
         if (requiresIntro)
@@ -113,12 +122,19 @@ public class BubblerScript : MonoBehaviour
         StartDialog();
         ClearOpinion();
         CheckHasBuiltStraw();
+        CheckEndRun();
     }
 
     void OnTriggerEnter(Collider other)
     {
+        if (movementCoolDown) { return; }
+
         IInteractable interactable = other.GetComponent<IInteractable>();
+
         if (interactable == null) { return; }
+
+        Description description = interactable.GetDescription();
+        DisplayDescriptor(description);
         string action = interactable.GetAction();
 
         if (action == "Reemplazar")
@@ -132,15 +148,19 @@ public class BubblerScript : MonoBehaviour
             action = InventarioController.Instance.HasDoorKeys() ? "Empezar venganza" : action;
         }
 
-        interactables.Add(interactable);
-        bubbleInteractions.SetActive(true);
-        textBoxInteractions.text = BuildActionMessage(action);
+        if (!interactables.Contains(interactable)) {
+            interactables.Add(interactable);
+            bubbleInteractions.SetActive(true);
+            textBoxInteractions.text = BuildActionMessage(action);
+        }
 
         if (other.CompareTag("Puerta"))
         {
             Puerta p = other.GetComponent<Puerta>();
 
             string phase = p.GetPhase();
+
+            DisplayDescriptor(description);
 
             if (phase == "second" && !isSecondFase)
             {
@@ -173,13 +193,13 @@ public class BubblerScript : MonoBehaviour
 
         if (interactables.Count == 0)
         {
+            descriptor.enabled = false;
             currentInteractable = null;
             bubbleInteractions.SetActive(false);
+            return;
         }
-        else
-        {
-            currentInteractable = interactables.Last();
-        }
+
+        currentInteractable = interactables.Last();
     }
 
     void Shoot()
@@ -195,8 +215,7 @@ public class BubblerScript : MonoBehaviour
             }
             else
             {
-                Debug.Log("No tienes balas...");
-                // perdiste... syntax...
+                EndRun("Perdiste");
             }
         }
 
@@ -216,15 +235,21 @@ public class BubblerScript : MonoBehaviour
             {
                 currentInteractable = interactables.Last();
                 string action = currentInteractable.GetAction();
-                GameObject item = currentInteractable.GetObject();
+                GameObject interactable = currentInteractable.GetObject();
 
-                InteractionExecution(action, item);
-                ClearLastInteractable();
+                InteractionExecution(action, interactable);
+
+                if (action != "Sentarse")
+                {
+                    ClearLastInteractable();
+                    return;
+                }
+
             }
         }
     }
 
-    void InteractionExecution(string action, GameObject item)
+    void InteractionExecution(string action, GameObject interactable)
     {
         if (action == "Sentarse")
         {
@@ -235,33 +260,68 @@ public class BubblerScript : MonoBehaviour
         if (action == "Inspeccionar")
         {
             followPlayerScript.Shake();
-            OpinionBubbleShow(true, "Parece que no hay nada");
+            Inspectable inspectable = interactable.GetComponent<Inspectable>();
+
+            if (inspectable == null)
+            {
+                OpinionBubbleShow(true, "Parece que no hay nada");
+                return;
+            }
+
+            FoundItem foundItem = inspectable.Inspect();
+
+            if (foundItem == null)
+            {
+                OpinionBubbleShow(true, "Parece que no hay nada");
+                return;
+            }
+
+            InventarioController.Instance.AddItem(foundItem);
             return;
         }
 
         if (action == "Tomar")
         {
-            if (item != null)
+            if (interactable != null)
             {
                 followPlayerScript.Shake();
-                InventarioController.Instance.SetObjectUI(item.GetComponent<PicableTest>());
+                Picable inspectable = interactable.GetComponent<Picable>();
+                FoundItem foundItem = inspectable.Take();
+
                 PlaySound(addItemClip);
+                InventarioController.Instance.AddItem(foundItem);
             }
+            return;
+        }
+
+        if (action == "Reemplazar")
+        {
+            bool canReplace = InventarioController.Instance.HasReplacementKeys();
+            if (canReplace)
+            {
+                followPlayerScript.Shake();
+                PlaySound(takeKeysClip);
+                InventarioController.Instance.ReplaceKeys();
+                LlavesObj.GetComponentInChildren<SpriteRenderer>().sprite = replacementKeys;
+                return;
+            }
+
+            OpinionBubbleShow(!canReplace, "Necesito algo para reemplazar las llavez");
             return;
         }
 
         if (action == "Info")
         {
-            if (item != null)
+            if (interactable != null)
             {
-                InventarioController.Instance.NoCollectionableInfo(item.GetComponent<InteractuableInfo>());
+                InventarioController.Instance.NoCollectionableInfo(interactable.GetComponent<InteractuableInfo>());
             }
             return;
         }
 
         if (action == "Abrir")
         {
-            Puerta p = item.GetComponent<Puerta>();
+            Puerta p = interactable.GetComponent<Puerta>();
             string phase = p.GetPhase();
 
             bool canOpen = false;
@@ -288,20 +348,6 @@ public class BubblerScript : MonoBehaviour
             }
 
             OpinionBubbleShow(!canOpen, errorMessage);
-            return;
-        }
-
-        if (action == "Reemplazar")
-        {
-            bool canReplace = InventarioController.Instance.HasReplacementKeys();
-            if (canReplace)
-            {
-                PlaySound(takeKeysClip);
-                InventarioController.Instance.ReplaceKeys();
-                LlavesObj.GetComponentInChildren<SpriteRenderer>().sprite = replacementKeys;
-            }
-
-            OpinionBubbleShow(!canReplace, "Necesito algo para reemplazar las llavez");
             return;
         }
     }
@@ -393,6 +439,7 @@ public class BubblerScript : MonoBehaviour
         transform.position = new Vector3(seatPosition.x, fixedSittingYOffset, seatPosition.z + 0.35f);
         animator.SetBool(isSittingAnimation, true);
         FreezeY();
+        ClearInteractable();
         StartTimedCooldown();
     }
 
@@ -443,8 +490,27 @@ public class BubblerScript : MonoBehaviour
         }
     }
 
+    void CheckEndRun()
+    {
+        if (!endRun)
+        {
+            return;
+        }
+
+        endrunCounter -= Time.deltaTime;
+        blackout.alpha = Mathf.Clamp01(1 - (endrunCounter / fadeOutTime));
+        AudioController.Instance.SetVolume(0.65f - (endrunCounter / fadeOutTime));
+
+        if (endrunCounter < 0)
+        {
+            SceneManager.LoadScene(nextScene);
+            AudioController.Instance.SetVolume();
+        }
+    }
+
     void SetHasBuiltStraw()
     {
+        OpinionBubbleShow(true, "Ahora tengo un servatana" + "\n[Q]");
         hasBuiltStraw = true;
         canShoot = true;
     }
@@ -467,6 +533,13 @@ public class BubblerScript : MonoBehaviour
         audioController.Play();
     }
 
+    void EndRun(string scene)
+    {
+        endRun = true;
+        endrunCounter = fadeOutTime;
+        nextScene = scene;
+    }
+
     void FreezeY()
     {
         rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotation;
@@ -475,6 +548,15 @@ public class BubblerScript : MonoBehaviour
     void UnFreezeY()
     {
         rb.constraints = RigidbodyConstraints.FreezeRotation;
+    }
+
+    void DisplayDescriptor(Description description)
+    {
+        descriptor.text = description.description;
+        Transform target = description.transform;
+        Vector3 newPosition = new Vector3(target.position.x + description.offsetX, target.position.y + description.offsetY, target.position.z);
+        descriptor.transform.position = newPosition;
+        descriptor.enabled = true;
     }
 
     public bool IsSitting()
@@ -508,11 +590,13 @@ public class BubblerScript : MonoBehaviour
 
         if (interactables.Count == 0)
         {
+            descriptor.enabled = false;
             bubbleInteractions.SetActive(false);
             return;
         }
 
         currentInteractable = interactables.Last();
+        DisplayDescriptor(currentInteractable.GetDescription());
         textBoxInteractions.text = BuildActionMessage(currentInteractable.GetAction());
     }
 
@@ -522,6 +606,7 @@ public class BubblerScript : MonoBehaviour
         bubbleInteractions.SetActive(false);
         interactables.Clear();
         currentInteractable = null;
+        descriptor.enabled = false;
         canMove = true;
     }
 
