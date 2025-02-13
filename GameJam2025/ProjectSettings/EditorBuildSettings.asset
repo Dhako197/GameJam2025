@@ -15,6 +15,9 @@ EditorBuildSettings:
     path: Assets/Scenes/FinalFinal.unity
     guid: 09eeb9627a29e204abdcb63d7c162e7e
   - enabled: 1
-    path: Assets/Syntax/Scenes/Perdiste.unity
+    path: Assets/Syntax/Scenes/PerdisteTime.unity
     guid: f5c7b51061f4f4e4eb15fad0b3b3436b
+  - enabled: 1
+    path: Assets/Syntax/Scenes/PerdisteBullets.unity
+    guid: a704b3cdfc2e63240a2c2988b2117bb3
   m_configObjects: {}

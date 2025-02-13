@@ -15,6 +15,7 @@ public class EnemyController : MonoBehaviour
     private Vector3 destination = Vector3.zero;
     private Animator animator;
     private AudioSource audioController;
+    private GameObject respawn;
 
     private readonly float randomRange = 3;
     private readonly float baseBubbleTime = 5.0f;
@@ -36,6 +37,7 @@ public class EnemyController : MonoBehaviour
 
     void Start()
     {
+        respawn = GameObject.FindGameObjectWithTag("Respawn");
         UnityEngine.Random.InitState(seed);
         animator = GetComponentInChildren<Animator>();
     }
@@ -55,6 +57,7 @@ public class EnemyController : MonoBehaviour
         if (isWall && needsReposition)
         {
             Vector3 inverted = GetInvertedDestinationUnit();
+            Debug.Log("Inverted: " + inverted);
             destination = inverted;
         }
     }
@@ -145,9 +148,11 @@ public class EnemyController : MonoBehaviour
     Vector3 GetInvertedDestinationUnit()
     {
         Vector3 invertedDestination = destination * -1;
+        //Debug.Log("destination: " + destination);
+        //Debug.Log("invertedDestination: " + invertedDestination);
         float x = invertedDestination.x > 0 ? 1 : -1;
         float z = invertedDestination.z > 0 ? 1 : -1;
-        return new Vector3(x, 0, z) + transform.position;
+        return new Vector3(x, destination.y, z) + transform.position;
     }
 
     public void TakeDamage(float damage)

@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 public class BubblerScript : MonoBehaviour
 {
     [SerializeField] private float speed = 8f;
-    [SerializeField] private float sensitivity = 0.25f;
+    [SerializeField] private float sensitivity = 0.4f;
     [SerializeField] private float fadeOutTime = 5f;
     [SerializeField] private int requiredGums = 6;
     [SerializeField] private bool requiresIntro;
@@ -215,7 +215,7 @@ public class BubblerScript : MonoBehaviour
             }
             else
             {
-                EndRun("Perdiste");
+                EndRun("PerdisteBullets");
             }
         }
 
@@ -579,7 +579,7 @@ public class BubblerScript : MonoBehaviour
 
     string BuildActionMessage(string actionName)
     {
-        return actionName + "\n[ E ]";
+        return actionName + "\n[E]";
     }
 
     public Vector3 GetInitialPosition()
