@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 public class BubblerScript : MonoBehaviour
 {
     [SerializeField] private float speed = 8f;
-    [SerializeField] private float sensitivity = 0.25f;
+    [SerializeField] private float sensitivity = 0.4f;
     [SerializeField] private float fadeOutTime = 5f;
     [SerializeField] private int requiredGums = 6;
     [SerializeField] private bool requiresIntro;
@@ -215,7 +215,7 @@ public class BubblerScript : MonoBehaviour
             }
             else
             {
-                EndRun("Perdiste");
+                EndRun("PerdisteBullets");
             }
         }
 
@@ -236,6 +236,8 @@ public class BubblerScript : MonoBehaviour
                 currentInteractable = interactables.Last();
                 string action = currentInteractable.GetAction();
                 GameObject interactable = currentInteractable.GetObject();
+                if (interactable == null) { return; }
+                if (interactable == null) { return; }
 
                 InteractionExecution(action, interactable);
 
@@ -535,8 +537,14 @@ public class BubblerScript : MonoBehaviour
 
     void EndRun(string scene)
     {
+        if (endRun)
+        {
+            return;
+        }
+
         endRun = true;
         endrunCounter = fadeOutTime;
+        blackout.gameObject.SetActive(true);
         nextScene = scene;
     }
 
@@ -571,7 +579,7 @@ public class BubblerScript : MonoBehaviour
 
     string BuildActionMessage(string actionName)
     {
-        return actionName + "\n[ E ]";
+        return actionName + "\n[E]";
     }
 
     public Vector3 GetInitialPosition()

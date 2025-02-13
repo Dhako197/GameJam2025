@@ -62,6 +62,7 @@ public class InventarioController : MonoBehaviour
         {
             uiItemBox.Add(box);
             box.gameObject.SetActive(false);
+            box.uiBox.SetActive(false);
         }
     }
 
@@ -148,11 +149,13 @@ public class InventarioController : MonoBehaviour
                 {
                     itembox.NombreObjeto = "";
                     itembox.gameObject.SetActive(false);
+                    itembox.uiBox.SetActive(false);
                     continue;
                 }
 
                 // new item in queue, assig to box
                 itembox.gameObject.SetActive(true);
+                itembox.uiBox.SetActive(true);
 
                 FoundItem newItem = newItems[0];
 

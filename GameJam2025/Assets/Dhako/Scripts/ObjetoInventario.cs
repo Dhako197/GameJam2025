@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class ObjetoInventario : MonoBehaviour
 {
-    public TextMeshProUGUI CantidadUI;
+    public GameObject uiBox;
     public string NombreObjeto;
     public int ObjectID = 0;
 }
