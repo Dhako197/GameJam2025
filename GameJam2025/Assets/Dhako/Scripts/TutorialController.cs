@@ -29,7 +29,7 @@ public class TutorialController : MonoBehaviour
         if (Input.GetButtonDown("Interact"))
         {
             Time.timeScale = 1;
-            TutorialUI.DOAnchorPos(new Vector2(0, 0), 0.5f, true).SetEase(Ease.OutBack);
+            TutorialUI.DOAnchorPos(new Vector2(0, 0), 0.5f, true).SetEase(Ease.InBack);
 
         }
     }
