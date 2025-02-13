@@ -1021,9 +1021,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   sensitivity: 0.25
+  fadeOutTime: 5
   requiredGums: 5
   requiresIntro: 1
   _transform: {fileID: 1906699670321459027}
+  blackout: {fileID: 0}
   addItemClip: {fileID: 8300000, guid: d5003da34e0cd304da4a70806c291a08, type: 3}
   openDoorClip: {fileID: 8300000, guid: 7ece65f6cda386e40b1ac4c73e65a4a8, type: 3}
   takeKeysClip: {fileID: 8300000, guid: 158609ec30fabdc40a44faa79bccc0a1, type: 3}
@@ -1031,6 +1033,7 @@ MonoBehaviour:
   bubbleComments: {fileID: 6765438903032438298}
   bubbleTextDinamico: {fileID: 7940409514760102849}
   introTextos:
+  - ' '
   - Otra vez en castigo por mis malas notas...
   - Estoy cansado de que la pandilla chicletilla siempre me trate mal y nunca los
     castiguen...
