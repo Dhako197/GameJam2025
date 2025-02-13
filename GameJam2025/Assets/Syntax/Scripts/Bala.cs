@@ -7,7 +7,7 @@ public class Bala : MonoBehaviour
     // Start is called before the first frame update
     [SerializeField] private float force = 8f;
     [SerializeField] private float daño = 20;
-    private readonly float angle = Mathf.PI/3; // rad for 60grad
+    private readonly float angle = Mathf.PI/4; // rad for 60grad
     private Rigidbody rb;
 
     private void Awake()

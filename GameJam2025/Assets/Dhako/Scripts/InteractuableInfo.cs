@@ -19,7 +19,7 @@ public class InteractuableInfo : MonoBehaviour, IInteractable
 
     public GameObject GetObject()
     {
-        return gameObject;
+        return this.gameObject;
     }
 
     public int GetId()

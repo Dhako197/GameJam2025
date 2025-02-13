@@ -236,6 +236,8 @@ public class BubblerScript : MonoBehaviour
                 currentInteractable = interactables.Last();
                 string action = currentInteractable.GetAction();
                 GameObject interactable = currentInteractable.GetObject();
+                if (interactable == null) { return; }
+                if (interactable == null) { return; }
 
                 InteractionExecution(action, interactable);
 
@@ -535,8 +537,14 @@ public class BubblerScript : MonoBehaviour
 
     void EndRun(string scene)
     {
+        if (endRun)
+        {
+            return;
+        }
+
         endRun = true;
         endrunCounter = fadeOutTime;
+        blackout.gameObject.SetActive(true);
         nextScene = scene;
     }
 
