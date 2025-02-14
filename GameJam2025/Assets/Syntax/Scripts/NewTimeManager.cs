@@ -5,6 +5,7 @@ public class TimerManager : MonoBehaviour
 {
     [SerializeField] private Transform hourHand;
     [SerializeField] private Transform minuteHand;
+    [SerializeField] private Transform limitBar;
     public float gameTimeDuration = 20f * 60f;
 
     private DateTime startTime;
@@ -27,6 +28,8 @@ public class TimerManager : MonoBehaviour
         simulatedTime = startTime;
         Debug.Log((" games x seconds= " + gameSecondsPerRealSecond));
         UpdateClock(simulatedTime);
+        SetLimitBar(simulatedTime);
+        
     }
 
     private void Update()
@@ -34,6 +37,7 @@ public class TimerManager : MonoBehaviour
         elapsedTime += Time.deltaTime;
         float gameTimeElapsed = elapsedTime * gameSecondsPerRealSecond;
         simulatedTime = startTime.AddSeconds(gameTimeElapsed);
+       
 
         UpdateClock(simulatedTime);
         LogHourChange(simulatedTime);
@@ -61,6 +65,13 @@ public class TimerManager : MonoBehaviour
         if (minuteHand != null)
             minuteHand.localRotation = Quaternion.Euler(0f, 0f, -minuteAngle);
     }
+
+    private void SetLimitBar(DateTime simulatedTime)
+    {
+        float hourAngle = (simulatedTime.Hour % 12) * 30f + simulatedTime.Minute * 0.5f;
+        limitBar.localRotation=Quaternion.Euler(0f, 0f, (-hourAngle-180));
+    }
+    
 
     private void LogHourChange(DateTime simulatedTime)
     {
