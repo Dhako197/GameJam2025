@@ -28,7 +28,6 @@ public class BubblerScript : MonoBehaviour
     private TextMeshProUGUI textBoxInteractions;
     private TextMeshProUGUI textBoxComments;
     private TextMeshProUGUI textBoxIntro;
-    private RectTransform descriptorCanvas;
     private TextMeshProUGUI descriptor;
     private FollowPlayer followPlayerScript;
     private Rigidbody rb;
@@ -93,7 +92,6 @@ public class BubblerScript : MonoBehaviour
     {   
         followPlayerScript = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<FollowPlayer>();
         descriptor = GameObject.FindGameObjectWithTag("Descriptor").GetComponent<TextMeshProUGUI>();
-        descriptorCanvas = descriptor.GetComponentInParent<RectTransform>();
 
         descriptor.enabled = false;
         initialPosition = transform.position;
@@ -535,7 +533,7 @@ public class BubblerScript : MonoBehaviour
         audioController.Play();
     }
 
-     public void EndRun(string scene)
+    public void EndRun(string scene)
     {
         if (endRun)
         {

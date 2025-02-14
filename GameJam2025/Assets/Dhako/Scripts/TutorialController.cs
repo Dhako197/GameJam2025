@@ -58,7 +58,6 @@ public class TutorialController : MonoBehaviour
 
             if (_timerTutorialIsOpen )
             {
-                Debug.Log("Adios tutorial Timer");
                 TimeTutorial.DOAnchorPos(new Vector2(0, 0), 0.5f, true).SetEase(Ease.InBack);
                 _timerTutorialIsOpen = false;
             }

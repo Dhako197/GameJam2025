@@ -1,11 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
     [SerializeField] private int seed = 0;
+    [SerializeField] private int distance = 6;
     [SerializeField] private AudioClip damageClip;
     private float life = 60;
     private float counter = 0;
@@ -15,12 +17,12 @@ public class EnemyController : MonoBehaviour
     private Vector3 destination = Vector3.zero;
     private Animator animator;
     private AudioSource audioController;
+    private WinController winController;
     private GameObject respawn;
 
     private readonly float randomRange = 3;
     private readonly float baseBubbleTime = 5.0f;
     private readonly float cooldownTime = 5;
-    private readonly float movementRatio = 8;
     private readonly float speed = 3f;
 
     private readonly string takeDamageAction = "takeDamage";
@@ -38,8 +40,9 @@ public class EnemyController : MonoBehaviour
     void Start()
     {
         respawn = GameObject.FindGameObjectWithTag("Respawn");
-        UnityEngine.Random.InitState(seed);
+        winController = GetComponentInParent<WinController>();
         animator = GetComponentInChildren<Animator>();
+        UnityEngine.Random.InitState(seed);
     }
 
     void Update()
@@ -53,11 +56,9 @@ public class EnemyController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        bool isWall = other.CompareTag("Wall");
-        if (isWall && needsReposition)
+        if (other.CompareTag("Wall"))
         {
             Vector3 inverted = GetInvertedDestinationUnit();
-            Debug.Log("Inverted: " + inverted);
             destination = inverted;
         }
     }
@@ -103,12 +104,12 @@ public class EnemyController : MonoBehaviour
         transform.position = Vector3.MoveTowards(transform.position, new Vector3(destination.x, transform.position.y, destination.z), Time.deltaTime * speed);
         Vector3 diff = destination - transform.position;
 
-        if (Math.Abs(diff.x) < 0.5f && Math.Abs(diff.z) < 0.5f)
+        if (Math.Abs(diff.x) < 0.25f && Math.Abs(diff.z) < 0.25f)
         {
             if (life == 20)
             {
-                destination = GetDestinationRandom(6);
-                return;
+               destination = GetDestinationRandom(distance);
+               return;
             }
 
             animator.SetBool(repositionAction, false);
@@ -124,35 +125,25 @@ public class EnemyController : MonoBehaviour
         }
 
         needsReposition = isRepositioning;
-        destination = GetDestinationRandom();
-    }
-
-    Vector3 GetDestinationRandom()
-    {
-        Vector2 destinationRandomizer = UnityEngine.Random.insideUnitCircle * movementRatio;
-        float minimumDistance = movementRatio / 4;
-        float x = destinationRandomizer.x < minimumDistance ? minimumDistance : destinationRandomizer.x;
-        float z = destinationRandomizer.y < minimumDistance ? minimumDistance : destinationRandomizer.y;
-
-        return new Vector3(x, 0, z) + transform.position;
+        destination = GetDestinationRandom(distance);
     }
 
     Vector3 GetDestinationRandom(float fixedDistance)
     {
-        Vector2 destinationRandomizer = UnityEngine.Random.insideUnitCircle * fixedDistance;
-        float x = destinationRandomizer.x;
-        float z = destinationRandomizer.y;
+        float randomizerX = UnityEngine.Random.value;
+        float randomizerZ = UnityEngine.Random.value;
+
+        float x = (randomizerX > 0.3f ? (randomizerX > 0.6f ? 1 : -1) : 0) * fixedDistance;
+        float z = (randomizerZ > 0.3f ? (randomizerX > 0.6f ? 1 : -1) : 0) * fixedDistance;
         return new Vector3(x, 0, z) + transform.position;
     }
 
     Vector3 GetInvertedDestinationUnit()
     {
-        Vector3 invertedDestination = destination * -1;
-        //Debug.Log("destination: " + destination);
-        //Debug.Log("invertedDestination: " + invertedDestination);
-        float x = invertedDestination.x > 0 ? 1 : -1;
-        float z = invertedDestination.z > 0 ? 1 : -1;
-        return new Vector3(x, destination.y, z) + transform.position;
+        Vector3 direction = respawn.transform.position - destination;
+        float x = direction.x == 0 ? 0 : (direction.x > 0 ? 1 : -1) * distance;
+        float z = direction.x == 0 ? 0 : (direction.z > 0 ? 1 : -1) * distance;
+        return new Vector3(x, 0, z) + transform.position;
     }
 
     public void TakeDamage(float damage)
@@ -171,6 +162,12 @@ public class EnemyController : MonoBehaviour
         audioController.Play();
         string action = life - damage > 0 ? takeDamageAction : isTrappedAction;
         life -= damage;
+        
         animator.SetBool(action, true);
+
+        if (life == 0)
+        {
+            winController.AddTrapped();
+        }
     }
 }

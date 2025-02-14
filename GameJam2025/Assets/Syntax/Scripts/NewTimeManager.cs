@@ -17,7 +17,6 @@ public class TimerManager : MonoBehaviour
     private bool gameOverTriggered = false;
 
     [SerializeField] private GameObject menuPerdisteUI;
-    private MenuPerdiste menuPerdiste;
     [SerializeField] private BubblerScript _bubblerScript;
     
 
@@ -26,7 +25,6 @@ public class TimerManager : MonoBehaviour
         startTime = DateTime.Now;
         gameSecondsPerRealSecond = (6f * 60f * 60f) / gameTimeDuration;
         simulatedTime = startTime;
-        Debug.Log((" games x seconds= " + gameSecondsPerRealSecond));
         UpdateClock(simulatedTime);
         SetLimitBar(simulatedTime);
         
@@ -43,16 +41,6 @@ public class TimerManager : MonoBehaviour
         LogHourChange(simulatedTime);
         CheckGameOver(simulatedTime);
     }
-    
-   /* private void Update()
-    {
-        TimeSpan tiempoTranscurrido = TimeSpan.FromSeconds(Time.time * gameSecondsPerRealSecond);
-        //simulatedTime = startTime + tiempoTranscurrido;
-        simulatedTime = simulatedTime.AddSeconds(Time.deltaTime * gameSecondsPerRealSecond);
-        UpdateClock(simulatedTime);
-        LogHourChange(simulatedTime);
-        CheckGameOver(simulatedTime);
-    }*/
 
     private void UpdateClock(DateTime simulatedTime)
     {
@@ -78,7 +66,6 @@ public class TimerManager : MonoBehaviour
         if (simulatedTime.Hour != lastLoggedHour)
         {
             lastLoggedHour = simulatedTime.Hour;
-            Debug.Log($"Nueva hora en el reloj: {simulatedTime:HH:mm}");
         }
     }
 
