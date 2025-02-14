@@ -42,7 +42,7 @@ public class TutorialController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Interact"))
+        if (Input.GetButtonDown("Pass"))
         {
             Time.timeScale = 1;
             TutorialUI.DOAnchorPos(new Vector2(0, 0), 0.5f, true).SetEase(Ease.InBack);

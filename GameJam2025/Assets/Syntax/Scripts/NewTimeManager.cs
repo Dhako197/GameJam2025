@@ -84,7 +84,5 @@ public class TimerManager : MonoBehaviour
         simulatedTime = simulatedTime.AddHours(1);
         elapsedTime += 3600 / gameSecondsPerRealSecond;
         UpdateClock(simulatedTime);
-        Debug.Log("ese 3600 ="+ 3600 * gameSecondsPerRealSecond);
-        Debug.Log($"Se ha agregado una hora. Nueva hora del juego: {simulatedTime:HH:mm}");
     }
 }

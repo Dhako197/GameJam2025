@@ -223,13 +223,13 @@ public class BubblerScript : MonoBehaviour
 
     void Interact()
     {
-        if (Input.GetButtonDown("Interact"))
+        if (Input.GetButtonDown("Pass")&& isInstructionsTalking)
         {
-            if (isInstructionsTalking)
-            {
-                NextDialog();
-                return;
-            }
+            NextDialog();
+            return;
+        }
+        if (Input.GetButtonDown("Interact")&& !isInstructionsTalking)
+        {
 
             if (interactables.Count != 0)
             {
