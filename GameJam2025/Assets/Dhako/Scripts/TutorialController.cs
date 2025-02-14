@@ -10,6 +10,8 @@ public class TutorialController : MonoBehaviour
 
     [SerializeField] private RectTransform TutorialUI;
     [SerializeField] private RectTransform TimeTutorial;
+    private bool _alreadyUseUi = false;
+    private bool _alreadyUseTimerUi = false;
 
 
     private void Awake()
@@ -44,9 +46,22 @@ public class TutorialController : MonoBehaviour
     {
         if (Input.GetButtonDown("Pass"))
         {
-            Time.timeScale = 1;
-            TutorialUI.DOAnchorPos(new Vector2(0, 0), 0.5f, true).SetEase(Ease.InBack);
-            TimeTutorial.DOAnchorPos(new Vector2(0, 0), 0.5f, true).SetEase(Ease.InBack);
+
+            if (!_alreadyUseUi)
+            {
+                Time.timeScale = 1;
+                TutorialUI.DOAnchorPos(new Vector2(0, 0), 0.5f, true).SetEase(Ease.InBack);
+                _alreadyUseUi = true;
+            }
+
+            if (!_alreadyUseTimerUi)
+            {
+                Time.timeScale = 1;
+                TimeTutorial.DOAnchorPos(new Vector2(0, 0), 0.5f, true).SetEase(Ease.InBack);
+                _alreadyUseTimerUi = true;
+            }
+            
+            
 
         }
     }
