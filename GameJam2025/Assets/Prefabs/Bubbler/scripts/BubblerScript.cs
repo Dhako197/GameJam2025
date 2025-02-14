@@ -535,7 +535,7 @@ public class BubblerScript : MonoBehaviour
         audioController.Play();
     }
 
-    void EndRun(string scene)
+     public void EndRun(string scene)
     {
         if (endRun)
         {
@@ -626,6 +626,8 @@ public class BubblerScript : MonoBehaviour
         }
 
         isFirstCatch = false;
+        TutorialController.Instance.TimeTutorialActivate();
+        dialogs.Add("");
         dialogs.Add("Mr.Pluff no me deja salir");
         dialogs.Add("debo estar sentado cuando despierte");
     }

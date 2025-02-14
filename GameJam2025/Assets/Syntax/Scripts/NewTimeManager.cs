@@ -17,6 +17,8 @@ public class TimerManager : MonoBehaviour
 
     [SerializeField] private GameObject menuPerdisteUI;
     private MenuPerdiste menuPerdiste;
+    [SerializeField] private BubblerScript _bubblerScript;
+    
 
     private void Start()
     {
@@ -27,7 +29,7 @@ public class TimerManager : MonoBehaviour
         UpdateClock(simulatedTime);
     }
 
-    /*private void Update()
+    private void Update()
     {
         elapsedTime += Time.deltaTime;
         float gameTimeElapsed = elapsedTime * gameSecondsPerRealSecond;
@@ -36,9 +38,9 @@ public class TimerManager : MonoBehaviour
         UpdateClock(simulatedTime);
         LogHourChange(simulatedTime);
         CheckGameOver(simulatedTime);
-    }*/
+    }
     
-    private void Update()
+   /* private void Update()
     {
         TimeSpan tiempoTranscurrido = TimeSpan.FromSeconds(Time.time * gameSecondsPerRealSecond);
         //simulatedTime = startTime + tiempoTranscurrido;
@@ -46,7 +48,7 @@ public class TimerManager : MonoBehaviour
         UpdateClock(simulatedTime);
         LogHourChange(simulatedTime);
         CheckGameOver(simulatedTime);
-    }
+    }*/
 
     private void UpdateClock(DateTime simulatedTime)
     {
@@ -73,19 +75,13 @@ public class TimerManager : MonoBehaviour
     {
         if (!gameOverTriggered && simulatedTime.Subtract(startTime).TotalHours >= 6)
         {
-            gameOverTriggered = true;
-            Debug.Log("¡Han pasado 6 horas simuladas! Mostrando el menú de 'Perdiste'.");
-            menuPerdiste = menuPerdisteUI.GetComponent<MenuPerdiste>();
-            menuPerdiste.ShowMenu();
+           _bubblerScript.EndRun("PerdisteTime");
         }
     }
 
     public void Increase()
     {
-        //simulatedTime += TimeSpan.FromSeconds(3600*gameSecondsPerRealSecond);
-         simulatedTime= simulatedTime.AddSeconds(3600 * gameSecondsPerRealSecond);
-        //elapsedTime = (float)(simulatedTime - startTime).TotalSeconds / gameSecondsPerRealSecond;
-        //startTime = simulatedTime - TimeSpan.FromSeconds(elapsedTime * gameSecondsPerRealSecond);
+        simulatedTime = simulatedTime.AddHours(1);
         elapsedTime += 3600 / gameSecondsPerRealSecond;
         UpdateClock(simulatedTime);
         Debug.Log("ese 3600 ="+ 3600 * gameSecondsPerRealSecond);
