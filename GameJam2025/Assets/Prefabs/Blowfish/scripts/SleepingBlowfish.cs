@@ -31,6 +31,8 @@ public class SleepingBlowfish : MonoBehaviour
     private readonly string isChargingAnimation = "isCharging";
     private readonly string isWalkingAnimation = "isWalking";
 
+    [SerializeField] private TimerManager _timerManager;
+    
     void Start()
     {
         sceneCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<FollowPlayer>();
@@ -103,6 +105,7 @@ public class SleepingBlowfish : MonoBehaviour
                     playerController.ClearInteractable();
                     destination = playerController.GetInitialPosition();
                     player.SetActive(false);
+                   _timerManager.Increase();
                     return;
                 }
 
@@ -141,7 +144,7 @@ public class SleepingBlowfish : MonoBehaviour
         destination = ogPosition;
         destinationName = String.Empty;
     }
-
+    
     public void ResetSleep()
     {
         sleepLimit = sleepTimeBase + RandomizeSleepTime();

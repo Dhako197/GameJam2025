@@ -9,7 +9,7 @@ public class MenuPerdiste : MonoBehaviour
 
     private void Start()
     {
-        perdisteMenuUI.SetActive(true);
+        //perdisteMenuUI.SetActive(true);
         AudioController.Instance.SetVolume(0.3f);
     }
     

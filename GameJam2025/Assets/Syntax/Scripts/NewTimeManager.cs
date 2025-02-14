@@ -23,6 +23,7 @@ public class TimerManager : MonoBehaviour
         startTime = DateTime.Now;
         gameSecondsPerRealSecond = (6f * 60f * 60f) / gameTimeDuration;
         simulatedTime = startTime;
+        Debug.Log((" games x seconds= " + gameSecondsPerRealSecond));
         UpdateClock(simulatedTime);
     }
 
@@ -40,8 +41,8 @@ public class TimerManager : MonoBehaviour
     private void Update()
     {
         TimeSpan tiempoTranscurrido = TimeSpan.FromSeconds(Time.time * gameSecondsPerRealSecond);
-        simulatedTime = startTime + tiempoTranscurrido;
-
+        //simulatedTime = startTime + tiempoTranscurrido;
+        simulatedTime = simulatedTime.AddSeconds(Time.deltaTime * gameSecondsPerRealSecond);
         UpdateClock(simulatedTime);
         LogHourChange(simulatedTime);
         CheckGameOver(simulatedTime);
@@ -81,9 +82,13 @@ public class TimerManager : MonoBehaviour
 
     public void Increase()
     {
-        simulatedTime = simulatedTime.AddHours(1);
-        elapsedTime = (float)(simulatedTime - startTime).TotalSeconds / gameSecondsPerRealSecond;
+        //simulatedTime += TimeSpan.FromSeconds(3600*gameSecondsPerRealSecond);
+         simulatedTime= simulatedTime.AddSeconds(3600 * gameSecondsPerRealSecond);
+        //elapsedTime = (float)(simulatedTime - startTime).TotalSeconds / gameSecondsPerRealSecond;
+        //startTime = simulatedTime - TimeSpan.FromSeconds(elapsedTime * gameSecondsPerRealSecond);
+        elapsedTime += 3600 / gameSecondsPerRealSecond;
         UpdateClock(simulatedTime);
+        Debug.Log("ese 3600 ="+ 3600 * gameSecondsPerRealSecond);
         Debug.Log($"Se ha agregado una hora. Nueva hora del juego: {simulatedTime:HH:mm}");
     }
 }
